@@ -1,0 +1,24 @@
+{
+  "Version": 1,
+  "Hash": "qe9P04IGpc353zUT9Eqn+aLbVwOQ+S/bdiQubXhHGqE=",
+  "Source": "CourseAppUserService_WebAPI",
+  "BasePath": "_content/CourseAppUserService_WebAPI",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [
+    {
+      "Identity": "D:\\Pet\\CourseAppUserService\\CourseAppUserService_IdentityServer\\CourseAppUserService_IdentityServer.csproj",
+      "Version": 2,
+      "Source": "CourseAppUserService_IdentityServer",
+      "GetPublishAssetsTargets": "ComputeReferencedStaticWebAssetsPublishManifest;GetCurrentProjectPublishStaticWebAssetItems",
+      "AdditionalPublishProperties": "Configuration=Debug;Platform=AnyCPU",
+      "AdditionalPublishPropertiesToRemove": "WebPublishProfileFile;TargetFramework",
+      "GetBuildAssetsTargets": "GetCurrentProjectBuildStaticWebAssetItems",
+      "AdditionalBuildProperties": "Configuration=Debug;Platform=AnyCPU",
+      "AdditionalBuildPropertiesToRemove": "WebPublishProfileFile;TargetFramework"
+    }
+  ],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}

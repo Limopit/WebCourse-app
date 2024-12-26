@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\CourseAppUserService_IdentityServer.props" />
+</Project>
