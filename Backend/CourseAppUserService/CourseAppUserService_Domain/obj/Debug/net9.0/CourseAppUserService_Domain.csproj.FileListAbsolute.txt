@@ -10,3 +10,16 @@ D:\Pet\CourseAppUserService\CourseAppUserService_Domain\obj\Debug\net9.0\CourseA
 D:\Pet\CourseAppUserService\CourseAppUserService_Domain\obj\Debug\net9.0\refint\CourseAppUserService_Domain.dll
 D:\Pet\CourseAppUserService\CourseAppUserService_Domain\obj\Debug\net9.0\CourseAppUserService_Domain.pdb
 D:\Pet\CourseAppUserService\CourseAppUserService_Domain\obj\Debug\net9.0\ref\CourseAppUserService_Domain.dll
+D:\Pet\WebCourseApp\Backend\CourseAppUserService\CourseAppUserService_Domain\bin\Debug\net9.0\CourseAppUserService_Domain.deps.json
+D:\Pet\WebCourseApp\Backend\CourseAppUserService\CourseAppUserService_Domain\bin\Debug\net9.0\CourseAppUserService_Domain.dll
+D:\Pet\WebCourseApp\Backend\CourseAppUserService\CourseAppUserService_Domain\bin\Debug\net9.0\CourseAppUserService_Domain.pdb
+D:\Pet\WebCourseApp\Backend\CourseAppUserService\CourseAppUserService_Domain\obj\Debug\net9.0\CourseAppUserService_Domain.csproj.AssemblyReference.cache
+D:\Pet\WebCourseApp\Backend\CourseAppUserService\CourseAppUserService_Domain\obj\Debug\net9.0\CourseAppUserService_Domain.GeneratedMSBuildEditorConfig.editorconfig
+D:\Pet\WebCourseApp\Backend\CourseAppUserService\CourseAppUserService_Domain\obj\Debug\net9.0\CourseAppUserService_Domain.AssemblyInfoInputs.cache
+D:\Pet\WebCourseApp\Backend\CourseAppUserService\CourseAppUserService_Domain\obj\Debug\net9.0\CourseAppUserService_Domain.AssemblyInfo.cs
+D:\Pet\WebCourseApp\Backend\CourseAppUserService\CourseAppUserService_Domain\obj\Debug\net9.0\CourseAppUserService_Domain.csproj.CoreCompileInputs.cache
+D:\Pet\WebCourseApp\Backend\CourseAppUserService\CourseAppUserService_Domain\obj\Debug\net9.0\CourseAppUserService_Domain.sourcelink.json
+D:\Pet\WebCourseApp\Backend\CourseAppUserService\CourseAppUserService_Domain\obj\Debug\net9.0\CourseAppUserService_Domain.dll
+D:\Pet\WebCourseApp\Backend\CourseAppUserService\CourseAppUserService_Domain\obj\Debug\net9.0\refint\CourseAppUserService_Domain.dll
+D:\Pet\WebCourseApp\Backend\CourseAppUserService\CourseAppUserService_Domain\obj\Debug\net9.0\CourseAppUserService_Domain.pdb
+D:\Pet\WebCourseApp\Backend\CourseAppUserService\CourseAppUserService_Domain\obj\Debug\net9.0\ref\CourseAppUserService_Domain.dll

@@ -26,7 +26,6 @@ public static class DependencyInjection
 
         services.AddScoped<IUserServiceDbContext>(provider => provider.GetRequiredService<UserServiceDbContext>());
 
-        // Настройка Identity для работы с MS SQL
         services.AddIdentity<User, IdentityRole>(options =>
             {
                 options.Password.RequireDigit = true;
@@ -41,6 +40,8 @@ public static class DependencyInjection
             .AddDefaultTokenProviders();
         
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IUserTakenCourseRepository, UserTakenCourseRepository>();
+        services.AddScoped<IUserCreatedCourseRepository, UserCreatedCourseRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<ITokenService, TokenService>();
         services.AddTransient<IMapperService, MapperService>();

@@ -11,6 +11,9 @@ public class UserCreatedCoursesConfiguration: IEntityTypeConfiguration<UserCreat
         builder.ToTable("UserCreatedCourses");
 
         builder.HasKey(uc => uc.RecordId);
+        builder.Property(utc => utc.RecordId)
+            .ValueGeneratedOnAdd()
+            .HasDefaultValueSql("NEWID()");
 
         builder.Property(uc => uc.CourseId)
             .IsRequired()
@@ -19,10 +22,7 @@ public class UserCreatedCoursesConfiguration: IEntityTypeConfiguration<UserCreat
         builder.Property(uc => uc.ApprovementStatus)
             .IsRequired()
             .HasMaxLength(15); 
-
-        builder.Property(uc => uc.ApprovementDate)
-            .IsRequired();
-
+        
         builder.HasIndex(uc => new { uc.UserId, uc.CourseId })
             .IsUnique();
 

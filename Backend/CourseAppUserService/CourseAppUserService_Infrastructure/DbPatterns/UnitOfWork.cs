@@ -20,6 +20,8 @@ public class UnitOfWork: IUnitOfWork
     {
         _dbContext = dbContext;
         Users = new UserRepository(signInManager, userManager, roleManager);
+        UserTakenCourses = new UserTakenCourseRepository(_dbContext);
+        UserCreatedCourses = new UserCreatedCourseRepository(_dbContext);
     }
     
     public async Task<int> SaveChangesAsync(CancellationToken token)

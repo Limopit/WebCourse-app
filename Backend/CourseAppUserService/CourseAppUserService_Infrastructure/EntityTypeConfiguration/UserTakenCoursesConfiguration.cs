@@ -10,26 +10,27 @@ public class UserTakenCoursesConfiguration: IEntityTypeConfiguration<UserTakenCo
     {
         builder.ToTable("UserTakenCourses");
 
-        builder.HasKey(utc => utc.RecordId); // Пример использования RecordId
+        builder.HasKey(utc => utc.RecordId);
+        builder.Property(utc => utc.RecordId)
+            .ValueGeneratedOnAdd()
+            .HasDefaultValueSql("NEWID()");
 
         builder.Property(utc => utc.Status)
             .IsRequired()
-            .HasMaxLength(50); // Ограничение на статус
+            .HasMaxLength(50); 
 
         builder.Property(utc => utc.DateStart)
             .IsRequired();
 
         builder.Property(utc => utc.DateFinished)
-            .IsRequired(false); // Может быть null, если курс не завершен
+            .IsRequired(false);
 
         builder.Property(utc => utc.IsFavourite)
             .IsRequired();
-
-        // Композитный ключ
+        
         builder.HasIndex(utc => new { utc.UserId, utc.CourseId })
             .IsUnique();
-
-        // Связь с User
+        
         builder.HasOne(utc => utc.User)
             .WithMany(u => u.TakenCourses)
             .HasForeignKey(utc => utc.UserId)

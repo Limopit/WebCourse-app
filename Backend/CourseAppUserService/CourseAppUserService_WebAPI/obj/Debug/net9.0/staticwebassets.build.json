@@ -1,13 +1,13 @@
 {
   "Version": 1,
-  "Hash": "qe9P04IGpc353zUT9Eqn+aLbVwOQ+S/bdiQubXhHGqE=",
+  "Hash": "UX3xyKaLDAJ6dwcSf8XDRjMlfiZgvy1+r6fTUBX6qsY=",
   "Source": "CourseAppUserService_WebAPI",
   "BasePath": "_content/CourseAppUserService_WebAPI",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [
     {
-      "Identity": "D:\\Pet\\CourseAppUserService\\CourseAppUserService_IdentityServer\\CourseAppUserService_IdentityServer.csproj",
+      "Identity": "D:\\Pet\\WebCourseApp\\Backend\\CourseAppUserService\\CourseAppUserService_IdentityServer\\CourseAppUserService_IdentityServer.csproj",
       "Version": 2,
       "Source": "CourseAppUserService_IdentityServer",
       "GetPublishAssetsTargets": "ComputeReferencedStaticWebAssetsPublishManifest;GetCurrentProjectPublishStaticWebAssetItems",

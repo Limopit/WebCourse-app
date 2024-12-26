@@ -130,9 +130,10 @@ namespace CourseAppUserService_Persistance.Migrations
                 {
                     b.Property<Guid>("RecordId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("NEWID()");
 
-                    b.Property<DateTime>("ApprovementDate")
+                    b.Property<DateTime?>("ApprovementDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ApprovementStatus")
@@ -161,7 +162,8 @@ namespace CourseAppUserService_Persistance.Migrations
                 {
                     b.Property<Guid>("RecordId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("NEWID()");
 
                     b.Property<string>("CourseId")
                         .IsRequired()

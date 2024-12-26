@@ -11,17 +11,9 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace CourseAppUserService_Persistance.Services;
 
-public class TokenService: ITokenService
+public class TokenService(IConfiguration configuration, IUserServiceDbContext dbContext)
+    : ITokenService
 {
-    private readonly IConfiguration _configuration;
-    private readonly IUserServiceDbContext _dbContext;
-    
-    public TokenService(IConfiguration configuration, IUserServiceDbContext dbContext)
-    {
-        _configuration = configuration;
-        _dbContext = dbContext;
-    }
-
     public async Task<(string accessToken, string refreshToken)> GenerateTokens(User user,
         UserManager<User> userManager, CancellationToken token)
     {
@@ -38,8 +30,8 @@ public class TokenService: ITokenService
 
     private async Task<string> GenerateAccessToken(User user, UserManager<User> userManager)
     {
-        var issuer = _configuration["Jwt:Issuer"];
-        var audience = _configuration["Jwt:Audience"];
+        var issuer = configuration["Jwt:Issuer"];
+        var audience = configuration["Jwt:Audience"];
         
         if (string.IsNullOrEmpty(issuer) || string.IsNullOrEmpty(audience))
         {
@@ -59,12 +51,12 @@ public class TokenService: ITokenService
             claims.Add(new Claim(ClaimTypes.Role, role));
         }
 
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
         
         var token = new JwtSecurityToken(
-            issuer: _configuration["Jwt:Issuer"],
-            audience: _configuration["Jwt:Audience"],
+            issuer: configuration["Jwt:Issuer"],
+            audience: configuration["Jwt:Audience"],
             claims: claims,
             expires: DateTime.Now.AddMinutes(30),
             signingCredentials: creds);
@@ -88,8 +80,8 @@ public class TokenService: ITokenService
             UserId = user.Id
         };
 
-        await _dbContext.RefreshTokens.AddAsync(refreshToken, cancellationToken);
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        await dbContext.RefreshTokens.AddAsync(refreshToken, cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
 
         return refreshToken.Token;
     }

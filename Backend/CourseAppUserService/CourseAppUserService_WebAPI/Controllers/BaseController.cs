@@ -5,12 +5,7 @@ namespace CourseAppUserService.Controllers;
 
 [ApiController]
 [Route("api/[controller]/[action]")]
-public abstract class BaseController : ControllerBase
+public abstract class BaseController(IMediator mediator) : ControllerBase
 {
-    protected readonly IMediator _mediator;
-    protected BaseController(IMediator mediator)
-    {
-        _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-    }
-    
+    protected readonly IMediator Mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
 }
