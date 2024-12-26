@@ -42,6 +42,7 @@ public static class DependencyInjection
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IUserTakenCourseRepository, UserTakenCourseRepository>();
         services.AddScoped<IUserCreatedCourseRepository, UserCreatedCourseRepository>();
+        services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<ITokenService, TokenService>();
         services.AddTransient<IMapperService, MapperService>();

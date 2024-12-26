@@ -1,5 +1,6 @@
 using CourseAppUserService_Application.Users.Commands.AssignRole;
 using CourseAppUserService_Application.Users.Commands.LoginUser;
+using CourseAppUserService_Application.Users.Commands.RefreshToken;
 using CourseAppUserService_Application.Users.Commands.RegisterUser;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -30,5 +31,13 @@ public class AuthController(IMediator mediator) : BaseController(mediator)
     {
         var result = await Mediator.Send(command);
         return Ok(result);
+    }
+    
+    [Authorize]
+    [HttpPost("refresh")]
+    public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenCommand command)
+    {
+        var jwt = await Mediator.Send(command); 
+        return Ok(jwt);
     }
 }

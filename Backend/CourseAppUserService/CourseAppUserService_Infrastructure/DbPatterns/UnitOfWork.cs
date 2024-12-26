@@ -22,6 +22,7 @@ public class UnitOfWork: IUnitOfWork
         Users = new UserRepository(signInManager, userManager, roleManager);
         UserTakenCourses = new UserTakenCourseRepository(_dbContext);
         UserCreatedCourses = new UserCreatedCourseRepository(_dbContext);
+        RefreshTokens = new RefreshTokenRepository(_dbContext);
     }
     
     public async Task<int> SaveChangesAsync(CancellationToken token)
