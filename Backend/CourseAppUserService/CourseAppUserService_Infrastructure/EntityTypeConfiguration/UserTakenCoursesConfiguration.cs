@@ -10,30 +10,30 @@ public class UserTakenCoursesConfiguration: IEntityTypeConfiguration<UserTakenCo
     {
         builder.ToTable("UserTakenCourses");
 
-        builder.HasKey(utc => utc.RecordId);
-        builder.Property(utc => utc.RecordId)
+        builder.HasKey(course => course.RecordId);
+        builder.Property(course => course.RecordId)
             .ValueGeneratedOnAdd()
             .HasDefaultValueSql("NEWID()");
 
-        builder.Property(utc => utc.Status)
+        builder.Property(course => course.Status)
             .IsRequired()
             .HasMaxLength(50); 
 
-        builder.Property(utc => utc.DateStart)
+        builder.Property(course => course.DateStart)
             .IsRequired();
 
-        builder.Property(utc => utc.DateFinished)
+        builder.Property(course => course.DateFinished)
             .IsRequired(false);
 
-        builder.Property(utc => utc.IsFavourite)
+        builder.Property(course => course.IsFavourite)
             .IsRequired();
         
-        builder.HasIndex(utc => new { utc.UserId, utc.CourseId })
+        builder.HasIndex(course => new { course.UserId, course.CourseId })
             .IsUnique();
         
-        builder.HasOne(utc => utc.User)
-            .WithMany(u => u.TakenCourses)
-            .HasForeignKey(utc => utc.UserId)
+        builder.HasOne(course => course.User)
+            .WithMany(user => user.TakenCourses)
+            .HasForeignKey(course => course.UserId)
             .OnDelete(DeleteBehavior.Cascade);
     }
 }

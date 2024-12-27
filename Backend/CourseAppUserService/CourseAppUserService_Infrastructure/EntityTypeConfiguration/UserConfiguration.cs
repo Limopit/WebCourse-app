@@ -10,17 +10,17 @@ public class UserConfiguration: IEntityTypeConfiguration<User>
     {
         builder.ToTable("Users");
 
-        builder.Property(u => u.FirstName)
+        builder.Property(user => user.FirstName)
             .IsRequired()
             .HasMaxLength(25);
 
-        builder.Property(u => u.LastName)
+        builder.Property(user => user.LastName)
             .IsRequired()
             .HasMaxLength(25);
 
-        builder.HasMany(u => u.RefreshTokens)
-            .WithOne(rt => rt.User)
-            .HasForeignKey(rt => rt.UserId)
+        builder.HasMany(user => user.RefreshTokens)
+            .WithOne(token => token.User)
+            .HasForeignKey(token => token.UserId)
             .OnDelete(DeleteBehavior.Cascade);
     }
 }

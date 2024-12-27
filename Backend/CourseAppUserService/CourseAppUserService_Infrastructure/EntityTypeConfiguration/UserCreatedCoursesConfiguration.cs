@@ -10,25 +10,25 @@ public class UserCreatedCoursesConfiguration: IEntityTypeConfiguration<UserCreat
     {
         builder.ToTable("UserCreatedCourses");
 
-        builder.HasKey(uc => uc.RecordId);
-        builder.Property(utc => utc.RecordId)
+        builder.HasKey(course => course.RecordId);
+        builder.Property(course => course.RecordId)
             .ValueGeneratedOnAdd()
             .HasDefaultValueSql("NEWID()");
 
-        builder.Property(uc => uc.CourseId)
+        builder.Property(course => course.CourseId)
             .IsRequired()
             .HasMaxLength(24);
 
-        builder.Property(uc => uc.ApprovementStatus)
+        builder.Property(course => course.ApprovementStatus)
             .IsRequired()
             .HasMaxLength(15); 
         
-        builder.HasIndex(uc => new { uc.UserId, uc.CourseId })
+        builder.HasIndex(course => new { course.UserId, course.CourseId })
             .IsUnique();
 
-        builder.HasOne(uc => uc.User)
-            .WithMany(u => u.CreatedCourses)
-            .HasForeignKey(uc => uc.UserId)
+        builder.HasOne(course => course.User)
+            .WithMany(user => user.CreatedCourses)
+            .HasForeignKey(course => course.UserId)
             .OnDelete(DeleteBehavior.Cascade);
     }
 }

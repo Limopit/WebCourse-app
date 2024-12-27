@@ -66,9 +66,9 @@ public class TokenService(IConfiguration configuration, IUserServiceDbContext db
     private async Task<string> GenerateRefreshToken(User user, CancellationToken cancellationToken)
     {
         var randomBytes = new byte[64];
-        using (var rng = RandomNumberGenerator.Create())
+        using (var randomNum = RandomNumberGenerator.Create())
         {
-            rng.GetBytes(randomBytes);
+            randomNum.GetBytes(randomBytes);
         }
         
         var refreshToken = new RefreshToken

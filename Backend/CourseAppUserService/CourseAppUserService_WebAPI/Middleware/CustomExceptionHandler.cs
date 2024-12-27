@@ -12,29 +12,29 @@ public class CustomExceptionHandler(RequestDelegate request)
         {
             await request(context);
         }
-        catch (Exception e)
+        catch (Exception exception)
         {
-            await HandleExceptionAsync(context, e);
+            await HandleExceptionAsync(context, exception);
         }
     }
 
-    private async Task HandleExceptionAsync(HttpContext context, Exception e)
+    private async Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
         var code = HttpStatusCode.InternalServerError;
         var result = string.Empty;
-        switch (e)
+        switch (exception)
         {
-            case UserValidationException сve:
+            case UserValidationException userValidationException:
                 code = HttpStatusCode.BadRequest;
                 result = JsonSerializer.Serialize(new
                 {
-                    Errors = сve.errors
+                    Errors = userValidationException.errors
                 });
                 break;
-            case NotFoundException nfe:
+            case NotFoundException:
                 code = HttpStatusCode.NotFound;
                 break;
-            case RoleAssignmentException rae:
+            case RoleAssignmentException:
                 code = HttpStatusCode.BadRequest;
                 break;
         }
@@ -44,7 +44,7 @@ public class CustomExceptionHandler(RequestDelegate request)
 
         if (result == string.Empty)
         {
-            result = JsonSerializer.Serialize(new { err = e.Message });
+            result = JsonSerializer.Serialize(new { error = exception.Message });
         }
 
         await context.Response.WriteAsync(result);

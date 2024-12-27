@@ -1,3 +1,4 @@
+using CourseAppUserService_Domain;
 using FluentValidation;
 
 namespace CourseAppUserService_Application.UserCreatedCourse.Commands.CreateUserCreatedCourse;
@@ -6,7 +7,7 @@ public class CreateUserCreatedCourseCommandValidator: AbstractValidator<CreateUs
 {
     public CreateUserCreatedCourseCommandValidator()
     {
-        RuleFor(command => command.ApprovementStatus).NotEmpty().MaximumLength(15)
-            .WithMessage("Status must be shorter than 15 characters");
+        RuleFor(command => command.ApprovementStatus).Must(status => Enum.IsDefined(typeof(ApprovementStatus), status))
+            .WithMessage("Invalid status value.");
     }
 }

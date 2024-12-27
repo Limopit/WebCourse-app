@@ -10,7 +10,6 @@ public class CreateUserTakenCourseMapper: IMapWith<UserTakenCourses>
     {
         profile.CreateMap<CreateUserTakenCourseCommand, UserTakenCourses>()
             .ForMember(course => course.CourseId, opt => opt.MapFrom(userCourse => userCourse.CourseId))
-            .ForMember(course => course.DateStart, opt => opt.MapFrom(userCourse => userCourse.StartDate))
-            .ForMember(course => course.Status, opt => opt.MapFrom(userCourse => userCourse.Status));
+            .ForMember(course => course.DateStart, opt => opt.MapFrom(userCourse => userCourse.StartDate));
     }
 }

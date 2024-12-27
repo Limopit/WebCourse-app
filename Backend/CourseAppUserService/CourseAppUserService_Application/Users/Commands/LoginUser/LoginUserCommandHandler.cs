@@ -1,8 +1,6 @@
 using CourseAppUserService_Application.Interfaces;
 using CourseAppUserService_Application.Interfaces.Services;
-using CourseAppUserService_Domain;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
 
 namespace CourseAppUserService_Application.Users.Commands.LoginUser;
 

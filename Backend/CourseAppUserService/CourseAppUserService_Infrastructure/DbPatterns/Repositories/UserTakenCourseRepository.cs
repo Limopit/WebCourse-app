@@ -10,7 +10,7 @@ public class UserTakenCourseRepository(UserServiceDbContext context)
     public async Task<List<UserTakenCourses>> GetUserTakenCoursesAsync(string userId, CancellationToken token)
     {
         return await context.UserTakenCourses
-            .Where(b => b.UserId == userId)
+            .Where(course => course.UserId == userId)
             .ToListAsync(token);
     }
 }

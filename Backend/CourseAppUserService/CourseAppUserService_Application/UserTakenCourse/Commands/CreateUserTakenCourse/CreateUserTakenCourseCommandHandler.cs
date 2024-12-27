@@ -22,6 +22,7 @@ public class CreateUserTakenCourseCommandHandler(IUnitOfWork unitOfWork, IMapper
         var userTakenCourse = await mapper.Map<CreateUserTakenCourseCommand, UserTakenCourses>(request);
         
         userTakenCourse.UserId = user.Id;
+        userTakenCourse.Status = CompletionStatus.InProgress.ToString();
         
         await unitOfWork.UserTakenCourses.AddEntityAsync(userTakenCourse, cancellationToken);
         await unitOfWork.SaveChangesAsync(cancellationToken);

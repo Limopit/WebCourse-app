@@ -13,6 +13,7 @@ public class MapperService(IMapper mapper) : IMapperService
     
     public async Task<TDestination> Update<TSource, TDestination>(TSource source, TDestination destination)
     {
-        return mapper.Map(source, destination); 
+        var result = await Task.Run(() =>  mapper.Map(source, destination));
+        return result;
     }
 }

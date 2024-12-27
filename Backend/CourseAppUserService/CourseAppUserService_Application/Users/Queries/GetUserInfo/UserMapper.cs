@@ -9,9 +9,9 @@ public class UserMapper: IMapWith<User>
     public void Mapping(Profile profile)
     {
         profile.CreateMap<User, UserDto>()
-            .ForMember(user => user.Id, opt => opt.MapFrom(u => u.Id))
-            .ForMember(user => user.FirstName, opt => opt.MapFrom(u => u.FirstName))
-            .ForMember(user => user.LastName, opt => opt.MapFrom(u => u.LastName))
-            .ForMember(user => user.Email, opt => opt.MapFrom(u => u.Email));
+            .ForMember(user => user.Id, config => config.MapFrom(u => u.Id))
+            .ForMember(user => user.FirstName, config => config.MapFrom(u => u.FirstName))
+            .ForMember(user => user.LastName, config => config.MapFrom(u => u.LastName))
+            .ForMember(user => user.Email, config => config.MapFrom(u => u.Email));
     }
 }

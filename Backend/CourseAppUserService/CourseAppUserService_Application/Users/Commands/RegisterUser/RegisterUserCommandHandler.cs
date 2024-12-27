@@ -26,7 +26,7 @@ public class RegisterUserCommandHandler(IUnitOfWork unitOfWork) : IRequestHandle
         if (!result.Succeeded)
         {
             throw new Exception(string.Join(", ", 
-                result.Errors.Select(e => e.Description)));
+                result.Errors.Select(error => error.Description)));
         }
         
         await unitOfWork.Users.GiveRoleAsync(user, request.Role);

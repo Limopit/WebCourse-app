@@ -38,7 +38,7 @@ public class DbInitializer
                 CourseId = "firstCourse",
                 UserId = AdminId.ToString(),
                 DateStart = DateTime.Now,
-                Status = "InProgress",
+                Status = CompletionStatus.InProgress.ToString()
             },
             new UserTakenCourses()
             {
@@ -46,7 +46,7 @@ public class DbInitializer
                 CourseId = "secondCourse",
                 UserId = UserId.ToString(),
                 DateStart = DateTime.Now,
-                Status = "InProgress"
+                Status = CompletionStatus.InProgress.ToString()
             }
         };
         
@@ -58,7 +58,7 @@ public class DbInitializer
                 CourseId = "thirdCourse",
                 UserId = AdminId.ToString(),
                 ApprovementDate = null,
-                ApprovementStatus = "Pending",
+                ApprovementStatus = ApprovementStatus.Pending.ToString()
             },
             new UserCreatedCourses()
             {
@@ -66,7 +66,7 @@ public class DbInitializer
                 CourseId = "fourthCourse",
                 UserId = AdminId.ToString(),
                 ApprovementDate = DateTime.Now,
-                ApprovementStatus = "Approved"
+                ApprovementStatus = ApprovementStatus.Accepted.ToString()
             }
         };
         context.UserTakenCourses.AddRange(takenCourses);

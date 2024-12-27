@@ -9,13 +9,13 @@ public class RefreshTokenRepository(UserServiceDbContext libraryDbContext) : IRe
     public async Task<RefreshToken?> ValidateRefreshToken(string refreshToken)
     {
         return await libraryDbContext.RefreshTokens
-            .Where(r => r.Token == refreshToken && r.Expires > DateTime.UtcNow)
+            .Where(token => token.Token == refreshToken && token.Expires > DateTime.UtcNow)
             .FirstOrDefaultAsync();
     }
 
     public async Task<RefreshToken?> RevokeToken(string refreshToken)
     {
         return await libraryDbContext.RefreshTokens
-            .SingleOrDefaultAsync(t => t.Token == refreshToken);
+            .SingleOrDefaultAsync(token => token.Token == refreshToken);
     }
 }
