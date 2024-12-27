@@ -12,14 +12,14 @@ public class CreateUserCreatedCourseCommandHandler(IUnitOfWork unitOfWork, IMapp
 {
     public async Task<Guid> Handle(CreateUserCreatedCourseCommand request, CancellationToken cancellationToken)
     {
-        var user = await unitOfWork.Users.FindUserByEmail(request.Email);
+        var user = await unitOfWork.Users.FindUserByEmailAsync(request.Email);
         
         if (user == null)
         {
             throw new NotFoundException(nameof(User), request.Email);
         }
 
-        var userCreatedCourse = await mapper.Map<CreateUserCreatedCourseCommand, UserCreatedCourses>(request);
+        var userCreatedCourse = await mapper.MapAsync<CreateUserCreatedCourseCommand, UserCreatedCourses>(request);
         
         userCreatedCourse.UserId = user.Id;
         

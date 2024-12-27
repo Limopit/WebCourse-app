@@ -3,5 +3,4 @@ namespace CourseAppUserService_Application.UserCreatedCourse.Queries.GetUserCrea
 public class UserCreatedCourseVm
 {
     public IList<UserCreatedCourseDto> UserCreatedCourses { get; set; }
-
 }

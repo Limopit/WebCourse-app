@@ -12,12 +12,12 @@ public class GetUserInfoCommandHandler(IUnitOfWork unitOfWork, IMapperService ma
 
     public async Task<UserDto> Handle(GetUserInfoCommand request, CancellationToken cancellationToken)
     {
-        var user = await unitOfWork.Users.FindUserByEmail(request.Email);
+        var user = await unitOfWork.Users.FindUserByEmailAsync(request.Email);
         if (user == null)
         {
             throw new NotFoundException(nameof(User), request.Email);
         }
         
-        return await mapper.Map<User, UserDto>(user);
+        return await mapper.MapAsync<User, UserDto>(user);
     }
 }

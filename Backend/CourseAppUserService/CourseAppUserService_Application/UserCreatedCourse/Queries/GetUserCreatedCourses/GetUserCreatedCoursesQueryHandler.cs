@@ -10,7 +10,7 @@ public class GetUserCreatedCoursesQueryHandler(IUnitOfWork unitOfWork, IMapperSe
 {
     public async Task<UserCreatedCourseVm> Handle(GetUserCreatedCoursesQuery request, CancellationToken cancellationToken)
     {
-        var user = await unitOfWork.Users.FindUserByEmail(request.Email);
+        var user = await unitOfWork.Users.FindUserByEmailAsync(request.Email);
         
         if (user == null)
         {
@@ -19,7 +19,7 @@ public class GetUserCreatedCoursesQueryHandler(IUnitOfWork unitOfWork, IMapperSe
         
         var courses = await unitOfWork.UserCreatedCourses.GetUserCreatedCoursesAsync(user.Id, cancellationToken);
         
-        var userCourses = await mapper.Map<List<UserCreatedCourses>, IList<UserCreatedCourseDto>>(courses);
+        var userCourses = await mapper.MapAsync<List<UserCreatedCourses>, IList<UserCreatedCourseDto>>(courses);
         
         return new UserCreatedCourseVm() { UserCreatedCourses = userCourses };
     }

@@ -13,9 +13,9 @@ using Microsoft.AspNetCore.Mvc;
 namespace CourseAppUserService.Controllers;
 
 [Route("api/[controller]")]
-public class AuthController(IMediator mediator) : BaseController(mediator)
+public class UserController(IMediator mediator) : BaseController(mediator)
 {
-    [HttpPost("register")]
+    [HttpPost]
     public async Task<IActionResult> Register([FromBody] RegisterUserCommand command)
     {
         var userId = await Mediator.Send(command);
@@ -46,7 +46,7 @@ public class AuthController(IMediator mediator) : BaseController(mediator)
     }
     
     [Authorize]
-    [HttpPut("update-data")]
+    [HttpPut]
     public async Task<IActionResult> UpdateUserData([FromBody] UpdateUserDataCommand command)
     {
         await Mediator.Send(command); 
@@ -54,7 +54,7 @@ public class AuthController(IMediator mediator) : BaseController(mediator)
     }
     
     [Authorize]
-    [HttpPut("update-password")]
+    [HttpPut("password")]
     public async Task<IActionResult> UpdateUserPassword([FromBody] UpdateUserPasswordCommand command)
     {
         await Mediator.Send(command); 
@@ -62,7 +62,7 @@ public class AuthController(IMediator mediator) : BaseController(mediator)
     }
 
     [Authorize(Roles = "Admin")]
-    [HttpGet("get-user-data")]
+    [HttpGet("user-data")]
     public async Task<IActionResult> GetUserData(string email)
     {
         var result = await Mediator.Send(new GetUserInfoCommand{Email = email});
@@ -70,7 +70,7 @@ public class AuthController(IMediator mediator) : BaseController(mediator)
     }
     
     [Authorize(Roles = "Admin")]
-    [HttpDelete("delete")]
+    [HttpDelete]
     public async Task<IActionResult> DeleteUser(string email)
     {
         await Mediator.Send(new DeleteUserCommand{Email = email});

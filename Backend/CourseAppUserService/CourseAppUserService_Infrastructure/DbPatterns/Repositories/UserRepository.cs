@@ -15,12 +15,12 @@ public class UserRepository(
         return await userManager.CreateAsync(user, password);
     }
 
-    public async Task<User?> FindUserByEmail(string email)
+    public async Task<User?> FindUserByEmailAsync(string email)
     {
         return await userManager.FindByEmailAsync(email);
     }
 
-    public async Task<User?> FindUserById(string id)
+    public async Task<User?> FindUserByIdAsync(string id)
     {
         return await userManager.FindByIdAsync(id);
     }
@@ -41,12 +41,12 @@ public class UserRepository(
         return await userManager.RemoveFromRolesAsync(user, roles);
     }
 
-    public async Task<IdentityResult?> UpdateUserPassword(User user, string currentPassword, string newPassword)
+    public async Task<IdentityResult?> UpdateUserPasswordAsync(User user, string currentPassword, string newPassword)
     {
         return await userManager.ChangePasswordAsync(user, currentPassword, newPassword);
     }
 
-    public async Task<bool> CheckPassword(User user, string password)
+    public async Task<bool> CheckPasswordAsync(User user, string password)
     {
         return await userManager.CheckPasswordAsync(user, password);
     }

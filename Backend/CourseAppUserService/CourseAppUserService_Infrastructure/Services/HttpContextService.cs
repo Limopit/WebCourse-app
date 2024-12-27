@@ -6,7 +6,7 @@ namespace CourseAppUserService_Persistance.Services;
 
 public class HttpContextService(IHttpContextAccessor httpContextAccessor) : IHttpContextService
 {
-    public async Task<string?> GetCurrentUserEmail()
+    public async Task<string?> GetCurrentUserEmailAsync()
     {
         var result = await Task.Run(() => httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
         return result;

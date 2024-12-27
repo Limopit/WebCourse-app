@@ -28,13 +28,19 @@ public class CustomExceptionHandler(RequestDelegate request)
                 code = HttpStatusCode.BadRequest;
                 result = JsonSerializer.Serialize(new
                 {
-                    Errors = userValidationException.errors
+                    errors = userValidationException.ErrorList
                 });
                 break;
             case NotFoundException:
                 code = HttpStatusCode.NotFound;
                 break;
             case RoleAssignmentException:
+                code = HttpStatusCode.BadRequest;
+                break;
+            case InvalidEmailException:
+                code = HttpStatusCode.BadRequest;
+                break;
+            case InvalidPasswordException:
                 code = HttpStatusCode.BadRequest;
                 break;
         }

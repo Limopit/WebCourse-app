@@ -9,7 +9,7 @@ public class AssignRoleCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<
 {
     public async Task<bool> Handle(AssignRoleCommand request, CancellationToken cancellationToken)
     {
-        var user = await unitOfWork.Users.FindUserByEmail(request.Email);
+        var user = await unitOfWork.Users.FindUserByEmailAsync(request.Email);
         if (user == null)
         {
             throw new NotFoundException(nameof(User), request.Email);

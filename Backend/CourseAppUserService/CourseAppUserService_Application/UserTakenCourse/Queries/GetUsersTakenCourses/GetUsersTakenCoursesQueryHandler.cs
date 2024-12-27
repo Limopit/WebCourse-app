@@ -11,7 +11,7 @@ public class GetUsersTakenCoursesQueryHandler(IUnitOfWork unitOfWork, IMapperSer
 {
     public async Task<UserTakenCourseVm> Handle(GetUsersTakenCoursesQuery request, CancellationToken cancellationToken)
     {
-        var user = await unitOfWork.Users.FindUserByEmail(request.Email);
+        var user = await unitOfWork.Users.FindUserByEmailAsync(request.Email);
         
         if (user == null)
         {
@@ -20,7 +20,7 @@ public class GetUsersTakenCoursesQueryHandler(IUnitOfWork unitOfWork, IMapperSer
         
         var courses = await unitOfWork.UserTakenCourses.GetUserTakenCoursesAsync(user.Id, cancellationToken);
         
-        var userCourses = await mapper.Map<List<UserTakenCourses>, IList<UserTakenCourseDto>>(courses);
+        var userCourses = await mapper.MapAsync<List<UserTakenCourses>, IList<UserTakenCourseDto>>(courses);
         
         return new UserTakenCourseVm { UserTakenCourses = userCourses };
     }

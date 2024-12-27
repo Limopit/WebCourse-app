@@ -13,7 +13,7 @@ namespace CourseAppUserService.Controllers;
 public class UserCourseController(IMediator mediator) : BaseController(mediator)
 {
     [Authorize]
-    [HttpPost("user/courses/taken/new")]
+    [HttpPost("taken/new")]
     public async Task<ActionResult<Guid>> CreateUserTakenCourse([FromBody] CreateUserTakenCourseCommand command)
     {
         command.Email = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -23,7 +23,7 @@ public class UserCourseController(IMediator mediator) : BaseController(mediator)
     }
     
     [Authorize]
-    [HttpGet("user/courses/taken/get")]
+    [HttpGet("taken/")]
     public async Task<ActionResult<Guid>> GetUserTakenCourses()
     {
         var result = await Mediator
@@ -33,7 +33,7 @@ public class UserCourseController(IMediator mediator) : BaseController(mediator)
     }
     
     [Authorize]
-    [HttpPost("user/courses/created/new")]
+    [HttpPost("created/new")]
     public async Task<ActionResult<Guid>> CreateUserCreatedCourse([FromBody] CreateUserCreatedCourseCommand command)
     {
         command.Email = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -42,7 +42,7 @@ public class UserCourseController(IMediator mediator) : BaseController(mediator)
         return Ok(result);
     }
     
-    [HttpGet("user/courses/created/get")]
+    [HttpGet("created/")]
     public async Task<ActionResult<Guid>> GetUserCreatedCourses(string email)
     {
         var result = await Mediator

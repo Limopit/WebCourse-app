@@ -14,20 +14,20 @@ namespace CourseAppUserService_Persistance.Services;
 public class TokenService(IConfiguration configuration, IUserServiceDbContext dbContext, UserManager<User> userManager)
     : ITokenService
 {
-    public async Task<(string accessToken, string refreshToken)> GenerateTokens(User user, CancellationToken token)
+    public async Task<(string accessToken, string refreshToken)> GenerateTokensAsync(User user, CancellationToken token)
     {
-        var accessToken = await GenerateAccessToken(user);
-        var refreshToken = await GenerateRefreshToken(user, token);
+        var accessToken = await GenerateAccessTokenAsync(user);
+        var refreshToken = await GenerateRefreshTokenAsync(user, token);
 
         return (accessToken, refreshToken);
     }
 
-    public async Task<string> GenerateNewToken(User user)
+    public async Task<string> GenerateNewTokenAsync(User user)
     {
-        return await GenerateAccessToken(user);
+        return await GenerateAccessTokenAsync(user);
     }
 
-    private async Task<string> GenerateAccessToken(User user)
+    private async Task<string> GenerateAccessTokenAsync(User user)
     {
         var issuer = configuration["Jwt:Issuer"];
         var audience = configuration["Jwt:Audience"];
@@ -63,7 +63,7 @@ public class TokenService(IConfiguration configuration, IUserServiceDbContext db
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
 
-    private async Task<string> GenerateRefreshToken(User user, CancellationToken cancellationToken)
+    private async Task<string> GenerateRefreshTokenAsync(User user, CancellationToken cancellationToken)
     {
         var randomBytes = new byte[64];
         using (var randomNum = RandomNumberGenerator.Create())

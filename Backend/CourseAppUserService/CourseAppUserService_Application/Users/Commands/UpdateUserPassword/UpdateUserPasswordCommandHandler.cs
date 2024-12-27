@@ -9,20 +9,20 @@ public class UpdateUserPasswordCommandHandler(IUnitOfWork unitOfWork, IHttpConte
 {
     public async Task Handle(UpdateUserPasswordCommand request, CancellationToken cancellationToken)
     {
-        var user = await httpContextService.GetCurrentUserEmail();
+        var user = await httpContextService.GetCurrentUserEmailAsync();
         if (user == null)
         {
             throw new UnauthorizedAccessException("You are not logged in");
         }
 
-        var currentUser = await unitOfWork.Users.FindUserByEmail(user);
+        var currentUser = await unitOfWork.Users.FindUserByEmailAsync(user);
         
-        var isValid = await unitOfWork.Users.CheckPassword(currentUser, request.PrevPassword);
+        var isValid = await unitOfWork.Users.CheckPasswordAsync(currentUser, request.OldPassword);
         if (!isValid)
         {
             throw new UnauthorizedAccessException("Invalid password");
         }
         
-        await unitOfWork.Users.UpdateUserPassword(currentUser, request.PrevPassword, request.NewPassword);
+        await unitOfWork.Users.UpdateUserPasswordAsync(currentUser, request.OldPassword, request.NewPassword);
     }
 }

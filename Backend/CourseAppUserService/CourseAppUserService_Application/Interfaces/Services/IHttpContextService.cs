@@ -2,5 +2,5 @@ namespace CourseAppUserService_Application.Interfaces.Services;
 
 public interface IHttpContextService
 {
-    Task<string?> GetCurrentUserEmail();
+    Task<string?> GetCurrentUserEmailAsync();
 }

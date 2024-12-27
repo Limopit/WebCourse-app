@@ -19,11 +19,11 @@ public class LoginTests(LoginUserMock loginUserMock) : IClassFixture<LoginUserMo
             Email = "testuser@example.com"
         };
 
-        loginUserMock.UnitOfWorkMock.Setup(uow => uow.Users.FindUserByEmail("testuser@example.com"))
+        loginUserMock.UnitOfWorkMock.Setup(uow => uow.Users.FindUserByEmailAsync("testuser@example.com"))
             .ReturnsAsync(user);
-        loginUserMock.UnitOfWorkMock.Setup(uow => uow.Users.CheckPassword(user, "password"))
+        loginUserMock.UnitOfWorkMock.Setup(uow => uow.Users.CheckPasswordAsync(user, "password"))
             .ReturnsAsync(true);
-        loginUserMock.TokenServiceMock.Setup(ts => ts.GenerateTokens(user, It.IsAny<CancellationToken>()))
+        loginUserMock.TokenServiceMock.Setup(ts => ts.GenerateTokensAsync(user, It.IsAny<CancellationToken>()))
             .ReturnsAsync(("access_token", "refresh_token"));
 
         // Act
@@ -48,7 +48,7 @@ public class LoginTests(LoginUserMock loginUserMock) : IClassFixture<LoginUserMo
         };
         var cancellationToken = new CancellationToken();
 
-        loginUserMock.UnitOfWorkMock.Setup(uow => uow.Users.FindUserByEmail(command.Email)).ReturnsAsync((User)null);
+        loginUserMock.UnitOfWorkMock.Setup(uow => uow.Users.FindUserByEmailAsync(command.Email)).ReturnsAsync((User)null);
         loginUserMock.UserManagerMock.Setup(um => um.FindByEmailAsync(command.Email)).ReturnsAsync((User)null);
 
         // Act
@@ -76,7 +76,7 @@ public class LoginTests(LoginUserMock loginUserMock) : IClassFixture<LoginUserMo
         };
         var cancellationToken = new CancellationToken();
 
-        loginUserMock.UnitOfWorkMock.Setup(uow => uow.Users.FindUserByEmail(command.Email)).ReturnsAsync(user);
+        loginUserMock.UnitOfWorkMock.Setup(uow => uow.Users.FindUserByEmailAsync(command.Email)).ReturnsAsync(user);
         loginUserMock.UserManagerMock.Setup(um => um.CheckPasswordAsync(user, command.Password)).ReturnsAsync(false);
         loginUserMock.UserManagerMock.Setup(um => um.FindByEmailAsync(command.Email)).ReturnsAsync(user);
 

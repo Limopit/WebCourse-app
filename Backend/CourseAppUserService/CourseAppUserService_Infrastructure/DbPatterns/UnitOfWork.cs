@@ -15,8 +15,10 @@ public class UnitOfWork: IUnitOfWork
     
     private readonly UserServiceDbContext _dbContext;
 
-    public UnitOfWork(UserServiceDbContext dbContext, UserManager<User> userManager,
-        SignInManager<User> signInManager, RoleManager<IdentityRole> roleManager)
+    public UnitOfWork(
+        UserServiceDbContext dbContext,
+        UserManager<User> userManager,
+        RoleManager<IdentityRole> roleManager)
     {
         _dbContext = dbContext;
         Users = new UserRepository(_dbContext, userManager, roleManager);

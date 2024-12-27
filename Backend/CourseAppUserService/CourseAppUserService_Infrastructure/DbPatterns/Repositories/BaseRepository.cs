@@ -30,7 +30,7 @@ public abstract class BaseRepository<T>: IBaseRepository<T> where T: class
         return Task.CompletedTask;
     }
 
-    public Task RemoveEntity(T entity)
+    public Task RemoveEntityAsync(T entity)
     {
         _dbSet.Remove(entity);
         return Task.CompletedTask;

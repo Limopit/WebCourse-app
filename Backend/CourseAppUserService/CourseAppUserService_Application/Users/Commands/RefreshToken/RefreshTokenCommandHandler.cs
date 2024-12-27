@@ -12,7 +12,7 @@ public class RefreshTokenCommandHandler(
 {
     public async Task<string> Handle(RefreshTokenCommand request, CancellationToken cancellationToken)
     {
-        var validatedToken = await unitOfWork.RefreshTokens.ValidateRefreshToken(request.RefreshToken);
+        var validatedToken = await unitOfWork.RefreshTokens.ValidateRefreshTokenAsync(request.RefreshToken);
         
         if (validatedToken == null)
         {
@@ -21,11 +21,11 @@ public class RefreshTokenCommandHandler(
         
         var userId = validatedToken.UserId;
 
-        var user = await unitOfWork.Users.FindUserById(userId);
+        var user = await unitOfWork.Users.FindUserByIdAsync(userId);
 
-        var newJWT = await tokenService.GenerateNewToken(user);
+        var newJWT = await tokenService.GenerateNewTokenAsync(user);
         
-        var token = await unitOfWork.RefreshTokens.RevokeToken(request.RefreshToken);
+        var token = await unitOfWork.RefreshTokens.RevokeTokenAsync(request.RefreshToken);
         
         if (token == null)
         {

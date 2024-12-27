@@ -8,8 +8,7 @@ public class DbInitializer
 {
     static Guid AdminId = Guid.NewGuid();
     static Guid UserId = Guid.NewGuid();
-    public static async Task Initialize(UserServiceDbContext context, UserManager<User> userManager,
-        RoleManager<IdentityRole> roleManager)
+    public static async Task Initialize(UserServiceDbContext context, UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
     {
         context.Users.RemoveRange(context.Users);
         context.UserCreatedCourses.RemoveRange(context.UserCreatedCourses);

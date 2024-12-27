@@ -4,6 +4,6 @@ namespace CourseAppUserService_Application.Interfaces.Repositories;
 
 public interface IRefreshTokenRepository
 {
-    Task<RefreshToken?> ValidateRefreshToken(string token);
-    Task<RefreshToken?> RevokeToken(string refreshToken);
+    Task<RefreshToken?> ValidateRefreshTokenAsync(string token);
+    Task<RefreshToken?> RevokeTokenAsync(string refreshToken);
 }

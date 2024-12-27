@@ -4,22 +4,21 @@ using MediatR;
 
 namespace CourseAppUserService_Application.Users.Commands.UpdateUserData;
 
-public class UpdateUserDataCommandHandler(IHttpContextService httpContextService,
-    IMapperService mapperService, IUnitOfWork unitOfWork)
+public class UpdateUserDataCommandHandler(IHttpContextService httpContextService, IMapperService mapperService, IUnitOfWork unitOfWork)
     : IRequestHandler<UpdateUserDataCommand>
 {
     public async Task Handle(UpdateUserDataCommand request, CancellationToken cancellationToken)
     {
-        var currentUser = await httpContextService.GetCurrentUserEmail();
+        var currentUser = await httpContextService.GetCurrentUserEmailAsync();
 
         if (currentUser == null)
         {
             throw new UnauthorizedAccessException("You are not logged in");
         }
 
-        var user = await unitOfWork.Users.FindUserByEmail(currentUser);
+        var user = await unitOfWork.Users.FindUserByEmailAsync(currentUser);
         
-        await mapperService.Update(request, user);
+        await mapperService.UpdateAsync(request, user);
         await unitOfWork.Users.UpdateAsync(user);
         
         await unitOfWork.SaveChangesAsync(cancellationToken);

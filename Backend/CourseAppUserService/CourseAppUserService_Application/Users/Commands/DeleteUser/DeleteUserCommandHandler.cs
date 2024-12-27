@@ -9,13 +9,13 @@ public class DeleteUserCommandHandler(IUnitOfWork unitOfWork):IRequestHandler<De
 {
     public async Task Handle(DeleteUserCommand request, CancellationToken cancellationToken)
     {
-        var user = await unitOfWork.Users.FindUserByEmail(request.Email);
+        var user = await unitOfWork.Users.FindUserByEmailAsync(request.Email);
         if (user == null)
         {
             throw new NotFoundException(nameof(User), request.Email);
         }
 
-        await unitOfWork.Users.RemoveEntity(user);
+        await unitOfWork.Users.RemoveEntityAsync(user);
         await unitOfWork.SaveChangesAsync(cancellationToken);
     }
 }

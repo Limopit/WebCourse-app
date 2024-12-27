@@ -7,7 +7,8 @@ public class CreateUserCreatedCourseCommandValidator: AbstractValidator<CreateUs
 {
     public CreateUserCreatedCourseCommandValidator()
     {
-        RuleFor(command => command.ApprovementStatus).Must(status => Enum.IsDefined(typeof(ApprovementStatus), status))
+        RuleFor(command => command.ApprovementStatus)
+            .Must(status => Enum.IsDefined(typeof(ApprovementStatus), status))
             .WithMessage("Invalid status value.");
     }
 }

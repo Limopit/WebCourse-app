@@ -1,3 +1,4 @@
+using CourseAppUserService_Application.Common.Exceptions;
 using CourseAppUserService_Application.Interfaces;
 using CourseAppUserService_Application.Interfaces.Services;
 using MediatR;
@@ -9,18 +10,18 @@ public class LoginUserCommandHandler(IUnitOfWork unitOfWork, ITokenService token
 {
     public async Task<(string, string)> Handle(LoginUserCommand request, CancellationToken cancellationToken)
     {
-        var user = await unitOfWork.Users.FindUserByEmail(request.Email);
+        var user = await unitOfWork.Users.FindUserByEmailAsync(request.Email);
         if (user == null)
         {
-            throw new Exception("Wrong email or password");
+            throw new InvalidEmailException();
         }
         
-        var isPasswordValid = await unitOfWork.Users.CheckPassword(user, request.Password);
+        var isPasswordValid = await unitOfWork.Users.CheckPasswordAsync(user, request.Password);
         if (!isPasswordValid)
         {
-            throw new Exception("Wrong email or password");
+            throw new InvalidPasswordException();
         }
 
-        return await tokenService.GenerateTokens(user, cancellationToken);
+        return await tokenService.GenerateTokensAsync(user, cancellationToken);
     }
 }

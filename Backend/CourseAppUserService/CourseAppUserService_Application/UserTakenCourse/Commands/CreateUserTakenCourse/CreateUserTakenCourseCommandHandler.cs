@@ -12,14 +12,14 @@ public class CreateUserTakenCourseCommandHandler(IUnitOfWork unitOfWork, IMapper
 {
     public async Task<Guid> Handle(CreateUserTakenCourseCommand request, CancellationToken cancellationToken)
     {
-        var user = await unitOfWork.Users.FindUserByEmail(request.Email);
+        var user = await unitOfWork.Users.FindUserByEmailAsync(request.Email);
         
         if (user == null)
         {
             throw new NotFoundException(nameof(User), request.Email);
         }
         
-        var userTakenCourse = await mapper.Map<CreateUserTakenCourseCommand, UserTakenCourses>(request);
+        var userTakenCourse = await mapper.MapAsync<CreateUserTakenCourseCommand, UserTakenCourses>(request);
         
         userTakenCourse.UserId = user.Id;
         userTakenCourse.Status = CompletionStatus.InProgress.ToString();
