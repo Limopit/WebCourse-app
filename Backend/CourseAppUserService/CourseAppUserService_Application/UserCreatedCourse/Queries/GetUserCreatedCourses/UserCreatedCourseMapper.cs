@@ -1,6 +1,5 @@
 using AutoMapper;
 using CourseAppUserService_Application.Common.Mappings;
-using CourseAppUserService_Application.UserTakenCourse.Queries.GetUsersTakenCourses;
 using CourseAppUserService_Domain;
 
 namespace CourseAppUserService_Application.UserCreatedCourse.Queries.GetUserCreatedCourses;

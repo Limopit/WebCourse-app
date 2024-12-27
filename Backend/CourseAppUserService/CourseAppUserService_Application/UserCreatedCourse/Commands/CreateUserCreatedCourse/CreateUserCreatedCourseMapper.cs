@@ -1,6 +1,5 @@
 using AutoMapper;
 using CourseAppUserService_Application.Common.Mappings;
-using CourseAppUserService_Application.UserTakenCourse.Commands.CreateUserTakenCourse;
 using CourseAppUserService_Domain;
 
 namespace CourseAppUserService_Application.UserCreatedCourse.Commands.CreateUserCreatedCourse;

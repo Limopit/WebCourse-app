@@ -1,4 +1,3 @@
-using AutoMapper;
 using CourseAppUserService_Application.Interfaces;
 using CourseAppUserService_Application.Interfaces.Repositories;
 using CourseAppUserService_Application.Interfaces.Services;
@@ -45,6 +44,7 @@ public static class DependencyInjection
         services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<ITokenService, TokenService>();
+        services.AddScoped<IHttpContextService, HttpContextService>();
         services.AddTransient<IMapperService, MapperService>();
     
         return services;

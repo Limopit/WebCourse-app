@@ -3,22 +3,16 @@ using CourseAppUserService_Application.Interfaces.Services;
 
 namespace CourseAppUserService_Persistance.Services;
 
-public class MapperService: IMapperService
+public class MapperService(IMapper mapper) : IMapperService
 {
-    private readonly IMapper _mapper;
-    
-    public MapperService(IMapper mapper)
-    {
-        _mapper = mapper;
-    }
-    
     public async Task<TDestination> Map<TSource, TDestination>(TSource source)
     {
-        return _mapper.Map<TDestination>(source);
+        var result = await Task.Run(() => mapper.Map<TDestination>(source)); 
+        return result;
     }
     
     public async Task<TDestination> Update<TSource, TDestination>(TSource source, TDestination destination)
     {
-        return _mapper.Map(source, destination); 
+        return mapper.Map(source, destination); 
     }
 }

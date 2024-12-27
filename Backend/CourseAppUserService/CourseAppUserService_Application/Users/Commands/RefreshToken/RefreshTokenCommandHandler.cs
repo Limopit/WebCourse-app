@@ -9,8 +9,7 @@ namespace CourseAppUserService_Application.Users.Commands.RefreshToken;
 
 public class RefreshTokenCommandHandler(
     IUnitOfWork unitOfWork,
-    ITokenService tokenService,
-    UserManager<User> userManager)
+    ITokenService tokenService)
     : IRequestHandler<RefreshTokenCommand, string>
 {
     public async Task<string> Handle(RefreshTokenCommand request, CancellationToken cancellationToken)
@@ -26,7 +25,7 @@ public class RefreshTokenCommandHandler(
 
         var user = await unitOfWork.Users.FindUserById(userId);
 
-        var newJWT = await tokenService.GenerateNewToken(user, userManager);
+        var newJWT = await tokenService.GenerateNewToken(user);
         
         var token = await unitOfWork.RefreshTokens.RevokeToken(request.RefreshToken);
         

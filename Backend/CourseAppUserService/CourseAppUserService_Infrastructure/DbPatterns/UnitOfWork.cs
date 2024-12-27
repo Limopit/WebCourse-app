@@ -19,7 +19,7 @@ public class UnitOfWork: IUnitOfWork
         SignInManager<User> signInManager, RoleManager<IdentityRole> roleManager)
     {
         _dbContext = dbContext;
-        Users = new UserRepository(signInManager, userManager, roleManager);
+        Users = new UserRepository(_dbContext, userManager, roleManager);
         UserTakenCourses = new UserTakenCourseRepository(_dbContext);
         UserCreatedCourses = new UserCreatedCourseRepository(_dbContext);
         RefreshTokens = new RefreshTokenRepository(_dbContext);

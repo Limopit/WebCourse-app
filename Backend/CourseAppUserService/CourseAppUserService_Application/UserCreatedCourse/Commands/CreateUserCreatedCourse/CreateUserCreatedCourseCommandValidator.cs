@@ -1,4 +1,3 @@
-using CourseAppUserService_Application.UserTakenCourse.Commands.CreateUserTakenCourse;
 using FluentValidation;
 
 namespace CourseAppUserService_Application.UserCreatedCourse.Commands.CreateUserCreatedCourse;

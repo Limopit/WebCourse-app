@@ -11,7 +11,7 @@ public class RegisterUserMock
 {
     public Mock<IUnitOfWork> UnitOfWorkMock { get; private set; }
     public Mock<ITokenService> TokenServiceMock { get; private set; }
-    public Mock<IUserStore<User>> UserStoreMock { get; private set; }
+    private Mock<IUserStore<User>> UserStoreMock { get; set; }
     public Mock<UserManager<User>> UserManagerMock { get; private set; }
     public RegisterUserCommandHandler Handler { get; private set; }
 
@@ -22,8 +22,7 @@ public class RegisterUserMock
 
         UserStoreMock = new Mock<IUserStore<User>>();
         UserManagerMock = new Mock<UserManager<User>>(
-            UserStoreMock.Object, null, null, null, null, null, null, null, null
-        );
+            UserStoreMock.Object);
 
         Handler = new RegisterUserCommandHandler(UnitOfWorkMock.Object);
     }

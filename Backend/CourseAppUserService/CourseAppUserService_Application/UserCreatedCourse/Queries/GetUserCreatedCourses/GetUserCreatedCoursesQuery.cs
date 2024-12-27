@@ -1,4 +1,3 @@
-using CourseAppUserService_Domain;
 using MediatR;
 
 namespace CourseAppUserService_Application.UserCreatedCourse.Queries.GetUserCreatedCourses;

@@ -8,10 +8,7 @@ namespace CourseAppUserService_Persistance
 {
     public class UserServiceDbContext : IdentityDbContext<User>, IUserServiceDbContext
     {
-        public UserServiceDbContext(DbContextOptions<UserServiceDbContext> options)
-            : base(options)
-        {
-        }
+        public UserServiceDbContext(DbContextOptions<UserServiceDbContext> options) : base(options) {}
 
         public DbSet<UserCreatedCourses> UserCreatedCourses { get; set; }
         public DbSet<UserTakenCourses> UserTakenCourses { get; set; }

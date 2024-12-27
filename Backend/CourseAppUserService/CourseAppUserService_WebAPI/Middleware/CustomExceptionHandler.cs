@@ -34,9 +34,6 @@ public class CustomExceptionHandler(RequestDelegate request)
             case NotFoundException nfe:
                 code = HttpStatusCode.NotFound;
                 break;
-            case AlreadyExistsException aee:
-                code = HttpStatusCode.BadRequest;
-                break;
             case RoleAssignmentException rae:
                 code = HttpStatusCode.BadRequest;
                 break;

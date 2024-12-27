@@ -11,24 +11,23 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace CourseAppUserService_Persistance.Services;
 
-public class TokenService(IConfiguration configuration, IUserServiceDbContext dbContext)
+public class TokenService(IConfiguration configuration, IUserServiceDbContext dbContext, UserManager<User> userManager)
     : ITokenService
 {
-    public async Task<(string accessToken, string refreshToken)> GenerateTokens(User user,
-        UserManager<User> userManager, CancellationToken token)
+    public async Task<(string accessToken, string refreshToken)> GenerateTokens(User user, CancellationToken token)
     {
-        var accessToken = await GenerateAccessToken(user, userManager);
+        var accessToken = await GenerateAccessToken(user);
         var refreshToken = await GenerateRefreshToken(user, token);
 
         return (accessToken, refreshToken);
     }
 
-    public async Task<string> GenerateNewToken(User user, UserManager<User> userManager)
+    public async Task<string> GenerateNewToken(User user)
     {
-        return await GenerateAccessToken(user, userManager);
+        return await GenerateAccessToken(user);
     }
 
-    private async Task<string> GenerateAccessToken(User user, UserManager<User> userManager)
+    private async Task<string> GenerateAccessToken(User user)
     {
         var issuer = configuration["Jwt:Issuer"];
         var audience = configuration["Jwt:Audience"];
