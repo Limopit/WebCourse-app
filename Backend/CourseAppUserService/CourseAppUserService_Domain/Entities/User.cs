@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace CourseAppUserService_Domain;
+namespace CourseAppUserService_Domain.Entities;
 
 public class User: IdentityUser
 {

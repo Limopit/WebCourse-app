@@ -1,6 +1,6 @@
 using CourseAppUserService_Application.Interfaces;
 using CourseAppUserService_Application.Interfaces.Repositories;
-using CourseAppUserService_Domain;
+using CourseAppUserService_Domain.Entities;
 using CourseAppUserService_Persistance.DbPatterns.Repositories;
 using Microsoft.AspNetCore.Identity;
 

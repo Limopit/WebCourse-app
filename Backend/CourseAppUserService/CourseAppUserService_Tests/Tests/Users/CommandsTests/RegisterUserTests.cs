@@ -1,6 +1,7 @@
 using CourseAppUserService_Application.Common.Exceptions;
 using CourseAppUserService_Application.Users.Commands.RegisterUser;
 using CourseAppUserService_Domain;
+using CourseAppUserService_Domain.Entities;
 using CourseAppUserService_Tests.Mocks;
 using Moq;
 using Microsoft.AspNetCore.Identity;

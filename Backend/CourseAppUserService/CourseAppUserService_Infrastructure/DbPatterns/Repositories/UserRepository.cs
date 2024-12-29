@@ -1,5 +1,5 @@
 using CourseAppUserService_Application.Interfaces.Repositories;
-using CourseAppUserService_Domain;
+using CourseAppUserService_Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 
 namespace CourseAppUserService_Persistance.DbPatterns.Repositories;

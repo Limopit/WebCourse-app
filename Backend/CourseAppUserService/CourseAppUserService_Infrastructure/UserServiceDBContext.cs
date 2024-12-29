@@ -1,5 +1,5 @@
 using CourseAppUserService_Application.Interfaces;
-using CourseAppUserService_Domain;
+using CourseAppUserService_Domain.Entities;
 using CourseAppUserService_Persistance.EntityTypeConfiguration;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;

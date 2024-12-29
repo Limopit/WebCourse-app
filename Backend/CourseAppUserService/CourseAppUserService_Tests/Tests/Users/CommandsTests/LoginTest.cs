@@ -1,5 +1,6 @@
+using CourseAppUserService_Application.Common.Exceptions;
 using CourseAppUserService_Application.Users.Commands.LoginUser;
-using CourseAppUserService_Domain;
+using CourseAppUserService_Domain.Entities;
 using CourseAppUserService_Tests.Mocks;
 using Moq;
 using FluentAssertions;
@@ -55,8 +56,7 @@ public class LoginTests(LoginUserMock loginUserMock) : IClassFixture<LoginUserMo
         Func<Task> act = async () => await loginUserMock.Handler.Handle(command, cancellationToken);
 
         // Assert
-        await act.Should().ThrowAsync<Exception>()
-            .WithMessage("Wrong email or password");
+        await act.Should().ThrowAsync<InvalidEmailException>();
     }
 
     [Fact]
@@ -84,7 +84,6 @@ public class LoginTests(LoginUserMock loginUserMock) : IClassFixture<LoginUserMo
         Func<Task> act = async () => await loginUserMock.Handler.Handle(command, cancellationToken);
 
         // Assert
-        await act.Should().ThrowAsync<Exception>()
-            .WithMessage("Wrong email or password");
+        await act.Should().ThrowAsync<InvalidPasswordException>();
     }
 }

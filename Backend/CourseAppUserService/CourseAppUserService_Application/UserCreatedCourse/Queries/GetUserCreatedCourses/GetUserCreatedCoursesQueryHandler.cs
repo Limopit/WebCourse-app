@@ -1,7 +1,7 @@
 using CourseAppUserService_Application.Common.Exceptions;
 using CourseAppUserService_Application.Interfaces;
 using CourseAppUserService_Application.Interfaces.Services;
-using CourseAppUserService_Domain;
+using CourseAppUserService_Domain.Entities;
 using MediatR;
 
 namespace CourseAppUserService_Application.UserCreatedCourse.Queries.GetUserCreatedCourses;

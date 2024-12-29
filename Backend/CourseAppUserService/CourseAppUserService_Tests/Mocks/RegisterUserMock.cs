@@ -2,6 +2,7 @@ using CourseAppUserService_Application.Interfaces;
 using CourseAppUserService_Application.Interfaces.Services;
 using CourseAppUserService_Application.Users.Commands.RegisterUser;
 using CourseAppUserService_Domain;
+using CourseAppUserService_Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Moq;
 

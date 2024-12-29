@@ -4,7 +4,7 @@ using System.Security.Cryptography;
 using System.Text;
 using CourseAppUserService_Application.Interfaces;
 using CourseAppUserService_Application.Interfaces.Services;
-using CourseAppUserService_Domain;
+using CourseAppUserService_Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;

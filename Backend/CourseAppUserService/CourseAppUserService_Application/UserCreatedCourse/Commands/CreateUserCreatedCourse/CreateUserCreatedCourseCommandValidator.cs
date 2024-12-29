@@ -1,4 +1,4 @@
-using CourseAppUserService_Domain;
+using CourseAppUserService_Domain.Enums;
 using FluentValidation;
 
 namespace CourseAppUserService_Application.UserCreatedCourse.Commands.CreateUserCreatedCourse;

@@ -1,4 +1,5 @@
-using CourseAppUserService_Domain;
+using CourseAppUserService_Domain.Entities;
+using CourseAppUserService_Domain.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 

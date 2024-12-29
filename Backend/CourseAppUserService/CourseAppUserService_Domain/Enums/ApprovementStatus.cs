@@ -1,4 +1,4 @@
-namespace CourseAppUserService_Domain;
+namespace CourseAppUserService_Domain.Enums;
 
 public enum ApprovementStatus
 {

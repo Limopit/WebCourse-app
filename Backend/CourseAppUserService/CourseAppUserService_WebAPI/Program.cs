@@ -2,7 +2,7 @@ using System.Reflection;
 using CourseAppUserService_Application;
 using CourseAppUserService_Application.Common.Mappings;
 using CourseAppUserService_Application.Interfaces;
-using CourseAppUserService_Domain;
+using CourseAppUserService_Domain.Entities;
 using CourseAppUserService_IdentityServer;
 using CourseAppUserService_Persistance;
 using CourseAppUserService.Middleware;
