@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CourseAppUserService_WebAPI", "CourseAppUserService_WebAPI\CourseAppUserService_WebAPI.csproj", "{A896C066-448C-4EDB-8133-2E4E5DCA19E2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CourseAppUserService_Domain", "CourseAppUserService_Domain\CourseAppUserService_Domain.csproj", "{F8154881-27A7-4BF1-B082-8360C4DBFE10}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CourseAppUserService_Application", "CourseAppUserService_Application\CourseAppUserService_Application.csproj", "{F1BAA206-0559-4294-BE2C-992434D31632}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CourseAppUserService_Infrastructure", "CourseAppUserService_Infrastructure\CourseAppUserService_Infrastructure.csproj", "{3B498C4B-8174-4D88-A7B4-6ED9C26881F4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CourseAppUserService_IdentityServer", "CourseAppUserService_IdentityServer\CourseAppUserService_IdentityServer.csproj", "{E278655A-64F9-4FFB-BDA7-C5CACF7CA435}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CourseAppUserService_Tests", "CourseAppUserService_Tests\CourseAppUserService_Tests.csproj", "{58BF52FA-7406-498A-8C18-0431575D805F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A896C066-448C-4EDB-8133-2E4E5DCA19E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A896C066-448C-4EDB-8133-2E4E5DCA19E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A896C066-448C-4EDB-8133-2E4E5DCA19E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A896C066-448C-4EDB-8133-2E4E5DCA19E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F8154881-27A7-4BF1-B082-8360C4DBFE10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8154881-27A7-4BF1-B082-8360C4DBFE10}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8154881-27A7-4BF1-B082-8360C4DBFE10}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8154881-27A7-4BF1-B082-8360C4DBFE10}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1BAA206-0559-4294-BE2C-992434D31632}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1BAA206-0559-4294-BE2C-992434D31632}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1BAA206-0559-4294-BE2C-992434D31632}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1BAA206-0559-4294-BE2C-992434D31632}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B498C4B-8174-4D88-A7B4-6ED9C26881F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B498C4B-8174-4D88-A7B4-6ED9C26881F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B498C4B-8174-4D88-A7B4-6ED9C26881F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B498C4B-8174-4D88-A7B4-6ED9C26881F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E278655A-64F9-4FFB-BDA7-C5CACF7CA435}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E278655A-64F9-4FFB-BDA7-C5CACF7CA435}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E278655A-64F9-4FFB-BDA7-C5CACF7CA435}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E278655A-64F9-4FFB-BDA7-C5CACF7CA435}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58BF52FA-7406-498A-8C18-0431575D805F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58BF52FA-7406-498A-8C18-0431575D805F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58BF52FA-7406-498A-8C18-0431575D805F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58BF52FA-7406-498A-8C18-0431575D805F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
