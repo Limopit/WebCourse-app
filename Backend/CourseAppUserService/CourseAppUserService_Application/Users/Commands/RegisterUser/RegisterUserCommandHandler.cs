@@ -15,8 +15,10 @@ public class RegisterUserCommandHandler(IUnitOfWork unitOfWork) : IRequestHandle
             FirstName = request.FirstName, 
             LastName = request.LastName
         };
+
+        var roleExists = await unitOfWork.Users.UserRoleExistsAsync(request.Role);
         
-        if (!await unitOfWork.Users.UserRoleExistsAsync(request.Role))
+        if (!roleExists)
         {
             throw new RoleAssignmentException(request.Role, " does not exist");
         }
