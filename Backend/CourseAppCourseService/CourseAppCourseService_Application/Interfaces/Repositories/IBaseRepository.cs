@@ -6,4 +6,5 @@ public interface IBaseRepository<T> where T: class
     Task AddEntityAsync(T entity, CancellationToken token);
     Task UpdateAsync(T entity);
     Task RemoveEntityAsync(T entity);
+    Task<List<T>> GetAllEntitiesAsync(CancellationToken token);
 }

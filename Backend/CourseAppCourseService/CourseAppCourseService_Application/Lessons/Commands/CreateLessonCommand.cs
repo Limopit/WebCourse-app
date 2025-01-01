@@ -1,8 +1,9 @@
-namespace CourseAppCourseService_Domain;
+using MediatR;
 
-public class Lesson
+namespace CourseAppCourseService_Application.Lessons.Commands;
+
+public class CreateLessonCommand: IRequest<Guid>
 {
-    public Guid Id { get; set; }
     public string LessonTitle {get;set;}
     public string LessonDescription {get;set;}
     public int LessonDuration {get;set;}

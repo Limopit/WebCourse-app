@@ -5,8 +5,8 @@ using MongoDB.Driver;
 
 namespace CourseAppCourseService_Infrastructure.DbPattenrs.Repositories;
 
-public class CourseRepository(ICourseDbContext context)
-    : BaseRepository<Course>(context, "Courses"), ICourseRepository
+public class LessonRepository(ICourseDbContext context)
+    : BaseRepository<Lesson>(context, "Lessons"), ILessonRepository
 {
     
 }

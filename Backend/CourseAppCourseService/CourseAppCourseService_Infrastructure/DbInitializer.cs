@@ -1,5 +1,6 @@
 using CourseAppCourseService_Application.Interfaces;
 using CourseAppCourseService_Domain;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace CourseAppCourseService_Infrastructure;
@@ -8,19 +9,23 @@ public class DbInitializer
 {
     public static async Task Initialize(ICourseDbContext courseDbContext)
     {
-        CreateCollectionIfNotExists("Courses", courseDbContext.Database);
-        CreateCollectionIfNotExists("Lessons", courseDbContext.Database);
-        CreateCollectionIfNotExists("Quizzes", courseDbContext.Database);
+        RefreshCollection("Courses", courseDbContext.Database);
+        RefreshCollection("Lessons", courseDbContext.Database);
+        RefreshCollection("Quizzes", courseDbContext.Database);
 
         await SeedDataAsync(courseDbContext.Courses, courseDbContext.Lessons, courseDbContext.Quizzes);
     }
 
-    private static void CreateCollectionIfNotExists(string collectionName, IMongoDatabase database)
+    private static void RefreshCollection(string collectionName, IMongoDatabase database)
     {
         var collections = database.ListCollectionNames().ToList();
         if (!collections.Contains(collectionName))
         {
             database.CreateCollection(collectionName);
+        }
+        else
+        {
+            database.GetCollection<BsonDocument>(collectionName).DeleteMany(FilterDefinition<BsonDocument>.Empty);
         }
     }
 
@@ -31,8 +36,8 @@ public class DbInitializer
         {
             var initialCourses = new List<Course>
             {
-                new Course { CourseId = Guid.NewGuid().ToString(), Name = "C# Basics" },
-                new Course { CourseId = Guid.NewGuid().ToString(), Name = "ASP.NET Core" }
+                new Course { CourseTitle = "C# Basics" },
+                new Course { CourseTitle = "ASP.NET Core" }
             };
             await Courses.InsertManyAsync(initialCourses);
         }
@@ -42,8 +47,8 @@ public class DbInitializer
         {
             var initialLessons = new List<Lesson>
             {
-                new Lesson { LessonId = Guid.NewGuid().ToString(), LessonName = "Lesson 1: Introduction to C#" },
-                new Lesson { LessonId = Guid.NewGuid().ToString(), LessonName = "Lesson 2: ASP.NET Core Overview" }
+                new Lesson { LessonTitle = "Lesson 1: Introduction to C#" },
+                new Lesson { LessonTitle = "Lesson 2: ASP.NET Core Overview" }
             };
             await Lessons.InsertManyAsync(initialLessons);
         }
@@ -53,8 +58,8 @@ public class DbInitializer
         {
             var initialQuizzes = new List<Quiz>
             {
-                new Quiz { QuizId = Guid.NewGuid().ToString(), QuizName = "C# Quiz" },
-                new Quiz { QuizId = Guid.NewGuid().ToString(), QuizName = "ASP.NET Core Quiz" }
+                new Quiz { QuizQuestion = "C# Quiz" },
+                new Quiz { QuizQuestion = "ASP.NET Core Quiz" }
             };
             await Quizzes.InsertManyAsync(initialQuizzes);
         }

@@ -1,3 +1,6 @@
+using System.Reflection;
+using CourseAppCourseService_Application;
+using CourseAppCourseService_Application.Common.Mappings;
 using CourseAppCourseService_Application.Interfaces;
 using CourseAppCourseService_Infrastructure;
 
@@ -7,7 +10,17 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
+builder.Services.AddApplication();
 builder.Services.AddPersistence(builder.Configuration);
+
+builder.Services.AddAutoMapper(config =>
+{
+    config.AddProfile(new AssemblyMappingProfile(Assembly.GetExecutingAssembly()));
+    config.AddProfile(new AssemblyMappingProfile(typeof(ICourseDbContext).Assembly));
+});
+
+builder.Services.AddSwaggerGen(); 
+builder.Services.AddControllers();
 
 var app = builder.Build();
 
@@ -32,6 +45,7 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
+app.MapControllers();
 app.UseHttpsRedirection();
 
 app.Run();
