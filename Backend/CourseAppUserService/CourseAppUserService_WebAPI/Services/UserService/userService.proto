@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+option csharp_namespace = "UserServiceRpc";
+
+package userServiceRpc;
+
+service UserService {
+  rpc CreateUserCreatedCourseRecord(CreateCourseRequest) returns (CreateRecordResponse);
+}
+
+message CreateCourseRequest {
+  string course_id = 1;
+}
+
+message CreateRecordResponse {
+  string record_id = 1;
+}

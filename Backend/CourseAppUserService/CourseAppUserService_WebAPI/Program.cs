@@ -6,6 +6,7 @@ using CourseAppUserService_Domain.Entities;
 using CourseAppUserService_IdentityServer;
 using CourseAppUserService_Persistance;
 using CourseAppUserService.Middleware;
+using CourseAppUserService.Services.UserService;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.OpenApi.Models;
 
@@ -75,6 +76,11 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
+builder.Services.AddGrpc();
+
+builder.Services.AddScoped<UserService>();
+
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
@@ -117,5 +123,7 @@ using (var scope = app.Services.CreateScope())
     var services = scope.ServiceProvider;
     await RoleInitializer.SeedRolesAsync(services);
 }
+
+app.MapGrpcService<UserService>();
 
 app.Run();

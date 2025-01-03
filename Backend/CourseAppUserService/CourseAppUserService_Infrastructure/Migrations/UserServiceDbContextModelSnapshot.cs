@@ -22,7 +22,7 @@ namespace CourseAppUserService_Persistance.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("CourseAppUserService_Domain.RefreshToken", b =>
+            modelBuilder.Entity("CourseAppUserService_Domain.Entities.RefreshToken", b =>
                 {
                     b.Property<string>("Token")
                         .HasMaxLength(500)
@@ -48,7 +48,7 @@ namespace CourseAppUserService_Persistance.Migrations
                     b.ToTable("RefreshTokens", (string)null);
                 });
 
-            modelBuilder.Entity("CourseAppUserService_Domain.User", b =>
+            modelBuilder.Entity("CourseAppUserService_Domain.Entities.User", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -126,7 +126,7 @@ namespace CourseAppUserService_Persistance.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("CourseAppUserService_Domain.UserCreatedCourses", b =>
+            modelBuilder.Entity("CourseAppUserService_Domain.Entities.UserCreatedCourses", b =>
                 {
                     b.Property<Guid>("RecordId")
                         .ValueGeneratedOnAdd()
@@ -143,8 +143,8 @@ namespace CourseAppUserService_Persistance.Migrations
 
                     b.Property<string>("CourseId")
                         .IsRequired()
-                        .HasMaxLength(24)
-                        .HasColumnType("nvarchar(24)");
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -158,7 +158,7 @@ namespace CourseAppUserService_Persistance.Migrations
                     b.ToTable("UserCreatedCourses", (string)null);
                 });
 
-            modelBuilder.Entity("CourseAppUserService_Domain.UserTakenCourses", b =>
+            modelBuilder.Entity("CourseAppUserService_Domain.Entities.UserTakenCourses", b =>
                 {
                     b.Property<Guid>("RecordId")
                         .ValueGeneratedOnAdd()
@@ -328,9 +328,9 @@ namespace CourseAppUserService_Persistance.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("CourseAppUserService_Domain.RefreshToken", b =>
+            modelBuilder.Entity("CourseAppUserService_Domain.Entities.RefreshToken", b =>
                 {
-                    b.HasOne("CourseAppUserService_Domain.User", "User")
+                    b.HasOne("CourseAppUserService_Domain.Entities.User", "User")
                         .WithMany("RefreshTokens")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -339,9 +339,9 @@ namespace CourseAppUserService_Persistance.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("CourseAppUserService_Domain.UserCreatedCourses", b =>
+            modelBuilder.Entity("CourseAppUserService_Domain.Entities.UserCreatedCourses", b =>
                 {
-                    b.HasOne("CourseAppUserService_Domain.User", "User")
+                    b.HasOne("CourseAppUserService_Domain.Entities.User", "User")
                         .WithMany("CreatedCourses")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -350,9 +350,9 @@ namespace CourseAppUserService_Persistance.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("CourseAppUserService_Domain.UserTakenCourses", b =>
+            modelBuilder.Entity("CourseAppUserService_Domain.Entities.UserTakenCourses", b =>
                 {
-                    b.HasOne("CourseAppUserService_Domain.User", "User")
+                    b.HasOne("CourseAppUserService_Domain.Entities.User", "User")
                         .WithMany("TakenCourses")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -372,7 +372,7 @@ namespace CourseAppUserService_Persistance.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("CourseAppUserService_Domain.User", null)
+                    b.HasOne("CourseAppUserService_Domain.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -381,7 +381,7 @@ namespace CourseAppUserService_Persistance.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("CourseAppUserService_Domain.User", null)
+                    b.HasOne("CourseAppUserService_Domain.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -396,7 +396,7 @@ namespace CourseAppUserService_Persistance.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CourseAppUserService_Domain.User", null)
+                    b.HasOne("CourseAppUserService_Domain.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -405,14 +405,14 @@ namespace CourseAppUserService_Persistance.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("CourseAppUserService_Domain.User", null)
+                    b.HasOne("CourseAppUserService_Domain.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("CourseAppUserService_Domain.User", b =>
+            modelBuilder.Entity("CourseAppUserService_Domain.Entities.User", b =>
                 {
                     b.Navigation("CreatedCourses");
 

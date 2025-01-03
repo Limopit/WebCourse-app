@@ -16,7 +16,7 @@ public class UserCourseController(IMediator mediator) : BaseController(mediator)
     [HttpPost("taken/new")]
     public async Task<ActionResult<Guid>> CreateUserTakenCourse([FromBody] CreateUserTakenCourseCommand command)
     {
-        command.Email = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        command.Email = User.FindFirstValue(ClaimTypes.Email);
         var result = await Mediator.Send(command);
         
         return Ok(result);

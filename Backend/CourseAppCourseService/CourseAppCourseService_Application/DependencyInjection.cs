@@ -1,5 +1,6 @@
 using System.Reflection;
 using CourseAppCourseService_Application.Common.Behavior;
+using CourseAppCourseService_Application.Courses.Commands.CreateCourse;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,7 +14,7 @@ public static class DependencyInjection
         services.AddMediatR(cfg
             =>cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
         
-        //services.AddValidatorsFromAssemblyContaining<RegisterUserCommand>();
+        services.AddValidatorsFromAssemblyContaining<CreateCourseCommand>();
         services.AddTransient(typeof(IPipelineBehavior<,>),
             typeof(ValidationBehavior<,>));
         

@@ -17,7 +17,7 @@ public class UserCreatedCoursesConfiguration: IEntityTypeConfiguration<UserCreat
 
         builder.Property(course => course.CourseId)
             .IsRequired()
-            .HasMaxLength(24);
+            .HasMaxLength(64);
 
         builder.Property(course => course.ApprovementStatus)
             .IsRequired()
