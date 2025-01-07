@@ -18,10 +18,14 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
     {
+        var objectDiscriminatorConvention = BsonSerializer.LookupDiscriminatorConvention(typeof(object));
+        var objectSerializer = new ObjectSerializer(objectDiscriminatorConvention, GuidRepresentation.Standard);
+        BsonSerializer.RegisterSerializer(objectSerializer);
+        BsonSerializer.RegisterSerializer(new GuidSerializer(BsonType.String));
         var connectionString = configuration.GetConnectionString("DbConnection");
         var databaseName = configuration.GetValue<string>("MongoDbDatabaseName");
         
-        CollectionConfigurations.ConfigureCollectionMappings();
+        //CollectionConfigurations.ConfigureCollectionMappings();
 
         var mongoUrl = new MongoUrl(connectionString);
         services.AddSingleton<IMongoClient>(new MongoClient(mongoUrl));

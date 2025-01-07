@@ -1,9 +1,10 @@
 using MediatR;
 
-namespace CourseAppCourseService_Application.Lessons.Commands;
+namespace CourseAppCourseService_Application.Lessons.Commands.UpdateLesson;
 
-public class CreateLessonCommand: IRequest<Guid>
+public class UpdateLessonCommand: IRequest
 {
+    public Guid Id { get; set; }
     public string LessonTitle {get;set;}
     public string LessonDescription {get;set;}
     public int LessonDuration {get;set;}

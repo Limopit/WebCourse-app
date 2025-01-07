@@ -1,4 +1,6 @@
 using CourseAppCourseService_Application.Quizzes.Commands.CreateQuiz;
+using CourseAppCourseService_Application.Quizzes.Commands.DeleteQuiz;
+using CourseAppCourseService_Application.Quizzes.Commands.UpdateQuiz;
 using CourseAppCourseService_Application.Quizzes.Queries.GetQuizList;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -22,5 +24,21 @@ public class QuizController(IMediator mediator) : BaseController(mediator)
         var result = await Mediator.Send(command);
         
         return Ok(result);
+    }
+    
+    [HttpPut]
+    public async Task<ActionResult> UpdateQuiz([FromBody]UpdateQuizCommand command)
+    {
+        await Mediator.Send(command);
+        
+        return Ok();
+    }
+    
+    [HttpDelete]
+    public async Task<ActionResult> DeleteQuiz(Guid id)
+    {
+        await Mediator.Send(new DeleteQuizCommand(){ QuizId = id });
+        
+        return Ok();
     }
 }

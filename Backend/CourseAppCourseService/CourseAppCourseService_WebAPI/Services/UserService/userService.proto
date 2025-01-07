@@ -6,6 +6,7 @@ package userServiceRpc;
 
 service UserService {
   rpc CreateUserCreatedCourseRecord(CreateCourseRequest) returns (CreateRecordResponse);
+  rpc DeleteCourseRecords(DeleteCourseRecordRequest) returns (DeleteCourseRecordResponse);
 }
 
 message CreateCourseRequest {
@@ -14,4 +15,12 @@ message CreateCourseRequest {
 
 message CreateRecordResponse {
   string record_id = 1;
+}
+
+message DeleteCourseRecordRequest {
+  string course_id = 1;
+}
+
+message DeleteCourseRecordResponse {
+  bool result = 1;
 }

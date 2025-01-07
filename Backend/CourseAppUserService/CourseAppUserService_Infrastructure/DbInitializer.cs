@@ -43,7 +43,7 @@ public class DbInitializer
             new UserTakenCourses()
             {
                 RecordId = takenCourseRecordIdB,
-                CourseId = "secondCourse",
+                CourseId = "firstCourse",
                 UserId = UserId.ToString(),
                 DateStart = DateTime.Now,
                 Status = CompletionStatus.InProgress.ToString()

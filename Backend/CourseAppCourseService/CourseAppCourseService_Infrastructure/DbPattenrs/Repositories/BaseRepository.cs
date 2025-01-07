@@ -1,5 +1,6 @@
 using CourseAppCourseService_Application.Interfaces;
 using CourseAppCourseService_Application.Interfaces.Repositories;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace CourseAppCourseService_Infrastructure.DbPattenrs.Repositories;
@@ -15,6 +16,7 @@ public abstract class BaseRepository<T>(ICourseDbContext context, string collect
         return await Collection.Find(filter).FirstOrDefaultAsync(token);
     }
 
+
     public async Task AddEntityAsync(T entity, CancellationToken token)
     {
         await Collection.InsertOneAsync(entity, cancellationToken: token);
@@ -22,13 +24,13 @@ public abstract class BaseRepository<T>(ICourseDbContext context, string collect
 
     public async Task UpdateAsync(T entity)
     {
-        var filter = Builders<T>.Filter.Eq("_id", entity.GetType().GetProperty("Id")?.GetValue(entity));
+        var filter = Builders<T>.Filter.Eq("_id", entity.GetType().GetProperty("Id")?.GetValue(entity).ToString());
         await Collection.ReplaceOneAsync(filter, entity);
     }
 
     public async Task RemoveEntityAsync(T entity)
     {
-        var filter = Builders<T>.Filter.Eq("_id", entity.GetType().GetProperty("Id")?.GetValue(entity));
+        var filter = Builders<T>.Filter.Eq("_id", entity.GetType().GetProperty("Id")?.GetValue(entity).ToString());
         await Collection.DeleteOneAsync(filter);
     }
 

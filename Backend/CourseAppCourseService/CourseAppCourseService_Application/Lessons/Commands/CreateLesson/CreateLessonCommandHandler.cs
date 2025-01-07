@@ -3,7 +3,7 @@ using CourseAppCourseService_Application.Interfaces.Services;
 using CourseAppCourseService_Domain;
 using MediatR;
 
-namespace CourseAppCourseService_Application.Lessons.Commands;
+namespace CourseAppCourseService_Application.Lessons.Commands.CreateLesson;
 
 public class CreateLessonCommandHandler(IUnitOfWork unitOfWork, IMapperService mapper): IRequestHandler<CreateLessonCommand, Guid>
 {

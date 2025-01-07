@@ -2,7 +2,7 @@ using AutoMapper;
 using CourseAppCourseService_Application.Common.Mappings;
 using CourseAppCourseService_Domain;
 
-namespace CourseAppCourseService_Application.Lessons.Commands;
+namespace CourseAppCourseService_Application.Lessons.Commands.CreateLesson;
 
 public class LessonMapper: IMapWith<Lesson>
 {

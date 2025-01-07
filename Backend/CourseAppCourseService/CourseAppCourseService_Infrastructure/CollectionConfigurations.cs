@@ -26,7 +26,7 @@ public static class CollectionConfigurations
             if (idMember != null)
             {
                 cm.MapIdMember(idMember)
-                    .SetSerializer(new GuidSerializer(BsonType.String));
+                    .SetSerializer(new GuidSerializer(GuidRepresentation.Standard));
             }
             else
             {

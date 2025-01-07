@@ -1,7 +1,6 @@
-using CourseAppCourseService_Application.Courses.Commands.CreateCourse;
 using FluentValidation;
 
-namespace CourseAppCourseService_Application.Lessons.Commands;
+namespace CourseAppCourseService_Application.Lessons.Commands.CreateLesson;
 
 public class CreateLessonCommandValidator: AbstractValidator<CreateLessonCommand>
 {

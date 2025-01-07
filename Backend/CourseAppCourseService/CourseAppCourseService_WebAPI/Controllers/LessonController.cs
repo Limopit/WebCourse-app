@@ -1,4 +1,7 @@
 using CourseAppCourseService_Application.Lessons.Commands;
+using CourseAppCourseService_Application.Lessons.Commands.CreateLesson;
+using CourseAppCourseService_Application.Lessons.Commands.DeleteLesson;
+using CourseAppCourseService_Application.Lessons.Commands.UpdateLesson;
 using CourseAppCourseService_Application.Lessons.Queries.GetLessonList;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -21,5 +24,21 @@ public class LessonController(IMediator mediator) : BaseController(mediator)
         var result = await Mediator.Send(command);
         
         return Ok(result);
+    }
+    
+    [HttpPut]
+    public async Task<ActionResult> UpdateLesson([FromBody]UpdateLessonCommand command)
+    {
+        await Mediator.Send(command);
+        
+        return Ok();
+    }
+    
+    [HttpDelete]
+    public async Task<ActionResult> DeleteLesson(Guid id)
+    {
+        await Mediator.Send(new DeleteLessonCommand(){ LessonId = id });
+        
+        return Ok();
     }
 }

@@ -1,9 +1,12 @@
 using System.Reflection;
+using System.Text;
 using CourseAppCourseService_Application;
 using CourseAppCourseService_Application.Common.Mappings;
 using CourseAppCourseService_Application.Interfaces;
 using CourseAppCourseService_Infrastructure;
 using CourseAppCourseService.Middleware;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,7 +23,32 @@ builder.Services.AddAutoMapper(config =>
 });
 builder.Services.AddPersistence(builder.Configuration);
 
-builder.Services.AddSwaggerGen(); 
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header,
+        Description = "Введите токен в формате **Bearer {ваш_токен}**",
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer"
+    });
+    
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] {}
+        }
+    });
+}); 
 builder.Services.AddControllers();
 
 builder.Services.AddGrpcClient<UserServiceRpc.UserService.UserServiceClient>(options =>
@@ -37,6 +65,22 @@ builder.Services.AddGrpcClient<UserServiceRpc.UserService.UserServiceClient>(opt
     
     return handler;
 });
+
+builder.Services.AddAuthentication("Bearer")
+    .AddJwtBearer(options =>
+    {
+        options.Authority = "https://localhost:7210";
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = "UserService",
+            ValidAudience = "OtherServices",
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("ThisKeyWillMakeMyJWTTokenTheBest"))
+        };
+    });
 
 var app = builder.Build();
 
@@ -61,6 +105,8 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
+app.UseAuthentication();
+app.UseAuthorization();
 app.UseCustomExceptionHandler();
 app.MapControllers();
 app.UseHttpsRedirection();
