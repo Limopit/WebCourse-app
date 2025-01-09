@@ -16,11 +16,9 @@ namespace CourseAppUserService.Services.UserService
         public override async Task<CreateRecordResponse> CreateUserCreatedCourseRecord(CreateCourseRequest request,
             ServerCallContext context)
         {
-            var httpContext = context.GetHttpContext();
-            var email = httpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
             var command = new CreateUserCreatedCourseCommand
             {
-                Email = "admin@gmail.com", //await contextService.GetCurrentUserEmailAsync(),
+                Email = request.Email,
                 CourseId = request.CourseId,
                 ApprovementStatus = ApprovementStatus.Pending,
             };

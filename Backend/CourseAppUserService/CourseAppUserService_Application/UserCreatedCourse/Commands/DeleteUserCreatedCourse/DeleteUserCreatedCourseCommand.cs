@@ -4,5 +4,5 @@ namespace CourseAppUserService_Application.UserCreatedCourse.Commands.DeleteUser
 
 public class DeleteUserCreatedCourseCommand: IRequest
 {
-    public string CourseId { get; set; }
+    public required string CourseId { get; set; }
 }

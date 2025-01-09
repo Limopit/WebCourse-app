@@ -7,7 +7,6 @@ namespace CourseAppCourseService_Application.Quizzes.Queries.GetQuizList;
 
 public class GetQuizListQueryHandler(IUnitOfWork unitOfWork, IMapperService mapper): IRequestHandler<GetQuizListQuery, QuizVm>
 {
-    
     public async Task<QuizVm> Handle(GetQuizListQuery request, CancellationToken cancellationToken)
     {
         var quizzes = await unitOfWork.Quizzes.GetAllEntitiesAsync(cancellationToken);

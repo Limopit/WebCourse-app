@@ -18,6 +18,7 @@ public class UpdateCourseCommandHandler(IUnitOfWork unitOfWork, IMapperService m
         }
         
         await mapper.UpdateAsync(request, course);
+        course.UpdateDate = DateTime.Now;
         await unitOfWork.Courses.UpdateAsync(course);
     }
 }

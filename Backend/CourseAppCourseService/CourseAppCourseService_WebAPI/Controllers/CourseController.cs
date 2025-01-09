@@ -1,9 +1,11 @@
+using System.Security.Claims;
 using CourseAppCourseService_Application.Courses.Commands.CreateCourse;
 using CourseAppCourseService_Application.Courses.Commands.DeleteCourse;
 using CourseAppCourseService_Application.Courses.Commands.UpdateCourse;
 using CourseAppCourseService_Application.Courses.Queries.GetCourseList;
 using Grpc.Core;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UserServiceRpc;
 
@@ -20,6 +22,7 @@ public class CourseController(IMediator mediator, UserServiceRpc.UserService.Use
         return Ok(result);
     }
     
+    [Authorize]
     [HttpPost]
     public async Task<ActionResult> CreateCourse([FromBody]CreateCourseCommand command)
     {
@@ -29,6 +32,7 @@ public class CourseController(IMediator mediator, UserServiceRpc.UserService.Use
 
             var grpcRequest = new CreateCourseRequest()
             {
+                Email = User.FindFirstValue(ClaimTypes.NameIdentifier),
                 CourseId = createdRecordId.ToString()
             };
 
@@ -66,9 +70,9 @@ public class CourseController(IMediator mediator, UserServiceRpc.UserService.Use
                 CourseId = id.ToString()
             };
             
-            userServiceClient.DeleteCourseRecords(grpcRequest);
+            var result = userServiceClient.DeleteCourseRecords(grpcRequest);
             
-            return Ok();
+            return Ok(result);
         }
         catch (RpcException grpcEx)
         {

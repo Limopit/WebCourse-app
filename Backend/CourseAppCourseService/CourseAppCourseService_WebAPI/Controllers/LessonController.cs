@@ -1,4 +1,3 @@
-using CourseAppCourseService_Application.Lessons.Commands;
 using CourseAppCourseService_Application.Lessons.Commands.CreateLesson;
 using CourseAppCourseService_Application.Lessons.Commands.DeleteLesson;
 using CourseAppCourseService_Application.Lessons.Commands.UpdateLesson;

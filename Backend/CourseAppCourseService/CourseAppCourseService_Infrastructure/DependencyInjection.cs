@@ -1,7 +1,6 @@
 using CourseAppCourseService_Application.Interfaces;
 using CourseAppCourseService_Application.Interfaces.Repositories;
 using CourseAppCourseService_Application.Interfaces.Services;
-using CourseAppCourseService_Domain;
 using CourseAppCourseService_Infrastructure.DbPattenrs;
 using CourseAppCourseService_Infrastructure.DbPattenrs.Repositories;
 using CourseAppCourseService_Infrastructure.Services;
@@ -22,11 +21,10 @@ public static class DependencyInjection
         var objectSerializer = new ObjectSerializer(objectDiscriminatorConvention, GuidRepresentation.Standard);
         BsonSerializer.RegisterSerializer(objectSerializer);
         BsonSerializer.RegisterSerializer(new GuidSerializer(BsonType.String));
+        
         var connectionString = configuration.GetConnectionString("DbConnection");
         var databaseName = configuration.GetValue<string>("MongoDbDatabaseName");
         
-        //CollectionConfigurations.ConfigureCollectionMappings();
-
         var mongoUrl = new MongoUrl(connectionString);
         services.AddSingleton<IMongoClient>(new MongoClient(mongoUrl));
 

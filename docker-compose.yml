@@ -1,0 +1,94 @@
+version: '3.8'
+services:
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    environment:
+      MONGO_INITDB_DATABASE: WebCourseApp
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js
+    networks:
+      - grpc-network
+        
+  mssql:
+    build:
+      context: .  
+      dockerfile: Backend/CourseAppUserService/CourseAppUserService_Infrastructure/Dockerfile
+    container_name: mssql
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "StrongPassword123"
+      MSSQL_PID: "Developer"
+    ports:
+      - "1433:1433"
+    volumes:
+      - mssql-data:/var/opt/mssql
+      - UserServiceDb:/var/opt/mssql/db
+    healthcheck:
+      test: nc -z localhost 1433
+      interval: 10s
+      retries: 5
+      start_period: 15s
+      timeout: 20s
+    networks:
+      - grpc-network
+  
+  webapi_identity:
+    build:
+      context: .
+      dockerfile: Backend/CourseAppUserService/CourseAppUserService_IdentityServer/Dockerfile
+    ports:
+      - "5001:8080"
+    environment:
+      - Authority = https://webapi_identity:5001
+    networks:
+      - grpc-network
+
+  webapi_user:
+    build:
+      context: .
+      dockerfile: Backend/CourseAppUserService/CourseAppUserService_WebAPI/Dockerfile
+    ports:
+      - "5002:8080"
+    environment:
+      - DbConnection =Server=mssql,1433;Database=UserServiceDb;UserId=sa;Password=StrongPassword123
+    healthcheck:
+      test: nc -z localhost 8080
+      interval: 10s
+      retries: 5
+      start_period: 15s
+      timeout: 20s
+    depends_on:
+      mssql:
+        condition: service_healthy
+    networks:
+      - grpc-network
+  
+  webapi_course:
+    build:
+      context: .
+      dockerfile: Backend/CourseAppCourseService/CourseAppCourseService_WebAPI/Dockerfile
+    ports:
+      - "5000:8080"
+    environment:
+      - DbConnection = mongodb://mongo:27017/
+      - MongoDbDatabaseName = WebCourseDb
+    depends_on:
+      webapi_user:
+        condition: service_healthy
+    networks:
+      - grpc-network
+
+volumes:
+  UserServiceDb:
+  mongo-data:
+    driver: local
+  mssql-data:
+    driver: local
+    
+networks:
+  grpc-network:
+    driver: bridge

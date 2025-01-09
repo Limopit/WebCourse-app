@@ -4,5 +4,5 @@ namespace CourseAppUserService_Application.UserTakenCourse.Commands.DeleteUserTa
 
 public class DeleteUserTakenCourseCommand: IRequest
 {
-    public string CourseId { get; set; }
+    public required string CourseId { get; set; }
 }

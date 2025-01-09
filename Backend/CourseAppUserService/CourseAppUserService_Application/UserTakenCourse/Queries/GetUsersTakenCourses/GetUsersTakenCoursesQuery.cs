@@ -4,5 +4,5 @@ namespace CourseAppUserService_Application.UserTakenCourse.Queries.GetUsersTaken
 
 public class GetUsersTakenCoursesQuery: IRequest<UserTakenCourseVm>
 {
-    public string Email { get; set; }
+    public required string Email { get; set; }
 }

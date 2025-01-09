@@ -4,5 +4,5 @@ namespace CourseAppUserService_Application.Users.Commands.DeleteUser;
 
 public class DeleteUserCommand: IRequest
 {
-    public string Email { get; set; }
+    public required string Email { get; set; }
 }

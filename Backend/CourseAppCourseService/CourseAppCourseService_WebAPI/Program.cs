@@ -21,6 +21,7 @@ builder.Services.AddAutoMapper(config =>
     config.AddProfile(new AssemblyMappingProfile(Assembly.GetExecutingAssembly()));
     config.AddProfile(new AssemblyMappingProfile(typeof(ICourseDbContext).Assembly));
 });
+
 builder.Services.AddPersistence(builder.Configuration);
 
 builder.Services.AddSwaggerGen(options =>
@@ -49,17 +50,17 @@ builder.Services.AddSwaggerGen(options =>
         }
     });
 }); 
+
 builder.Services.AddControllers();
 
 builder.Services.AddGrpcClient<UserServiceRpc.UserService.UserServiceClient>(options =>
 {
-    options.Address = new Uri("https://localhost:7018");
+    options.Address = new Uri("http://webapi_user:8080");
 })
 .ConfigurePrimaryHttpMessageHandler(() =>
 {
     var handler = new HttpClientHandler();
     
-    // Отключаем проверку сертификатов (небезопасно для продакшн)
     handler.ServerCertificateCustomValidationCallback = 
         (sender, certificate, chain, sslPolicyErrors) => true;
     
@@ -69,7 +70,7 @@ builder.Services.AddGrpcClient<UserServiceRpc.UserService.UserServiceClient>(opt
 builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer(options =>
     {
-        options.Authority = "https://localhost:7210";
+        options.Authority = "https://webapi_identity:5001";
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
@@ -85,10 +86,13 @@ builder.Services.AddAuthentication("Bearer")
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+    });
 }
 
 using (var scope = app.Services.CreateScope())

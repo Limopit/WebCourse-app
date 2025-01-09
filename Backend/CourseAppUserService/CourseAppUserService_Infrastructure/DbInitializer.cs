@@ -9,15 +9,16 @@ public class DbInitializer
 {
     static Guid AdminId = Guid.NewGuid();
     static Guid UserId = Guid.NewGuid();
+    
     public static async Task Initialize(UserServiceDbContext context, UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
     {
+        await context.Database.MigrateAsync();
+        
         context.Users.RemoveRange(context.Users);
         context.UserCreatedCourses.RemoveRange(context.UserCreatedCourses);
         context.UserTakenCourses.RemoveRange(context.UserTakenCourses);
         context.RefreshTokens.RemoveRange(context.RefreshTokens);
         await context.SaveChangesAsync();
-
-        await context.Database.MigrateAsync();
         
         await SeedUsersAndRolesAsync(userManager, roleManager);
         SeedDatabase(context);
