@@ -8,7 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration
     .SetBasePath(Directory.GetCurrentDirectory())
     .AddJsonFile("appsettings.Identity.Development.json", optional: true, reloadOnChange: true)
-    .AddJsonFile("appsettings.Identity.json", optional: true, reloadOnChange: true);
+    .AddJsonFile("appsettings.Identity.json", optional: true, reloadOnChange: true)
+    .AddJsonFile($"appsettings.Identity.{builder.Environment.EnvironmentName}.json", optional: true);
 
 builder.Services.AddIdentityServer(options =>
     {

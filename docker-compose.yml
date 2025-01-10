@@ -10,9 +10,7 @@ services:
     volumes:
       - mongo-data:/data/db
       - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js
-    networks:
-      - grpc-network
-        
+
   mssql:
     build:
       context: .  
@@ -33,30 +31,30 @@ services:
       retries: 5
       start_period: 15s
       timeout: 20s
-    networks:
-      - grpc-network
   
   webapi_identity:
     build:
       context: .
       dockerfile: Backend/CourseAppUserService/CourseAppUserService_IdentityServer/Dockerfile
     ports:
-      - "5001:8080"
+      - "5001:5001"
     environment:
-      - Authority = https://webapi_identity:5001
-    networks:
-      - grpc-network
+      - DOTNET_ENVIRONMENT=Development
+      - Authority=https://localhost:5001
 
   webapi_user:
     build:
       context: .
       dockerfile: Backend/CourseAppUserService/CourseAppUserService_WebAPI/Dockerfile
     ports:
-      - "5002:8080"
+      - "5002:5002"
     environment:
+      - DOTNET_ENVIRONMENT=Docker
+      - IDENTITY_CONFIG_PATH=/app/appsettings.Identity.Docker.json
+      - ASPNETCORE_Kestrel__Endpoints__Grpc__Protocols=Http2
       - DbConnection =Server=mssql,1433;Database=UserServiceDb;UserId=sa;Password=StrongPassword123
     healthcheck:
-      test: nc -z localhost 8080
+      test: nc -z localhost 5002
       interval: 10s
       retries: 5
       start_period: 15s
@@ -64,23 +62,27 @@ services:
     depends_on:
       mssql:
         condition: service_healthy
-    networks:
-      - grpc-network
   
   webapi_course:
     build:
       context: .
       dockerfile: Backend/CourseAppCourseService/CourseAppCourseService_WebAPI/Dockerfile
     ports:
-      - "5000:8080"
+      - "5000:5000"
     environment:
+      - DOTNET_ENVIRONMENT=Docker
       - DbConnection = mongodb://mongo:27017/
+      - ASPNETCORE_Kestrel__Endpoints__Grpc__Protocols=Http2
       - MongoDbDatabaseName = WebCourseDb
+    healthcheck:
+      test: nc -z localhost 5000
+      interval: 10s
+      retries: 5
+      start_period: 15s
+      timeout: 20s
     depends_on:
       webapi_user:
         condition: service_healthy
-    networks:
-      - grpc-network
 
 volumes:
   UserServiceDb:
@@ -88,7 +90,3 @@ volumes:
     driver: local
   mssql-data:
     driver: local
-    
-networks:
-  grpc-network:
-    driver: bridge

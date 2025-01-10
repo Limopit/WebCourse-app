@@ -1,3 +1,4 @@
+using System.Net.Security;
 using System.Reflection;
 using System.Text;
 using CourseAppCourseService_Application;
@@ -12,6 +13,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+builder.Configuration.AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true);
+
 builder.Services.AddOpenApi();
 
 builder.Services.AddApplication();
@@ -54,23 +57,23 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddControllers();
 
 builder.Services.AddGrpcClient<UserServiceRpc.UserService.UserServiceClient>(options =>
-{
-    options.Address = new Uri("http://webapi_user:8080");
-})
-.ConfigurePrimaryHttpMessageHandler(() =>
-{
-    var handler = new HttpClientHandler();
+    {
+        options.Address = new Uri("https://localhost:5002");
+    })
+    .ConfigurePrimaryHttpMessageHandler(() =>
+    {
+        var handler = new HttpClientHandler();
     
-    handler.ServerCertificateCustomValidationCallback = 
-        (sender, certificate, chain, sslPolicyErrors) => true;
+        handler.ServerCertificateCustomValidationCallback = 
+            (sender, certificate, chain, sslPolicyErrors) => true;
     
-    return handler;
-});
+        return handler;
+    });
 
 builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer(options =>
     {
-        options.Authority = "https://webapi_identity:5001";
+        options.Authority = "https://localhost:5001";
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
@@ -86,7 +89,7 @@ builder.Services.AddAuthentication("Bearer")
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
+if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("Docker"))
 {
     app.UseSwagger();
     app.UseSwaggerUI(options =>

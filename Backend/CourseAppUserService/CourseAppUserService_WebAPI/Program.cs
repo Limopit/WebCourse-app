@@ -15,8 +15,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-var path = "/app/appsettings.Identity.json";
+var path = Environment.GetEnvironmentVariable("IDENTITY_CONFIG_PATH")
+    ?? Path.Combine("..", "CourseAppUserService_IdentityServer", "appsettings.Identity.json");
 var fullpath = Path.GetFullPath(path);
+
+builder.Configuration
+    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true);
 
 builder.Configuration.AddJsonFile(fullpath, optional: false, reloadOnChange: true);
 
@@ -104,7 +108,7 @@ using (var scope = app.Services.CreateScope())
 
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
+if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("Docker"))
 {
     app.UseSwagger();
     app.UseSwaggerUI(options =>
