@@ -1,6 +1,7 @@
 using System.Net;
 using System.Text.Json;
 using CourseAppCourseService_Application.Common.Exceptions;
+using Grpc.Core;
 
 namespace CourseAppCourseService.Middleware;
 
@@ -34,6 +35,13 @@ public class CustomExceptionHandler(RequestDelegate request)
             case NotFoundException:
                 code = HttpStatusCode.NotFound;
                 break;
+            case RpcException rpcException:
+                code = MapRpcStatusCodeToHttpStatusCode(rpcException.StatusCode);
+                result = JsonSerializer.Serialize(new
+                {
+                    error = rpcException.Status.Detail
+                });
+                break;
         }
 
         context.Response.ContentType = "application/json";
@@ -45,5 +53,18 @@ public class CustomExceptionHandler(RequestDelegate request)
         }
 
         await context.Response.WriteAsync(result);
+    }
+    
+    
+    private HttpStatusCode MapRpcStatusCodeToHttpStatusCode(StatusCode grpcStatusCode)
+    {
+        return grpcStatusCode switch
+        {
+            StatusCode.NotFound => HttpStatusCode.NotFound,
+            StatusCode.InvalidArgument => HttpStatusCode.BadRequest,
+            StatusCode.PermissionDenied => HttpStatusCode.Forbidden,
+            StatusCode.Unauthenticated => HttpStatusCode.Unauthorized,
+            _ => HttpStatusCode.InternalServerError,
+        };
     }
 }

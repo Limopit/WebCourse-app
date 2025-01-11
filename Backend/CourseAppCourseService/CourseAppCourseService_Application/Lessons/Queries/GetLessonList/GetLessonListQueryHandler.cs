@@ -1,4 +1,3 @@
-using System.Security;
 using CourseAppCourseService_Application.Interfaces;
 using CourseAppCourseService_Application.Interfaces.Services;
 using CourseAppCourseService_Domain;

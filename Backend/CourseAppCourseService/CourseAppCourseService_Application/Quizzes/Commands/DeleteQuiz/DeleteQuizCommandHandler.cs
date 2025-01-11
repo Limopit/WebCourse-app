@@ -1,4 +1,3 @@
-using AutoMapper;
 using CourseAppCourseService_Application.Common.Exceptions;
 using CourseAppCourseService_Application.Interfaces;
 using CourseAppCourseService_Domain;

@@ -21,6 +21,8 @@ WORKDIR /app
 
 COPY --from=build /app/publish .
 
+COPY ./certs /https:ro
+
 EXPOSE 5000
 
 ENTRYPOINT ["dotnet", "CourseAppCourseService_WebAPI.dll"]

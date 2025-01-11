@@ -5,7 +5,4 @@ using CourseAppCourseService_Domain;
 namespace CourseAppCourseService_Infrastructure.DbPattenrs.Repositories;
 
 public class QuizRepository(ICourseDbContext context)
-: BaseRepository<Quiz>(context, "Quizzes"), IQuizRepository
-{
-    
-}
+: BaseRepository<Quiz>(context, "Quizzes"), IQuizRepository;

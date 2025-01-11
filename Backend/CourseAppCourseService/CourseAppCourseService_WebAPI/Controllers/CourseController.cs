@@ -3,6 +3,7 @@ using CourseAppCourseService_Application.Courses.Commands.CreateCourse;
 using CourseAppCourseService_Application.Courses.Commands.DeleteCourse;
 using CourseAppCourseService_Application.Courses.Commands.UpdateCourse;
 using CourseAppCourseService_Application.Courses.Queries.GetCourseList;
+using CourseAppCourseService_Infrastructure.Services.UserService;
 using Grpc.Core;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -12,7 +13,7 @@ using UserServiceRpc;
 namespace CourseAppCourseService.Controllers;
 
 [Route("api/[controller]/[action]")]
-public class CourseController(IMediator mediator, UserServiceRpc.UserService.UserServiceClient userServiceClient) : BaseController(mediator)
+public class CourseController(IMediator mediator, GrpcUserServiceClient userServiceClient) : BaseController(mediator)
 {
     [HttpGet]
     public async Task<ActionResult<Guid>> GetCourseList()
@@ -21,35 +22,18 @@ public class CourseController(IMediator mediator, UserServiceRpc.UserService.Use
         
         return Ok(result);
     }
-    
+
     [Authorize]
     [HttpPost]
-    public async Task<ActionResult> CreateCourse([FromBody]CreateCourseCommand command)
+    public async Task<ActionResult> CreateCourse([FromBody] CreateCourseCommand command)
     {
-        try
-        {
-            var createdRecordId = await mediator.Send(command);
+        var createdRecordId = await mediator.Send(command);
+        
+        userServiceClient.CreateUserCreatedCourseRecord(User.FindFirstValue(ClaimTypes.NameIdentifier), createdRecordId.ToString());
 
-            var grpcRequest = new CreateCourseRequest()
-            {
-                Email = User.FindFirstValue(ClaimTypes.NameIdentifier),
-                CourseId = createdRecordId.ToString()
-            };
-
-            userServiceClient.CreateUserCreatedCourseRecord(grpcRequest);
-
-            return Ok(new { RecordId = createdRecordId });
-        }
-        catch (RpcException grpcEx)
-        {
-            return StatusCode((int)grpcEx.StatusCode, grpcEx.Status.Detail);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, ex.Message);
-        }
+        return Ok(new { RecordId = createdRecordId });
     }
-    
+
     [HttpPut]
     public async Task<ActionResult> UpdateCourse([FromBody]UpdateCourseCommand command)
     {
@@ -57,30 +41,15 @@ public class CourseController(IMediator mediator, UserServiceRpc.UserService.Use
         
         return Ok();
     }
-    
+
     [HttpDelete]
     public async Task<ActionResult> DeleteCourse(Guid id)
     {
-        try
-        {
-            await Mediator.Send(new DeleteCourseCommand(){ Id = id });
+        await Mediator.Send(new DeleteCourseCommand() { Id = id });
 
-            var grpcRequest = new DeleteCourseRecordRequest()
-            {
-                CourseId = id.ToString()
-            };
-            
-            var result = userServiceClient.DeleteCourseRecords(grpcRequest);
-            
-            return Ok(result);
-        }
-        catch (RpcException grpcEx)
-        {
-            return StatusCode((int)grpcEx.StatusCode, grpcEx.Status.Detail);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, ex.Message);
-        }
+        var result = userServiceClient.DeleteUserCourseRecord(id.ToString());
+
+        return Ok(result);
+
     }
 }

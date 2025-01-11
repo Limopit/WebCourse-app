@@ -15,11 +15,13 @@ services:
     build:
       context: .  
       dockerfile: Backend/CourseAppUserService/CourseAppUserService_Infrastructure/Dockerfile
+    env_file:
+      - .env
     container_name: mssql
     environment:
-      ACCEPT_EULA: "Y"
-      SA_PASSWORD: "StrongPassword123"
-      MSSQL_PID: "Developer"
+      ACCEPT_EULA: ${MSSQL_ACCEPT_EULA}
+      SA_PASSWORD: ${MSSQL_SA_PASSWORD}
+      MSSQL_PID: ${MSSQL_PID}
     ports:
       - "1433:1433"
     volumes:
@@ -36,23 +38,35 @@ services:
     build:
       context: .
       dockerfile: Backend/CourseAppUserService/CourseAppUserService_IdentityServer/Dockerfile
+    env_file:
+      - .env
     ports:
       - "5001:5001"
     environment:
       - DOTNET_ENVIRONMENT=Development
       - Authority=https://localhost:5001
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=${KESTREL_CERT_PATH}
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=${KESTREL_CERT_PASS}
+    volumes:
+      - ./certs:/https:ro
 
   webapi_user:
     build:
       context: .
       dockerfile: Backend/CourseAppUserService/CourseAppUserService_WebAPI/Dockerfile
+    env_file:
+      - .env
     ports:
       - "5002:5002"
     environment:
       - DOTNET_ENVIRONMENT=Docker
       - IDENTITY_CONFIG_PATH=/app/appsettings.Identity.Docker.json
       - ASPNETCORE_Kestrel__Endpoints__Grpc__Protocols=Http2
-      - DbConnection =Server=mssql,1433;Database=UserServiceDb;UserId=sa;Password=StrongPassword123
+      - DbConnection=${MSSQL_DB_CONNECTION}
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=${KESTREL_CERT_PATH}
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=${KESTREL_CERT_PASS}
+    volumes:
+      - ./certs:/https:ro
     healthcheck:
       test: nc -z localhost 5002
       interval: 10s
@@ -67,13 +81,19 @@ services:
     build:
       context: .
       dockerfile: Backend/CourseAppCourseService/CourseAppCourseService_WebAPI/Dockerfile
+    env_file:
+      - .env
     ports:
       - "5000:5000"
     environment:
       - DOTNET_ENVIRONMENT=Docker
-      - DbConnection = mongodb://mongo:27017/
+      - DbConnection=mongodb://mongo:27017/
       - ASPNETCORE_Kestrel__Endpoints__Grpc__Protocols=Http2
       - MongoDbDatabaseName = WebCourseDb
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=${KESTREL_CERT_PATH}
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=${KESTREL_CERT_PASS}
+    volumes:
+      - ./certs:/https:ro
     healthcheck:
       test: nc -z localhost 5000
       interval: 10s

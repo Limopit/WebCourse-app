@@ -1,4 +1,3 @@
-using System.Net.Security;
 using System.Reflection;
 using System.Text;
 using CourseAppCourseService_Application;
@@ -58,7 +57,7 @@ builder.Services.AddControllers();
 
 builder.Services.AddGrpcClient<UserServiceRpc.UserService.UserServiceClient>(options =>
     {
-        options.Address = new Uri("https://localhost:5002");
+        options.Address = builder.Environment.IsDevelopment() ? new Uri("https://localhost:5002") :new Uri("https://webapi_user:5002");
     })
     .ConfigurePrimaryHttpMessageHandler(() =>
     {

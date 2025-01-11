@@ -8,7 +8,6 @@ using CourseAppUserService_Persistance;
 using CourseAppUserService.Middleware;
 using CourseAppUserService.Services.UserService;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);

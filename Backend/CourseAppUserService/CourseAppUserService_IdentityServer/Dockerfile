@@ -15,6 +15,8 @@ WORKDIR /app
 
 COPY --from=build /app/publish .
 
+COPY ./certs /https:ro
+
 EXPOSE 5001
 
 ENTRYPOINT ["dotnet", "CourseAppUserService_IdentityServer.dll"]

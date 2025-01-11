@@ -4,6 +4,7 @@ using CourseAppCourseService_Application.Interfaces.Services;
 using CourseAppCourseService_Infrastructure.DbPattenrs;
 using CourseAppCourseService_Infrastructure.DbPattenrs.Repositories;
 using CourseAppCourseService_Infrastructure.Services;
+using CourseAppCourseService_Infrastructure.Services.UserService;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Bson;
@@ -24,10 +25,9 @@ public static class DependencyInjection
         
         var connectionString = configuration.GetConnectionString("DbConnection");
         var databaseName = configuration.GetValue<string>("MongoDbDatabaseName");
-        
         var mongoUrl = new MongoUrl(connectionString);
+        
         services.AddSingleton<IMongoClient>(new MongoClient(mongoUrl));
-
         services.AddScoped<ICourseDbContext>(serviceProvider =>
         {
             var client = serviceProvider.GetRequiredService<IMongoClient>();
@@ -39,6 +39,8 @@ public static class DependencyInjection
         services.AddScoped<IQuizRepository, QuizRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IMapperService, MapperService>();
+        services.AddTransient<GrpcUserServiceClient>();
+
 
         return services;
     }

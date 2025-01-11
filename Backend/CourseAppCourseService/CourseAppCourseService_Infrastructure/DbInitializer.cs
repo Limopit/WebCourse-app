@@ -5,7 +5,7 @@ using MongoDB.Driver;
 
 namespace CourseAppCourseService_Infrastructure;
 
-public class DbInitializer
+public static class DbInitializer
 {
     public static async Task Initialize(ICourseDbContext courseDbContext)
     {

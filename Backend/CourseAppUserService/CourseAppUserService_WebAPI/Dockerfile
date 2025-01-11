@@ -27,7 +27,9 @@ COPY --from=build /app/publish .
 
 RUN apt-get update && \
     apt-get install -y curl netcat-traditional telnet && \
-    apt-get clean
+    apt-get clean 
+
+COPY ./certs /https:ro
 
 EXPOSE 5002
 

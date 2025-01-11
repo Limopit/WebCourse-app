@@ -1,6 +1,5 @@
 using CourseAppCourseService_Application.Interfaces;
 using CourseAppCourseService_Application.Interfaces.Repositories;
-using MongoDB.Driver;
 using CourseAppCourseService_Infrastructure.DbPattenrs.Repositories;
 
 namespace CourseAppCourseService_Infrastructure.DbPattenrs
