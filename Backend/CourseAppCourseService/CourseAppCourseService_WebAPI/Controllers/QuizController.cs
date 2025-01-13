@@ -31,7 +31,7 @@ public class QuizController(IMediator mediator) : BaseController(mediator)
     {
         await Mediator.Send(command);
         
-        return Ok();
+        return NoContent();
     }
     
     [HttpDelete]
@@ -39,6 +39,6 @@ public class QuizController(IMediator mediator) : BaseController(mediator)
     {
         await Mediator.Send(new DeleteQuizCommand(){ QuizId = id });
         
-        return Ok();
+        return NoContent();
     }
 }

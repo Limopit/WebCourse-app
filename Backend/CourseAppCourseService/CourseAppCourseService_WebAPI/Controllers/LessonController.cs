@@ -30,7 +30,7 @@ public class LessonController(IMediator mediator) : BaseController(mediator)
     {
         await Mediator.Send(command);
         
-        return Ok();
+        return NoContent();
     }
     
     [HttpDelete]
@@ -38,6 +38,6 @@ public class LessonController(IMediator mediator) : BaseController(mediator)
     {
         await Mediator.Send(new DeleteLessonCommand(){ LessonId = id });
         
-        return Ok();
+        return NoContent();
     }
 }

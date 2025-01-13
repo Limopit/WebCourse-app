@@ -10,8 +10,8 @@ public class CreateCourseCommandHandler(IUnitOfWork unitOfWork, IMapperService m
     public async Task<Guid> Handle(CreateCourseCommand request, CancellationToken cancellationToken)
     {
         var course = await mapper.MapAsync<CreateCourseCommand, Course>(request);
-        course.CreationDate = DateTime.Now;
-        course.UpdateDate = DateTime.Now;
+        course.CreationDate = DateTime.UtcNow;
+        course.UpdateDate = DateTime.UtcNow;
         
         await unitOfWork.Courses.AddEntityAsync(course, cancellationToken);
         

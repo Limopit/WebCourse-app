@@ -39,7 +39,7 @@ public class CourseController(IMediator mediator, GrpcUserServiceClient userServ
     {
         await Mediator.Send(command);
         
-        return Ok();
+        return NoContent();
     }
 
     [HttpDelete]
@@ -49,7 +49,7 @@ public class CourseController(IMediator mediator, GrpcUserServiceClient userServ
 
         var result = userServiceClient.DeleteUserCourseRecord(id.ToString());
 
-        return Ok(result);
+        return NoContent();
 
     }
 }
