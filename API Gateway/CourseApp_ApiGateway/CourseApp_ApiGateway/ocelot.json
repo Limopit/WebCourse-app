@@ -1,0 +1,71 @@
+{
+  "GlobalConfiguration": {
+    "BaseUrl": "https://localhost:5003"
+  },
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/api/Course/GetCourseList",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5000
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/courses",
+      "UpstreamHttpMethod": [ "Get" ],
+      "SwaggerKey": "courses"
+    },
+    {
+      "DownstreamPathTemplate": "/api/Course/CreateCourse",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5000
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/courses/create",
+      "UpstreamHttpMethod": [ "Post" ],
+      "SwaggerKey": "courses"
+    },
+    {
+      "DownstreamPathTemplate": "/api/Course/UpdateCourse",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5000
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/courses/update",
+      "UpstreamHttpMethod": [ "Put" ],
+      "SwaggerKey": "courses"
+    },
+    {
+      "DownstreamPathTemplate": "/api/Course/DeleteCourse",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5000
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/courses/delete",
+      "UpstreamHttpMethod": [ "Delete" ],
+      "SwaggerKey": "courses"
+    }
+  ],
+  "SwaggerEndPoints": [
+    {
+      "Key": "courses",
+      "Config": [
+        {
+          "Name": "My API",
+          "Version": "v1",
+          "Url": "https://localhost:5000/swagger/v1/swagger.json"
+        }
+      ]
+    }
+  ]
+}
