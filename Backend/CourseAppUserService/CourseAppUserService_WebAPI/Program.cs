@@ -6,6 +6,7 @@ using CourseAppUserService_Domain.Entities;
 using CourseAppUserService_IdentityServer;
 using CourseAppUserService_Persistance;
 using CourseAppUserService.Middleware;
+using CourseAppUserService.Services.UserService;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.OpenApi.Models;
 
@@ -13,8 +14,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-var path = Path.Combine("..", "CourseAppUserService_IdentityServer", "appsettings.json");
+var path = Environment.GetEnvironmentVariable("IDENTITY_CONFIG_PATH")
+    ?? Path.Combine("..", "CourseAppUserService_IdentityServer", "appsettings.Identity.json");
 var fullpath = Path.GetFullPath(path);
+
+builder.Configuration
+    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true);
 
 builder.Configuration.AddJsonFile(fullpath, optional: false, reloadOnChange: true);
 
@@ -75,6 +80,13 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
+builder.Services.AddGrpc(options =>
+{
+    options.EnableDetailedErrors = true;
+});
+
+builder.Services.AddScoped<UserService>();
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
@@ -95,10 +107,13 @@ using (var scope = app.Services.CreateScope())
 
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("Docker"))
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+    });
 }
 
 app.UseCustomExceptionHandler();
@@ -117,5 +132,7 @@ using (var scope = app.Services.CreateScope())
     var services = scope.ServiceProvider;
     await RoleInitializer.SeedRolesAsync(services);
 }
+
+app.MapGrpcService<UserService>();
 
 app.Run();

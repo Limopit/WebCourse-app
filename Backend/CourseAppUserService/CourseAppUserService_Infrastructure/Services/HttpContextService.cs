@@ -8,7 +8,7 @@ public class HttpContextService(IHttpContextAccessor httpContextAccessor) : IHtt
 {
     public async Task<string?> GetCurrentUserEmailAsync()
     {
-        var result = await Task.Run(() => httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+        var result = await Task.Run(() => httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Email));
         return result;
     }
 }

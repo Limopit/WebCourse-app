@@ -4,5 +4,5 @@ namespace CourseAppUserService_Application.UserCreatedCourse.Queries.GetUserCrea
 
 public class GetUserCreatedCoursesQuery: IRequest<UserCreatedCourseVm>
 {
-    public string Email { get; set; }
+    public required string Email { get; set; }
 }

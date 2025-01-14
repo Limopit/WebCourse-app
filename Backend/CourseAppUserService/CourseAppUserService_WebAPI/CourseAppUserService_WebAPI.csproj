@@ -8,14 +8,24 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <Protobuf Include="Services\UserService\userService.proto" GrpcServices="Server" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Google.Protobuf" Version="3.29.2" />
+        <PackageReference Include="Grpc.AspNetCore.Server" Version="2.67.0" />
+        <PackageReference Include="Grpc.Tools" Version="2.69.0-pre1">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
         <PackageReference Include="MediatR" Version="12.4.1" />
-        <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.1.0" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.0"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Swashbuckle.AspNetCore" Version="7.2.0" />
+        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.3.0" />
     </ItemGroup>
 
     <ItemGroup>
@@ -23,6 +33,10 @@
       <ProjectReference Include="..\CourseAppUserService_Domain\CourseAppUserService_Domain.csproj" />
       <ProjectReference Include="..\CourseAppUserService_IdentityServer\CourseAppUserService_IdentityServer.csproj" />
       <ProjectReference Include="..\CourseAppUserService_Infrastructure\CourseAppUserService_Infrastructure.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="obj\Debug\net9.0\Services\" />
     </ItemGroup>
 
 </Project>

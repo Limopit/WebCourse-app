@@ -1,0 +1,112 @@
+version: '3.8'
+services:
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    environment:
+      MONGO_INITDB_DATABASE: WebCourseApp
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js
+
+  mssql:
+    build:
+      context: .  
+      dockerfile: Backend/CourseAppUserService/CourseAppUserService_Infrastructure/Dockerfile
+    env_file:
+      - .env
+    container_name: mssql
+    environment:
+      ACCEPT_EULA: ${MSSQL_ACCEPT_EULA}
+      SA_PASSWORD: ${MSSQL_SA_PASSWORD}
+      MSSQL_PID: ${MSSQL_PID}
+    ports:
+      - "1433:1433"
+    volumes:
+      - mssql-data:/var/opt/mssql
+      - UserServiceDb:/var/opt/mssql/db
+    healthcheck:
+      test: nc -z localhost 1433
+      interval: 10s
+      retries: 5
+      start_period: 15s
+      timeout: 20s
+  
+  webapi_identity:
+    build:
+      context: .
+      dockerfile: Backend/CourseAppUserService/CourseAppUserService_IdentityServer/Dockerfile
+    env_file:
+      - .env
+    ports:
+      - "5001:5001"
+    environment:
+      - DOTNET_ENVIRONMENT=Development
+      - Authority=https://localhost:5001
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=${KESTREL_CERT_PATH}
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=${KESTREL_CERT_PASS}
+    volumes:
+      - ./certs:/https:ro
+
+  webapi_user:
+    build:
+      context: .
+      dockerfile: Backend/CourseAppUserService/CourseAppUserService_WebAPI/Dockerfile
+    env_file:
+      - .env
+    ports:
+      - "5002:5002"
+    environment:
+      - DOTNET_ENVIRONMENT=Docker
+      - IDENTITY_CONFIG_PATH=/app/appsettings.Identity.Docker.json
+      - ASPNETCORE_Kestrel__Endpoints__Grpc__Protocols=Http2
+      - DbConnection=${MSSQL_DB_CONNECTION}
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=${KESTREL_CERT_PATH}
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=${KESTREL_CERT_PASS}
+    volumes:
+      - ./certs:/https:ro
+    healthcheck:
+      test: nc -z localhost 5002
+      interval: 10s
+      retries: 5
+      start_period: 15s
+      timeout: 20s
+    depends_on:
+      mssql:
+        condition: service_healthy
+  
+  webapi_course:
+    build:
+      context: .
+      dockerfile: Backend/CourseAppCourseService/CourseAppCourseService_WebAPI/Dockerfile
+    env_file:
+      - .env
+    ports:
+      - "5000:5000"
+    environment:
+      - DOTNET_ENVIRONMENT=Docker
+      - DbConnection=mongodb://mongo:27017/
+      - ASPNETCORE_Kestrel__Endpoints__Grpc__Protocols=Http2
+      - MongoDbDatabaseName = WebCourseDb
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=${KESTREL_CERT_PATH}
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=${KESTREL_CERT_PASS}
+    volumes:
+      - ./certs:/https:ro
+    healthcheck:
+      test: nc -z localhost 5000
+      interval: 10s
+      retries: 5
+      start_period: 15s
+      timeout: 20s
+    depends_on:
+      webapi_user:
+        condition: service_healthy
+
+volumes:
+  UserServiceDb:
+  mongo-data:
+    driver: local
+  mssql-data:
+    driver: local

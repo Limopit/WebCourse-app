@@ -13,4 +13,11 @@ public class UserCreatedCourseRepository(UserServiceDbContext context)
             .Where(course => course.UserId == userId)
             .ToListAsync(token);
     }
+    
+    public async Task<UserCreatedCourses?> GetUserCreatedCourseByCourseIdAsync(string courseId, CancellationToken token)
+    {
+        return await context.UserCreatedCourses
+            .Where(course => course.CourseId == courseId)
+            .FirstOrDefaultAsync(token);
+    }
 }

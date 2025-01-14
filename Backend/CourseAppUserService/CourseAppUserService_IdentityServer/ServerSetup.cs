@@ -16,6 +16,7 @@ public static class ServerSetup
             .AddJwtBearer("Bearer", options =>
             {
                 options.Authority = configuration["IdentityServer:Authority"];
+                options.RequireHttpsMetadata = bool.Parse(configuration["IdentityServer:RequireHttpsMetadata"]);
                 
                 options.BackchannelHttpHandler = new HttpClientHandler
                 {

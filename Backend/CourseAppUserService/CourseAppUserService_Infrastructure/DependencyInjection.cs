@@ -37,7 +37,8 @@ public static class DependencyInjection
             })
             .AddEntityFrameworkStores<UserServiceDbContext>()
             .AddDefaultTokenProviders();
-        
+
+        //services.AddHttpContextAccessor();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IUserTakenCourseRepository, UserTakenCourseRepository>();
         services.AddScoped<IUserCreatedCourseRepository, UserCreatedCourseRepository>();

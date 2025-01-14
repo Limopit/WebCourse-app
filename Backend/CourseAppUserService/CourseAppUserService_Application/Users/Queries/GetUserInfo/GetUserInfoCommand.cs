@@ -4,5 +4,5 @@ namespace CourseAppUserService_Application.Users.Queries.GetUserInfo;
 
 public class GetUserInfoCommand: IRequest<UserDto>
 {
-    public string Email { get; set; }
+    public required string Email { get; set; }
 }
