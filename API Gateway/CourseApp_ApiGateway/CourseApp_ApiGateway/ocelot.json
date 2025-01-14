@@ -4,20 +4,24 @@
   },
   "Routes": [
     {
-      "DownstreamPathTemplate": "/api/Course/GetCourseList",
+      "DownstreamPathTemplate": "/api/Auth/{everything}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 5000
+          "Port": 5002
         }
       ],
-      "UpstreamPathTemplate": "/gateway/courses",
-      "UpstreamHttpMethod": [ "Get" ],
-      "SwaggerKey": "courses"
+      "UpstreamPathTemplate": "/gateway/auth/{everything}",
+      "UpstreamHttpMethod": [
+        "Post"
+      ],
+      "SwaggerKey": "User",
+      "Tags": ["Auth"]
     },
+
     {
-      "DownstreamPathTemplate": "/api/Course/CreateCourse",
+      "DownstreamPathTemplate": "/api/Course/{everything}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -25,12 +29,19 @@
           "Port": 5000
         }
       ],
-      "UpstreamPathTemplate": "/gateway/courses/create",
-      "UpstreamHttpMethod": [ "Post" ],
-      "SwaggerKey": "courses"
+      "UpstreamPathTemplate": "/gateway/courses/{everything}",
+      "UpstreamHttpMethod": [
+        "Get",
+        "Post",
+        "Put",
+        "Delete"
+      ],
+      "SwaggerKey": "Courses",
+      "Tags": ["Courses"]
     },
+
     {
-      "DownstreamPathTemplate": "/api/Course/UpdateCourse",
+      "DownstreamPathTemplate": "/api/Lesson/{everything}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -38,12 +49,19 @@
           "Port": 5000
         }
       ],
-      "UpstreamPathTemplate": "/gateway/courses/update",
-      "UpstreamHttpMethod": [ "Put" ],
-      "SwaggerKey": "courses"
+      "UpstreamPathTemplate": "/gateway/lessons/{everything}",
+      "UpstreamHttpMethod": [
+        "Get",
+        "Post",
+        "Put",
+        "Delete"
+      ],
+      "SwaggerKey": "Courses",
+      "Tags": ["Lessons"]
     },
+
     {
-      "DownstreamPathTemplate": "/api/Course/DeleteCourse",
+      "DownstreamPathTemplate": "/api/Quiz/{everything}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -51,17 +69,79 @@
           "Port": 5000
         }
       ],
-      "UpstreamPathTemplate": "/gateway/courses/delete",
-      "UpstreamHttpMethod": [ "Delete" ],
-      "SwaggerKey": "courses"
+      "UpstreamPathTemplate": "/gateway/quizzes/{everything}",
+      "UpstreamHttpMethod": [
+        "Get",
+        "Post",
+        "Put",
+        "Delete"
+      ],
+      "SwaggerKey": "Courses",
+      "Tags": ["Quizzes"],
+      "AuthenticationProviderKey": "Bearer",
+      "AllowedScopes": [ "api_scope" ]
+    },
+
+    {
+      "DownstreamPathTemplate": "/api/User/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5002
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/user/{everything}",
+      "UpstreamHttpMethod": [
+        "Get",
+        "Post",
+        "Put",
+        "Delete"
+      ],
+      "SwaggerKey": "User",
+      "Tags": [ "User" ],
+      "AuthenticationProviderKey": "Bearer",
+      "AllowedScopes": [ "api_scope" ]
+    },
+
+    {
+      "DownstreamPathTemplate": "/api/UserCourse/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5002
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/user-course/{everything}",
+      "UpstreamHttpMethod": [
+        "Get",
+        "Post",
+        "Put",
+        "Delete"
+      ],
+      "SwaggerKey": "User",
+      "Tags": [ "UserCourses" ],
+      "AuthenticationProviderKey": "Bearer",
+      "AllowedScopes": [ "api_scope" ]
     }
   ],
   "SwaggerEndPoints": [
     {
-      "Key": "courses",
+      "Key": "User",
       "Config": [
         {
-          "Name": "My API",
+          "Name": "User API",
+          "Version": "v1",
+          "Url": "https://localhost:5002/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "Courses",
+      "Config": [
+        {
+          "Name": "Course API",
           "Version": "v1",
           "Url": "https://localhost:5000/swagger/v1/swagger.json"
         }

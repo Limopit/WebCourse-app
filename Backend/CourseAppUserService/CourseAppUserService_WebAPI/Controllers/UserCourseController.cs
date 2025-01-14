@@ -11,11 +11,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CourseAppUserService.Controllers;
 
-[Route("api/[controller]")]
 public class UserCourseController(IMediator mediator) : BaseController(mediator)
 {
     [Authorize]
-    [HttpPost("taken/new")]
+    [HttpPost]
     public async Task<ActionResult<Guid>> CreateUserTakenCourse([FromBody] CreateUserTakenCourseCommand command)
     {
         command.Email = User.FindFirstValue(ClaimTypes.Email);
@@ -25,7 +24,7 @@ public class UserCourseController(IMediator mediator) : BaseController(mediator)
     }
     
     [Authorize]
-    [HttpGet("taken/")]
+    [HttpGet]
     public async Task<ActionResult<Guid>> GetUserTakenCourses()
     {
         var result = await Mediator
@@ -35,7 +34,7 @@ public class UserCourseController(IMediator mediator) : BaseController(mediator)
     }
     
     [Authorize]
-    [HttpPost("created/new")]
+    [HttpPost]
     public async Task<ActionResult<Guid>> CreateUserCreatedCourse([FromBody] CreateUserCreatedCourseCommand command)
     {
         command.Email = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -44,7 +43,7 @@ public class UserCourseController(IMediator mediator) : BaseController(mediator)
         return Ok(result);
     }
     
-    [HttpGet("created/")]
+    [HttpGet]
     public async Task<ActionResult<Guid>> GetUserCreatedCourses(string email)
     {
         var result = await Mediator
@@ -54,7 +53,7 @@ public class UserCourseController(IMediator mediator) : BaseController(mediator)
     }
 
     [Authorize(Roles = "Admin")]
-    [HttpDelete("taken/{id}/")]
+    [HttpDelete]
     public async Task<ActionResult> DeleteUserTakenCourse(string id)
     {
         await Mediator.Send(new DeleteUserTakenCourseCommand() { CourseId = id });
@@ -63,7 +62,7 @@ public class UserCourseController(IMediator mediator) : BaseController(mediator)
     }
     
     [Authorize(Roles = "Admin")]
-    [HttpDelete("created/{id}/")]
+    [HttpDelete]
     public async Task<ActionResult> DeleteUserCreatedCourse(string id)
     {
         await Mediator.Send(new DeleteUserCreatedCourseCommand() { CourseId = id });

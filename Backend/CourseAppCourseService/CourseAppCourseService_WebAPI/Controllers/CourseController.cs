@@ -12,7 +12,6 @@ using UserServiceRpc;
 
 namespace CourseAppCourseService.Controllers;
 
-[Route("api/[controller]/[action]")]
 public class CourseController(IMediator mediator, GrpcUserServiceClient userServiceClient) : BaseController(mediator)
 {
     [HttpGet]

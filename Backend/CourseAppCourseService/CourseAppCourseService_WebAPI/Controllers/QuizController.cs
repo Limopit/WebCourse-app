@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CourseAppCourseService.Controllers;
 
-[Route("api/[controller]/[action]")]
 public class QuizController(IMediator mediator) : BaseController(mediator)
 {
     [HttpGet]

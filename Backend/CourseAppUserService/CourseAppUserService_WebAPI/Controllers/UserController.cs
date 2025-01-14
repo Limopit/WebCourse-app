@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CourseAppUserService.Controllers;
 
-[Route("api/[controller]")]
 public class UserController(IMediator mediator) : BaseController(mediator)
 {
     [Authorize]
@@ -20,7 +19,7 @@ public class UserController(IMediator mediator) : BaseController(mediator)
     }
     
     [Authorize]
-    [HttpPut("password")]
+    [HttpPut]
     public async Task<IActionResult> UpdateUserPassword([FromBody] UpdateUserPasswordCommand command)
     {
         await Mediator.Send(command); 
@@ -28,7 +27,7 @@ public class UserController(IMediator mediator) : BaseController(mediator)
     }
 
     [Authorize(Roles = "Admin")]
-    [HttpGet("user-data")]
+    [HttpGet]
     public async Task<IActionResult> GetUserData(string email)
     {
         var result = await Mediator.Send(new GetUserInfoCommand{Email = email});
