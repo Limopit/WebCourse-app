@@ -103,7 +103,29 @@ services:
     depends_on:
       webapi_user:
         condition: service_healthy
-
+        
+  webapi_ocelot:
+    build:
+      context: .
+      dockerfile: APIGateway/CourseApp_ApiGateway/CourseApp_ApiGateway/Dockerfile
+    env_file:
+      - .env
+    ports:
+      - "5003:5003"
+    environment:
+      - DOTNET_ENVIRONMENT=Docker
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=${KESTREL_CERT_PATH}
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=${KESTREL_CERT_PASS}
+    volumes:
+      - ./certs:/https:ro
+    healthcheck:
+      test: nc -z localhost 5003
+      interval: 10s
+      retries: 5
+      start_period: 15s
+      timeout: 20s
+    depends_on:
+       - webapi_course
 volumes:
   UserServiceDb:
   mongo-data:

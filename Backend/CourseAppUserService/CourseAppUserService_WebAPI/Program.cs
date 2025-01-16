@@ -23,6 +23,13 @@ builder.Configuration
 
 builder.Configuration.AddJsonFile(fullpath, optional: false, reloadOnChange: true);
 
+var handler = new HttpClientHandler();
+handler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+var client = new HttpClient(handler);
+
+// Регистрируем HttpClient для использования в сервисе
+builder.Services.AddSingleton(client);
+
 builder.Services.AddOpenApi();
 
 builder.Services.AddApplication();

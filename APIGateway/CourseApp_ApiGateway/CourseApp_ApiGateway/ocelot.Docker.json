@@ -1,0 +1,153 @@
+{
+  "GlobalConfiguration": {
+    "BaseUrl": "https://localhost:5003",
+    "AllowInvalidCertificates": true,
+    "DangerousAcceptAnyServerCertificateValidator": true
+  },
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/api/Auth/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "webapi_user",
+          "Port": 5002
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/auth/{everything}",
+      "UpstreamHttpMethod": [
+        "Post"
+      ],
+      "SwaggerKey": "User",
+      "Tags": ["Auth"]
+    },
+
+    {
+      "DownstreamPathTemplate": "/api/Course/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "webapi_course",
+          "Port": 5000
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/courses/{everything}",
+      "UpstreamHttpMethod": [
+        "Get",
+        "Post",
+        "Put",
+        "Delete"
+      ],
+      "SwaggerKey": "Courses",
+      "Tags": ["Courses"]
+    },
+
+    {
+      "DownstreamPathTemplate": "/api/Lesson/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "webapi_course",
+          "Port": 5000
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/lessons/{everything}",
+      "UpstreamHttpMethod": [
+        "Get",
+        "Post",
+        "Put",
+        "Delete"
+      ],
+      "SwaggerKey": "Courses",
+      "Tags": ["Lessons"]
+    },
+
+    {
+      "DownstreamPathTemplate": "/api/Quiz/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "webapi_course",
+          "Port": 5000
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/quizzes/{everything}",
+      "UpstreamHttpMethod": [
+        "Get",
+        "Post",
+        "Put",
+        "Delete"
+      ],
+      "SwaggerKey": "Courses",
+      "Tags": ["Quizzes"],
+      "AuthenticationProviderKey": "Bearer",
+      "AllowedScopes": [ "api_scope" ]
+    },
+
+    {
+      "DownstreamPathTemplate": "/api/User/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "webapi_user",
+          "Port": 5002
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/user/{everything}",
+      "UpstreamHttpMethod": [
+        "Get",
+        "Post",
+        "Put",
+        "Delete"
+      ],
+      "SwaggerKey": "User",
+      "Tags": [ "User" ],
+      "AuthenticationProviderKey": "Bearer",
+      "AllowedScopes": [ "api_scope" ]
+    },
+
+    {
+      "DownstreamPathTemplate": "/api/UserCourse/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "webapi_user",
+          "Port": 5002
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/user-course/{everything}",
+      "UpstreamHttpMethod": [
+        "Get",
+        "Post",
+        "Put",
+        "Delete"
+      ],
+      "SwaggerKey": "User",
+      "Tags": [ "UserCourses" ],
+      "AuthenticationProviderKey": "Bearer",
+      "AllowedScopes": [ "api_scope" ]
+    }
+  ],
+  "SwaggerEndPoints": [
+    {
+      "Key": "User",
+      "Config": [
+        {
+          "Name": "User API",
+          "Version": "v1",
+          "Url": "https://webapi_user:5002/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "Courses",
+      "Config": [
+        {
+          "Name": "Course API",
+          "Version": "v1",
+          "Url": "https://webapi_course:5000/swagger/v1/swagger.json"
+        }
+      ]
+    }
+  ]
+}
