@@ -64,7 +64,7 @@ services:
       - ASPNETCORE_Kestrel__Endpoints__Grpc__Protocols=Http2
       - DbConnection=${MSSQL_DB_CONNECTION}
       - ASPNETCORE_Kestrel__Certificates__Default__Path=${KESTREL_CERT_PATH}
-      - ASPNETCORE_Kestrel__Certificates__Default__Password=${KESTREL_CERT_PASS}
+      - ASPNETCORE_Kestrel__Certificates__Default__KeyPath=${KESTREL_CERT_PASS}
     volumes:
       - ./certs:/https:ro
     healthcheck:
@@ -91,7 +91,7 @@ services:
       - ASPNETCORE_Kestrel__Endpoints__Grpc__Protocols=Http2
       - MongoDbDatabaseName = WebCourseDb
       - ASPNETCORE_Kestrel__Certificates__Default__Path=${KESTREL_CERT_PATH}
-      - ASPNETCORE_Kestrel__Certificates__Default__Password=${KESTREL_CERT_PASS}
+      - ASPNETCORE_Kestrel__Certificates__Default__KeyPath=${KESTREL_CERT_PASS}
     volumes:
       - ./certs:/https:ro
     healthcheck:
@@ -115,7 +115,7 @@ services:
     environment:
       - DOTNET_ENVIRONMENT=Docker
       - ASPNETCORE_Kestrel__Certificates__Default__Path=${KESTREL_CERT_PATH}
-      - ASPNETCORE_Kestrel__Certificates__Default__Password=${KESTREL_CERT_PASS}
+      - ASPNETCORE_Kestrel__Certificates__Default__KeyPath=${KESTREL_CERT_PASS}
     volumes:
       - ./certs:/https:ro
     healthcheck:

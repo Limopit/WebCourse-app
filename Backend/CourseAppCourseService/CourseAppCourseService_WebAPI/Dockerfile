@@ -21,7 +21,9 @@ WORKDIR /app
 
 COPY --from=build /app/publish .
 
-COPY ./certs /https:ro
+COPY ./certs /https
+
+RUN cp /https/cert.crt /usr/local/share/ca-certificates/cert.crt && update-ca-certificates
 
 EXPOSE 5000
 

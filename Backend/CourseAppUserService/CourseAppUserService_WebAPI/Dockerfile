@@ -25,7 +25,9 @@ RUN apt-get update && \
     apt-get install -y curl netcat-traditional telnet && \
     apt-get clean 
 
-COPY ./certs /https:ro
+COPY ./certs /https
+
+RUN cp /https/cert.crt /usr/local/share/ca-certificates/cert.crt && update-ca-certificates
 
 EXPOSE 5002
 

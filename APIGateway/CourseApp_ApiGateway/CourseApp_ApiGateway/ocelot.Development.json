@@ -12,10 +12,6 @@
           "Port": 5002
         }
       ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": [ "api_scope" ]
-      },
       "UpstreamPathTemplate": "/gateway/auth/{everything}",
       "UpstreamHttpMethod": [
         "Post"
@@ -33,10 +29,6 @@
           "Port": 5000
         }
       ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": [ "api_scope" ]
-      },
       "UpstreamPathTemplate": "/gateway/courses/{everything}",
       "UpstreamHttpMethod": [
         "Get",
@@ -57,10 +49,6 @@
           "Port": 5000
         }
       ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": [ "api_scope" ]
-      },
       "UpstreamPathTemplate": "/gateway/lessons/{everything}",
       "UpstreamHttpMethod": [
         "Get",
@@ -81,10 +69,6 @@
           "Port": 5000
         }
       ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": [ "api_scope" ]
-      },
       "UpstreamPathTemplate": "/gateway/quizzes/{everything}",
       "UpstreamHttpMethod": [
         "Get",
@@ -107,10 +91,6 @@
           "Port": 5002
         }
       ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": [ "api_scope" ]
-      },
       "UpstreamPathTemplate": "/gateway/user/{everything}",
       "UpstreamHttpMethod": [
         "Get",
@@ -119,9 +99,7 @@
         "Delete"
       ],
       "SwaggerKey": "User",
-      "Tags": [ "User" ],
-      "AuthenticationProviderKey": "Bearer",
-      "AllowedScopes": [ "api_scope" ]
+      "Tags": [ "User" ]
     },
 
     {
@@ -133,10 +111,6 @@
           "Port": 5002
         }
       ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": [ "api_scope" ]
-      },
       "UpstreamPathTemplate": "/gateway/user-course/{everything}",
       "UpstreamHttpMethod": [
         "Get",

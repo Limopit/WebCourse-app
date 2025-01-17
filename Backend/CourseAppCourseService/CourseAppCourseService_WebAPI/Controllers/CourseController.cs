@@ -14,7 +14,7 @@ namespace CourseAppCourseService.Controllers;
 
 public class CourseController(IMediator mediator, GrpcUserServiceClient userServiceClient) : BaseController(mediator)
 {
-    [HttpGet]
+    [HttpGet("course-list")]
     public async Task<ActionResult<Guid>> GetCourseList()
     {
         var result = await Mediator.Send(new GetCourseListQuery());
@@ -23,7 +23,7 @@ public class CourseController(IMediator mediator, GrpcUserServiceClient userServ
     }
 
     [Authorize]
-    [HttpPost]
+    [HttpPost("new")]
     public async Task<ActionResult> CreateCourse([FromBody] CreateCourseCommand command)
     {
         var createdRecordId = await mediator.Send(command);
@@ -32,16 +32,19 @@ public class CourseController(IMediator mediator, GrpcUserServiceClient userServ
 
         return Ok(new { RecordId = createdRecordId });
     }
-
-    [HttpPut]
-    public async Task<ActionResult> UpdateCourse([FromBody]UpdateCourseCommand command)
+    
+    [Authorize]
+    [HttpPut("{id}")]
+    public async Task<ActionResult> UpdateCourse(Guid id, [FromBody]UpdateCourseCommand command)
     {
+        command.Id = id;
         await Mediator.Send(command);
         
         return NoContent();
     }
-
-    [HttpDelete]
+    
+    [Authorize]
+    [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteCourse(Guid id)
     {
         await Mediator.Send(new DeleteCourseCommand() { Id = id });

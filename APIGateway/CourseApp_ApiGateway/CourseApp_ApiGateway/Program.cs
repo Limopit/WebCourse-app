@@ -1,8 +1,6 @@
-using Microsoft.OpenApi.Models;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 
-// Add services to the container.
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOpenApi();
@@ -21,18 +19,8 @@ builder.Services.AddOcelot();
 
 builder.Services.AddSwaggerForOcelot(builder.Configuration);
 
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new OpenApiInfo
-    {
-        Title = "Course Gateway API",
-        Version = "v1",
-    });
-});
-
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();

@@ -11,7 +11,7 @@ namespace CourseAppUserService.Controllers;
 public class UserController(IMediator mediator) : BaseController(mediator)
 {
     [Authorize]
-    [HttpPut]
+    [HttpPut("user-data")]
     public async Task<IActionResult> UpdateUserData([FromBody] UpdateUserDataCommand command)
     {
         await Mediator.Send(command); 
@@ -19,7 +19,7 @@ public class UserController(IMediator mediator) : BaseController(mediator)
     }
     
     [Authorize]
-    [HttpPut]
+    [HttpPut("password")]
     public async Task<IActionResult> UpdateUserPassword([FromBody] UpdateUserPasswordCommand command)
     {
         await Mediator.Send(command); 
@@ -27,7 +27,7 @@ public class UserController(IMediator mediator) : BaseController(mediator)
     }
 
     [Authorize(Roles = "Admin")]
-    [HttpGet]
+    [HttpGet("{email}")]
     public async Task<IActionResult> GetUserData(string email)
     {
         var result = await Mediator.Send(new GetUserInfoCommand{Email = email});
@@ -35,7 +35,7 @@ public class UserController(IMediator mediator) : BaseController(mediator)
     }
     
     [Authorize(Roles = "Admin")]
-    [HttpDelete]
+    [HttpDelete("{email}")]
     public async Task<IActionResult> DeleteUser(string email)
     {
         await Mediator.Send(new DeleteUserCommand{Email = email});
