@@ -23,4 +23,8 @@
       <_ContentIncludedByDefault Remove="OcelotConfig\ocelot.UserCourses.json" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="OcelotConfig\Docker\" />
+    </ItemGroup>
+
 </Project>
