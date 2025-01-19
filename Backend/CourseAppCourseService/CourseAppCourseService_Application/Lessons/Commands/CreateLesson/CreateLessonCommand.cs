@@ -2,7 +2,7 @@ using MediatR;
 
 namespace CourseAppCourseService_Application.Lessons.Commands.CreateLesson;
 
-public class CreateLessonCommand: IRequest<Guid>
+public record CreateLessonCommand: IRequest<Guid>
 {
     public string LessonTitle {get;set;}
     public string LessonDescription {get;set;}

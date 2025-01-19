@@ -2,7 +2,7 @@ using MediatR;
 
 namespace CourseAppCourseService_Application.Lessons.Commands.UpdateLesson;
 
-public class UpdateLessonCommand: IRequest
+public record UpdateLessonCommand: IRequest
 {
     public Guid Id { get; set; }
     public string LessonTitle {get;set;}

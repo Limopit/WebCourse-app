@@ -1,6 +1,6 @@
 namespace CourseAppCourseService_Application.Courses.Queries.GetCourseList;
 
-public class CourseDto
+public record CourseDto
 {
     public Guid Id { get; set; }
     public string CourseTitle {get; set;}
