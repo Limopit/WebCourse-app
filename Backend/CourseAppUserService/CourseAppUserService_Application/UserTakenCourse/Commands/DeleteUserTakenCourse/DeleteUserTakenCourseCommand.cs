@@ -2,7 +2,8 @@ using MediatR;
 
 namespace CourseAppUserService_Application.UserTakenCourse.Commands.DeleteUserTakenCourse;
 
-public record DeleteUserTakenCourseCommand: IRequest
+public class DeleteUserTakenCourseCommand: IRequest
 {
     public required string CourseId { get; set; }
+    public required string Email { get; set; }
 }

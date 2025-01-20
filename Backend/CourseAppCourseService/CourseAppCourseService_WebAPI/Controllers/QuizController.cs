@@ -10,7 +10,7 @@ namespace CourseAppCourseService.Controllers;
 
 public class QuizController(IMediator mediator) : BaseController(mediator)
 {
-    [HttpGet("quiz-list")]
+    [HttpGet("quizzes")]
     public async Task<ActionResult<Guid>> GetQuizList()
     {
         var result = await Mediator.Send(new GetQuizListQuery());
@@ -19,7 +19,7 @@ public class QuizController(IMediator mediator) : BaseController(mediator)
     }
     
     [Authorize]
-    [HttpPost("new")]
+    [HttpPost("quizzes")]
     public async Task<ActionResult<Guid>> CreateNewQuiz([FromBody] CreateQuizCommand command)
     {
         var result = await Mediator.Send(command);

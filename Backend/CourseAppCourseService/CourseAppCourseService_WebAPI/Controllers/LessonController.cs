@@ -10,7 +10,7 @@ namespace CourseAppCourseService.Controllers;
 
 public class LessonController(IMediator mediator) : BaseController(mediator)
 {
-    [HttpGet("lesson-list")]
+    [HttpGet("lessons")]
     public async Task<ActionResult<Guid>> GetLessonList()
     {
         var result = await Mediator.Send(new GetLessonListQuery());
@@ -19,7 +19,7 @@ public class LessonController(IMediator mediator) : BaseController(mediator)
     }
     
     [Authorize]
-    [HttpPost("new")]
+    [HttpPost("lessons")]
     public async Task<ActionResult<Guid>> CreateNewLesson([FromBody] CreateLessonCommand command)
     {
         var result = await Mediator.Send(command);

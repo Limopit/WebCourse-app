@@ -14,10 +14,16 @@ public class UserTakenCourseRepository(UserServiceDbContext context)
             .ToListAsync(token);
     }
 
-    public async Task<List<UserTakenCourses>> GetUserTakenCoursesByCourseIdAsync(string courseId, CancellationToken token)
+    public async Task<List<UserTakenCourses>> GetEachUserTakenCoursesByCourseIdAsync(string courseId, CancellationToken token)
     {
         return await context.UserTakenCourses
             .Where(course => course.CourseId == courseId)
             .ToListAsync(token);
+    }
+
+    public async Task<UserTakenCourses> GetUserTakenCoursesByCourseIdAsync(string courseId, User user, CancellationToken token)
+    {
+        return await context.UserTakenCourses
+            .FirstOrDefaultAsync(course => course.CourseId == courseId && course.User.Equals(user), token);
     }
 }
