@@ -8,9 +8,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CourseAppCourseService.Controllers;
 
-public class LessonController(IMediator mediator) : BaseController(mediator)
+public class LessonsController(IMediator mediator) : BaseController(mediator)
 {
-    [HttpGet("lessons")]
+    [HttpGet]
     public async Task<ActionResult<Guid>> GetLessonList()
     {
         var result = await Mediator.Send(new GetLessonListQuery());
@@ -19,7 +19,7 @@ public class LessonController(IMediator mediator) : BaseController(mediator)
     }
     
     [Authorize]
-    [HttpPost("lessons")]
+    [HttpPost]
     public async Task<ActionResult<Guid>> CreateNewLesson([FromBody] CreateLessonCommand command)
     {
         var result = await Mediator.Send(command);
@@ -41,7 +41,7 @@ public class LessonController(IMediator mediator) : BaseController(mediator)
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteLesson(Guid id)
     {
-        await Mediator.Send(new DeleteLessonCommand(){ LessonId = id });
+        await Mediator.Send(new DeleteLessonCommand(){ Id = id });
         
         return NoContent();
     }

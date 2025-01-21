@@ -10,10 +10,10 @@ public class LessonMapper : IMapWith<Lesson>
     {
         profile.CreateMap<Lesson, LessonDto>()
             .ForMember(dto => dto.Id, opt => opt.MapFrom(lesson => lesson.Id))
-            .ForMember(dto => dto.LessonTitle, opt => opt.MapFrom(lesson => lesson.Title))
-            .ForMember(dto => dto.LessonDescription, opt => opt.MapFrom(lesson => lesson.Description));
+            .ForMember(dto => dto.Title, opt => opt.MapFrom(lesson => lesson.Title))
+            .ForMember(dto => dto.Description, opt => opt.MapFrom(lesson => lesson.Description));
 
         profile.CreateMap<List<Lesson>, LessonVm>()
-            .ForMember(vm => vm.Lessons, opt => opt.MapFrom(lessonList => lessonList));
+            .ForMember(vm => vm.Lessons, opt => opt.MapFrom(list => list));
     }
 }

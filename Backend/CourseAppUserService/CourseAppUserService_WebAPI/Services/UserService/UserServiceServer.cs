@@ -35,11 +35,11 @@ namespace CourseAppUserService.Services.UserService
         {
             var deleteCreatedCourseCommand = new DeleteUserCreatedCourseCommand
             {
-                CourseId = request.CourseId
+                Id = request.CourseId
             };
             var deleteUserTakenCoursesCommand = new DeleteEachUserTakenCourseCommand
             {
-                CourseId = request.CourseId
+                Id = request.CourseId
             };
             
             await mediator.Send(deleteCreatedCourseCommand);

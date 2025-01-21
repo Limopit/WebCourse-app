@@ -8,6 +8,6 @@ public class QuizMapper: IMapWith<Quiz>
 {
     public void Mapping(Profile profile)
     {
-        profile.CreateMap<IList<Quiz>, QuizVm>().ForMember(quizVm => quizVm.Quizzes, opt => opt.MapFrom(quiz => quiz));
+        profile.CreateMap<IList<Quiz>, QuizVm>().ForMember(vm => vm.Quizzes, opt => opt.MapFrom(quiz => quiz));
     }
 }

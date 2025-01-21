@@ -6,7 +6,7 @@ public class CreateLessonCommandValidator: AbstractValidator<CreateLessonCommand
 {
     public CreateLessonCommandValidator()
     {
-        RuleFor(command => command.LessonTitle).NotEmpty().MaximumLength(20).WithMessage("Title must be between 1 and 20 characters.");
-        RuleFor(command => command.LessonDescription).NotEmpty().WithMessage("Description is required.");
+        RuleFor(command => command.Title).NotEmpty().MaximumLength(20).WithMessage("Title must be between 1 and 20 characters.");
+        RuleFor(command => command.Description).NotEmpty().WithMessage("Description is required.");
     }
 }

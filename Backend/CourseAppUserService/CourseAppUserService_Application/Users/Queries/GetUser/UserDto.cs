@@ -1,4 +1,4 @@
-namespace CourseAppUserService_Application.Users.Queries.GetUserInfo;
+namespace CourseAppUserService_Application.Users.Queries.GetUser;
 
 public record UserDto
 {

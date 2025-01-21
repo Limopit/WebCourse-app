@@ -8,7 +8,6 @@ namespace CourseAppUserService_Application.UserCreatedCourse.Commands.CreateUser
 
 public class CreateUserCreatedCourseCommandHandler(IUnitOfWork unitOfWork, IMapperService mapper):
     IRequestHandler<CreateUserCreatedCourseCommand, Guid> 
-//After implementing Course Service courseId connecting must be updated
 {
     public async Task<Guid> Handle(CreateUserCreatedCourseCommand request, CancellationToken cancellationToken)
     {

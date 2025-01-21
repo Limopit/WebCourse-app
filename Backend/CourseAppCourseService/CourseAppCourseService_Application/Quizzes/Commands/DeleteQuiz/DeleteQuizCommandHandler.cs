@@ -9,10 +9,10 @@ public class DeleteQuizCommandHandler(IUnitOfWork unitOfWork): IRequestHandler<D
 {
     public async Task Handle(DeleteQuizCommand request, CancellationToken cancellationToken)
     {
-        var quiz = await unitOfWork.Quizzes.GetEntityByIdAsync(request.QuizId, cancellationToken);
+        var quiz = await unitOfWork.Quizzes.GetEntityByIdAsync(request.Id, cancellationToken);
         if (quiz is null)
         {
-            throw new NotFoundException(nameof(Quiz), request.QuizId);
+            throw new NotFoundException(nameof(Quiz), request.Id);
         }
         
         await unitOfWork.Quizzes.RemoveEntityAsync(quiz);

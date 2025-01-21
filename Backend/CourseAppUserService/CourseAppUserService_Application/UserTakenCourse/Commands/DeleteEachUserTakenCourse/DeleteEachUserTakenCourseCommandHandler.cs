@@ -7,7 +7,7 @@ public class DeleteEachUserTakenCourseCommandHandler(IUnitOfWork unitOfWork): IR
 {
     public async Task Handle(DeleteEachUserTakenCourseCommand request, CancellationToken cancellationToken)
     {
-        var records = await unitOfWork.UserTakenCourses.GetEachUserTakenCoursesByCourseIdAsync(request.CourseId, cancellationToken);
+        var records = await unitOfWork.UserTakenCourses.GetEachUserTakenCoursesByCourseIdAsync(request.Id, cancellationToken);
         
         foreach (var record in records)
             await unitOfWork.UserTakenCourses.RemoveEntityAsync(record);

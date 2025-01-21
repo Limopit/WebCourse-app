@@ -12,9 +12,9 @@ using UserServiceRpc;
 
 namespace CourseAppCourseService.Controllers;
 
-public class CourseController(IMediator mediator, GrpcUserServiceClient userServiceClient) : BaseController(mediator)
+public class CoursesController(IMediator mediator, GrpcUserServiceClient userServiceClient) : BaseController(mediator)
 {
-    [HttpGet("courses")]
+    [HttpGet]
     public async Task<ActionResult<Guid>> GetCourseList()
     {
         var result = await Mediator.Send(new GetCourseListQuery());
@@ -23,7 +23,7 @@ public class CourseController(IMediator mediator, GrpcUserServiceClient userServ
     }
 
     [Authorize]
-    [HttpPost("courses")]
+    [HttpPost]
     public async Task<ActionResult> CreateCourse([FromBody] CreateCourseCommand command)
     {
         var createdRecordId = await mediator.Send(command);

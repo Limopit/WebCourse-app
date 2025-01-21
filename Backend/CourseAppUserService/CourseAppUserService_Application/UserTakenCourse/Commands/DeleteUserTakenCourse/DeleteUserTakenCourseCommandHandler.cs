@@ -15,10 +15,10 @@ public class DeleteUserTakenCourseCommandHandler(IUnitOfWork unitOfWork): IReque
             throw new NotFoundException(nameof(User), request.Email);
         }
         
-        var record = await unitOfWork.UserTakenCourses.GetUserTakenCoursesByCourseIdAsync(request.CourseId, user, cancellationToken);
+        var record = await unitOfWork.UserTakenCourses.GetUserTakenCoursesByCourseIdAsync(request.Id, user, cancellationToken);
         if (record == null)
         {
-            throw new NotFoundException(nameof(UserTakenCourse), request.CourseId);
+            throw new NotFoundException(nameof(UserTakenCourse), request.Id);
         }
         
         await unitOfWork.UserTakenCourses.RemoveEntityAsync(record);

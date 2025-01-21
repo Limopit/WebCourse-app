@@ -12,10 +12,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CourseAppUserService.Controllers;
 
+[Route("api/Users")]
 public class UserCourseController(IMediator mediator) : BaseController(mediator)
 {
     [Authorize]
-    [HttpPost("taken-course/courses")]
+    [HttpPost("courses/taken")]
     public async Task<ActionResult<Guid>> CreateUserTakenCourse([FromBody] CreateUserTakenCourseCommand command)
     {
         command.Email = User.FindFirstValue(ClaimTypes.Email);
@@ -25,7 +26,7 @@ public class UserCourseController(IMediator mediator) : BaseController(mediator)
     }
     
     [Authorize]
-    [HttpGet("taken-course/courses")]
+    [HttpGet("courses/taken")]
     public async Task<ActionResult<Guid>> GetUserTakenCourses()
     {
         var result = await Mediator
@@ -35,7 +36,7 @@ public class UserCourseController(IMediator mediator) : BaseController(mediator)
     }
     
     [Authorize]
-    [HttpPost("user-course/courses")]
+    [HttpPost("courses/created")]
     public async Task<ActionResult<Guid>> CreateUserCreatedCourse([FromBody] CreateUserCreatedCourseCommand command)
     {
         command.Email = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -44,7 +45,7 @@ public class UserCourseController(IMediator mediator) : BaseController(mediator)
         return Ok(result);
     }
     
-    [HttpGet("{email}/user-course/courses")]
+    [HttpGet("{email}/courses/created")]
     public async Task<ActionResult<Guid>> GetUserCreatedCourses(string email)
     {
         var result = await Mediator
@@ -54,19 +55,19 @@ public class UserCourseController(IMediator mediator) : BaseController(mediator)
     }
 
     [Authorize(Roles = "Admin")]
-    [HttpDelete("users/{email}/taken-course/{id}")]
+    [HttpDelete("{email}/courses/taken/{id}")]
     public async Task<ActionResult> DeleteUserTakenCourse(string id, string email)
     {
-        await Mediator.Send(new DeleteUserTakenCourseCommand() { CourseId = id, Email = email });
+        await Mediator.Send(new DeleteUserTakenCourseCommand() { Id = id, Email = email });
 
         return NoContent();
     }
     
     [Authorize(Roles = "Admin")]
-    [HttpDelete("user-course/{id}")]
+    [HttpDelete("courses/created/{id}")]
     public async Task<ActionResult> DeleteUserCreatedCourse(string id)
     {
-        await Mediator.Send(new DeleteUserCreatedCourseCommand() { CourseId = id });
+        await Mediator.Send(new DeleteUserCreatedCourseCommand() { Id = id });
 
         return NoContent();
     }

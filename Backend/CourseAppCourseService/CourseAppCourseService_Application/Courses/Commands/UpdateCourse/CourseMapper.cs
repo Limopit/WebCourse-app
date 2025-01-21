@@ -9,12 +9,12 @@ public class CourseMapper: IMapWith<Course>
     public void Mapping(Profile profile)
     {
         profile.CreateMap<UpdateCourseCommand, Course>()
-            .ForMember(course => course.Title, opt => opt.MapFrom(command => command.CourseTitle))
-            .ForMember(course => course.Description, opt => opt.MapFrom(command => command.CourseDescription))
-            .ForMember(course => course.Logo, opt => opt.MapFrom(command => command.CourseLogo))
-            .ForMember(course => course.Level, opt => opt.MapFrom(command => command.CourseLevel))
-            .ForMember(course => course.Category, opt => opt.MapFrom(command => command.CourseCategory))
-            .ForMember(course => course.Language, opt => opt.MapFrom(command => command.CourseLanguage))
-            .ForMember(course => course.Requierments, opt => opt.MapFrom(command => command.CourseRequierments));
+            .ForMember(course => course.Title, opt => opt.MapFrom(command => command.Title))
+            .ForMember(course => course.Description, opt => opt.MapFrom(command => command.Description))
+            .ForMember(course => course.Logo, opt => opt.MapFrom(command => command.Logo))
+            .ForMember(course => course.Level, opt => opt.MapFrom(command => command.Level))
+            .ForMember(course => course.Category, opt => opt.MapFrom(command => command.Category))
+            .ForMember(course => course.Language, opt => opt.MapFrom(command => command.Language))
+            .ForMember(course => course.Requierments, opt => opt.MapFrom(command => command.Requierments));
     }
 }

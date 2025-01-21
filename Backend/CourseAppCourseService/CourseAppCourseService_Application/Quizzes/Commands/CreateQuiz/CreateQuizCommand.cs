@@ -4,7 +4,7 @@ namespace CourseAppCourseService_Application.Quizzes.Commands.CreateQuiz;
 
 public record CreateQuizCommand: IRequest<Guid>
 {
-    public string QuizQuestion {get; set;}
-    public List<string> QuizOptions {get; set;}
-    public string QuizAnswer {get; set;}
+    public string Question {get; set;}
+    public List<string> Options {get; set;}
+    public string Answer {get; set;}
 }

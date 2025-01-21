@@ -9,10 +9,10 @@ public class DeleteLessonCommandHandler(IUnitOfWork unitOfWork): IRequestHandler
 {
     public async Task Handle(DeleteLessonCommand request, CancellationToken cancellationToken)
     {
-        var lesson = await unitOfWork.Lessons.GetEntityByIdAsync(request.LessonId, cancellationToken);
+        var lesson = await unitOfWork.Lessons.GetEntityByIdAsync(request.Id, cancellationToken);
         if (lesson is null)
         {
-            throw new NotFoundException(nameof(Lesson), request.LessonId);
+            throw new NotFoundException(nameof(Lesson), request.Id);
         }
 
         await unitOfWork.Lessons.RemoveEntityAsync(lesson);
