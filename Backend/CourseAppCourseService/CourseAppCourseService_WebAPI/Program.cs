@@ -4,9 +4,11 @@ using CourseAppCourseService_Application;
 using CourseAppCourseService_Application.Common.Mappings;
 using CourseAppCourseService_Application.Interfaces;
 using CourseAppCourseService_Infrastructure;
+using CourseAppCourseService.Logging;
 using CourseAppCourseService.Middleware;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +17,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true);
 
 builder.Services.AddOpenApi();
+
+LoggingConfig.ConfigureLogging(builder.Configuration);
 
 builder.Services.AddApplication();
 
@@ -85,6 +89,8 @@ builder.Services.AddAuthentication("Bearer")
         };
     });
 
+builder.Host.UseSerilog();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -104,6 +110,7 @@ using (var scope = app.Services.CreateScope())
     {
         var context = serviceProvider.GetRequiredService<ICourseDbContext>();
         await DbInitializer.Initialize(context);
+        Log.Information("DB context initialized successfully");
     }
     catch (Exception ex)
     {
