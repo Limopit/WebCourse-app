@@ -1,7 +1,6 @@
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
 
-# Копируем только нужные .sln и .csproj файлы для рабочих проектов
 COPY ./Backend/CourseAppUserService/*.sln ./
 COPY ./Backend/CourseAppUserService/CourseAppUserService_Application/*.csproj CourseAppUserService_Application/
 COPY ./Backend/CourseAppUserService/CourseAppUserService_Domain/*.csproj CourseAppUserService_Domain/
@@ -10,15 +9,12 @@ COPY ./Backend/CourseAppUserService/CourseAppUserService_IdentityServer/*.csproj
 COPY ./Backend/CourseAppUserService/CourseAppUserService_WebAPI/*.csproj CourseAppUserService_WebAPI/
 COPY ./Backend/CourseAppUserService/CourseAppUserService_IdentityServer/appsettings.Identity.json /app/
 
-# Восстанавливаем зависимости, исключая тестовые проекты
 RUN dotnet restore CourseAppUserService_WebAPI/CourseAppUserService_WebAPI.csproj
 
-# Копируем все остальные файлы, но исключаем тестовые проекты
 COPY ./Backend/CourseAppUserService/ /src/
 
 WORKDIR /src/CourseAppUserService_WebAPI
 
-# Публикуем приложение
 RUN dotnet publish -c Release -o /app/publish 
 
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS runtime
@@ -29,7 +25,9 @@ RUN apt-get update && \
     apt-get install -y curl netcat-traditional telnet && \
     apt-get clean 
 
-COPY ./certs /https:ro
+COPY ./certs /https
+
+RUN cp /https/cert.crt /usr/local/share/ca-certificates/cert.crt && update-ca-certificates
 
 EXPOSE 5002
 

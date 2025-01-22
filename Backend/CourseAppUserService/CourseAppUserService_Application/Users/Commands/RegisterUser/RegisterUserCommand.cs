@@ -2,7 +2,7 @@ using MediatR;
 
 namespace CourseAppUserService_Application.Users.Commands.RegisterUser;
 
-public class RegisterUserCommand: IRequest<string>
+public record RegisterUserCommand: IRequest<string>
 {
     public required string FirstName { get; set; }
     public required string LastName { get; set; }

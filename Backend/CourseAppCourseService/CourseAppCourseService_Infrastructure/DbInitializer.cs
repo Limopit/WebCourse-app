@@ -36,8 +36,8 @@ public static class DbInitializer
         {
             var initialCourses = new List<Course>
             {
-                new Course { CourseTitle = "C# Basics" },
-                new Course { CourseTitle = "ASP.NET Core" }
+                new Course { Title = "C# Basics" },
+                new Course { Title = "ASP.NET Core" }
             };
             await Courses.InsertManyAsync(initialCourses);
         }
@@ -47,8 +47,8 @@ public static class DbInitializer
         {
             var initialLessons = new List<Lesson>
             {
-                new Lesson { LessonTitle = "Lesson 1: Introduction to C#" },
-                new Lesson { LessonTitle = "Lesson 2: ASP.NET Core Overview" }
+                new Lesson { Title = "Lesson 1: Introduction to C#" },
+                new Lesson { Title = "Lesson 2: ASP.NET Core Overview" }
             };
             await Lessons.InsertManyAsync(initialLessons);
         }
@@ -58,8 +58,8 @@ public static class DbInitializer
         {
             var initialQuizzes = new List<Quiz>
             {
-                new Quiz { QuizQuestion = "C# Quiz" },
-                new Quiz { QuizQuestion = "ASP.NET Core Quiz" }
+                new Quiz { Question = "C# Quiz" },
+                new Quiz { Question = "ASP.NET Core Quiz" }
             };
             await Quizzes.InsertManyAsync(initialQuizzes);
         }

@@ -1,0 +1,24 @@
+{
+  "SwaggerEndPoints": [
+    {
+      "Key": "User",
+      "Config": [
+        {
+          "Name": "User API",
+          "Version": "v1",
+          "Url": "https://webapi_user:5002/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "Courses",
+      "Config": [
+        {
+          "Name": "Course API",
+          "Version": "v1",
+          "Url": "https://webapi_course:5000/swagger/v1/swagger.json"
+        }
+      ]
+    }
+  ]
+}

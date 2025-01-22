@@ -2,13 +2,13 @@ using MediatR;
 
 namespace CourseAppCourseService_Application.Courses.Commands.CreateCourse;
 
-public class CreateCourseCommand: IRequest<Guid>
+public record CreateCourseCommand: IRequest<Guid>
 {
-    public string CourseTitle {get; set;}
-    public string CourseDescription {get; set;}
-    public string CourseLogo {get; set;}
-    public string CourseLevel {get; set;}
-    public string CourseCategory {get; set;}
-    public string CourseLanguage {get; set;}
-    public string CourseRequierments {get; set;}
+    public string Title {get; set;}
+    public string Description {get; set;}
+    public string Logo {get; set;}
+    public string Level {get; set;}
+    public string Category {get; set;}
+    public string Language {get; set;}
+    public string Requierments {get; set;}
 }

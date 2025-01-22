@@ -23,6 +23,13 @@ builder.Configuration
 
 builder.Configuration.AddJsonFile(fullpath, optional: false, reloadOnChange: true);
 
+var handler = new HttpClientHandler();
+handler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+var client = new HttpClient(handler);
+
+// Регистрируем HttpClient для использования в сервисе
+builder.Services.AddSingleton(client);
+
 builder.Services.AddOpenApi();
 
 builder.Services.AddApplication();
@@ -104,7 +111,6 @@ using (var scope = app.Services.CreateScope())
         Console.WriteLine($"Произошла ошибка при инициализации БД: {ex.Message}");
     }
 }
-
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("Docker"))

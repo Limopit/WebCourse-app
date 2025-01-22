@@ -1,0 +1,24 @@
+{
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/api/Auth/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5002
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/auth/{everything}",
+      "UpstreamHttpMethod": [
+        "Post"
+      ],
+      "SwaggerKey": "User",
+      "Tags": [
+        "Auth"
+      ],
+      "AuthenticationProviderKey": "Bearer",
+      "AllowedScopes": [ "api_scope" ]
+    }
+  ]
+}

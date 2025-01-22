@@ -1,6 +1,6 @@
-namespace CourseAppUserService_Application.Users.Queries.GetUserInfo;
+namespace CourseAppUserService_Application.Users.Queries.GetUser;
 
-public class UserDto
+public record UserDto
 {
     public string Id { get; set; }
     public string FirstName { get; set; }

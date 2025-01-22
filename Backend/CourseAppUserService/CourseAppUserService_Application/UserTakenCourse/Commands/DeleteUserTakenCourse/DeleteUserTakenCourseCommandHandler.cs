@@ -1,5 +1,6 @@
 using CourseAppUserService_Application.Common.Exceptions;
 using CourseAppUserService_Application.Interfaces;
+using CourseAppUserService_Domain.Entities;
 using MediatR;
 
 namespace CourseAppUserService_Application.UserTakenCourse.Commands.DeleteUserTakenCourse;
@@ -8,11 +9,19 @@ public class DeleteUserTakenCourseCommandHandler(IUnitOfWork unitOfWork): IReque
 {
     public async Task Handle(DeleteUserTakenCourseCommand request, CancellationToken cancellationToken)
     {
-        var records = await unitOfWork.UserTakenCourses.GetUserTakenCoursesByCourseIdAsync(request.CourseId, cancellationToken);
+        var user = await unitOfWork.Users.FindUserByEmailAsync(request.Email);
+        if (user == null)
+        {
+            throw new NotFoundException(nameof(User), request.Email);
+        }
         
-        foreach (var record in records)
-            await unitOfWork.UserTakenCourses.RemoveEntityAsync(record);
+        var record = await unitOfWork.UserTakenCourses.GetUserTakenCoursesByCourseIdAsync(request.Id, user, cancellationToken);
+        if (record == null)
+        {
+            throw new NotFoundException(nameof(UserTakenCourse), request.Id);
+        }
         
+        await unitOfWork.UserTakenCourses.RemoveEntityAsync(record);
         await unitOfWork.SaveChangesAsync(cancellationToken);
     }
 }

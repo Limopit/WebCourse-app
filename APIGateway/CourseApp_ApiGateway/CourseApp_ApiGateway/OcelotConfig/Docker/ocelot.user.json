@@ -1,0 +1,23 @@
+{
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/api/User/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "webapi_user",
+          "Port": 5002
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/user/{everything}",
+      "UpstreamHttpMethod": [
+        "Get",
+        "Post",
+        "Put",
+        "Delete"
+      ],
+      "SwaggerKey": "User",
+      "Tags": [ "User" ]
+    }
+  ]
+}

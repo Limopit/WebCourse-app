@@ -9,13 +9,13 @@ public class CourseMapper : IMapWith<Course>
     public void Mapping(Profile profile)
     {
         profile.CreateMap<Course, CourseDto>()
-            .ForMember(courseDto => courseDto.Id, opt => opt.MapFrom(course => course.Id))
-            .ForMember(courseDto => courseDto.CourseTitle, opt => opt.MapFrom(course => course.CourseTitle))
-            .ForMember(courseDto => courseDto.CourseDescription, opt => opt.MapFrom(course => course.CourseDescription))
-            .ForMember(courseDto => courseDto.CourseLogo, opt => opt.MapFrom(course => course.CourseLogo))
-            .ForMember(courseDto => courseDto.CourseCreator, opt => opt.MapFrom(course => course.CourseCreator));
+            .ForMember(dto => dto.Id, opt => opt.MapFrom(course => course.Id))
+            .ForMember(dto => dto.Title, opt => opt.MapFrom(course => course.Title))
+            .ForMember(dto => dto.Description, opt => opt.MapFrom(course => course.Description))
+            .ForMember(dto => dto.Logo, opt => opt.MapFrom(course => course.Logo))
+            .ForMember(dto => dto.Creator, opt => opt.MapFrom(course => course.Creator));
 
         profile.CreateMap<List<Course>, CourseVm>()
-            .ForMember(courseVm => courseVm.Courses, opt => opt.MapFrom(courseList => courseList));
+            .ForMember(vm => vm.Courses, opt => opt.MapFrom(list => list));
     }
 }

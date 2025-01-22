@@ -3,12 +3,12 @@ using CourseAppCourseService_Application.Quizzes.Commands.DeleteQuiz;
 using CourseAppCourseService_Application.Quizzes.Commands.UpdateQuiz;
 using CourseAppCourseService_Application.Quizzes.Queries.GetQuizList;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CourseAppCourseService.Controllers;
 
-[Route("api/[controller]/[action]")]
-public class QuizController(IMediator mediator) : BaseController(mediator)
+public class QuizzesController(IMediator mediator) : BaseController(mediator)
 {
     [HttpGet]
     public async Task<ActionResult<Guid>> GetQuizList()
@@ -18,6 +18,7 @@ public class QuizController(IMediator mediator) : BaseController(mediator)
         return Ok(result);
     }
     
+    [Authorize]
     [HttpPost]
     public async Task<ActionResult<Guid>> CreateNewQuiz([FromBody] CreateQuizCommand command)
     {
@@ -26,18 +27,21 @@ public class QuizController(IMediator mediator) : BaseController(mediator)
         return Ok(result);
     }
     
-    [HttpPut]
-    public async Task<ActionResult> UpdateQuiz([FromBody]UpdateQuizCommand command)
+    [Authorize]
+    [HttpPut("{id}")]
+    public async Task<ActionResult> UpdateQuiz(Guid id, [FromBody]UpdateQuizCommand command)
     {
+        command.Id = id;
         await Mediator.Send(command);
         
         return NoContent();
     }
     
-    [HttpDelete]
+    [Authorize]
+    [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteQuiz(Guid id)
     {
-        await Mediator.Send(new DeleteQuizCommand(){ QuizId = id });
+        await Mediator.Send(new DeleteQuizCommand(){ Id = id });
         
         return NoContent();
     }

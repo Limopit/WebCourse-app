@@ -6,8 +6,8 @@ public class CreateQuizCommandValidator: AbstractValidator<CreateQuizCommand>
 {
     public CreateQuizCommandValidator()
     {
-        RuleFor(command => command.QuizQuestion).NotEmpty().WithMessage("Question is required");
-        RuleFor(command => command.QuizAnswer).NotEmpty().WithMessage("Answer is required");
-        RuleFor(command => command.QuizOptions).NotEmpty().WithMessage("Options are required");
+        RuleFor(command => command.Question).NotEmpty().WithMessage("Question is required");
+        RuleFor(command => command.Answer).NotEmpty().WithMessage("Answer is required");
+        RuleFor(command => command.Options).NotEmpty().WithMessage("Options are required");
     }
 }

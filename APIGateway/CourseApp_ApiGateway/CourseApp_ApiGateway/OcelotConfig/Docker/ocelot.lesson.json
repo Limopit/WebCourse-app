@@ -1,0 +1,23 @@
+{
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/api/Lesson/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "webapi_course",
+          "Port": 5000
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/lessons/{everything}",
+      "UpstreamHttpMethod": [
+        "Get",
+        "Post",
+        "Put",
+        "Delete"
+      ],
+      "SwaggerKey": "Courses",
+      "Tags": ["Lessons"]
+    }
+  ]
+}

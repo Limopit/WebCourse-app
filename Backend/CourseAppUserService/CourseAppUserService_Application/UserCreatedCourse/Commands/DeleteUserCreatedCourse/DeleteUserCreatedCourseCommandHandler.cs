@@ -8,10 +8,10 @@ public class DeleteUserCreatedCourseCommandHandler(IUnitOfWork unitOfWork): IReq
 {
     public async Task Handle(DeleteUserCreatedCourseCommand request, CancellationToken cancellationToken)
     {
-        var record = await unitOfWork.UserCreatedCourses.GetUserCreatedCourseByCourseIdAsync(request.CourseId, cancellationToken);
+        var record = await unitOfWork.UserCreatedCourses.GetUserCreatedCourseByCourseIdAsync(request.Id, cancellationToken);
         if (record is null)
         {
-            throw new NotFoundException(nameof(UserCreatedCourse), request.CourseId);
+            throw new NotFoundException(nameof(UserCreatedCourse), request.Id);
         }
         
         await unitOfWork.UserCreatedCourses.RemoveEntityAsync(record);

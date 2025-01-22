@@ -8,10 +8,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CourseAppUserService.Controllers;
 
-[Route("api/[controller]")]
 public class AuthController(IMediator mediator) : BaseController(mediator)
 {
-    [HttpPost]
+    [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterUserCommand command)
     {
         var userId = await Mediator.Send(command);

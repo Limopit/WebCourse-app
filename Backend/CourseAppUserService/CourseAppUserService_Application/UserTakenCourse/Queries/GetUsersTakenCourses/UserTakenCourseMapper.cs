@@ -9,10 +9,10 @@ public class UserTakenCourseMapper : IMapWith<UserTakenCourses>
     public void Mapping(Profile profile)
     {
         profile.CreateMap<UserTakenCourses, UserTakenCourseDto>()
-            .ForMember(course => course.CourseId, config => config.MapFrom(userCourse => userCourse.CourseId))
-            .ForMember(course => course.StartDate, config => config.MapFrom(userCourse => userCourse.DateStart))
-            .ForMember(course => course.FinishDate, config => config.MapFrom(userCourse => userCourse.DateFinished))
-            .ForMember(course => course.Status, config => config.MapFrom(userCourse => userCourse.Status))
-            .ForMember(course => course.IsFavorite, config => config.MapFrom(userCourse => userCourse.IsFavourite));
+            .ForMember(dto => dto.Id, config => config.MapFrom(course => course.CourseId))
+            .ForMember(dto => dto.StartDate, config => config.MapFrom(course => course.DateStart))
+            .ForMember(dto => dto.FinishDate, config => config.MapFrom(course => course.DateFinished))
+            .ForMember(dto => dto.Status, config => config.MapFrom(course => course.Status))
+            .ForMember(dto => dto.IsFavorite, config => config.MapFrom(course => course.IsFavourite));
     }
 }

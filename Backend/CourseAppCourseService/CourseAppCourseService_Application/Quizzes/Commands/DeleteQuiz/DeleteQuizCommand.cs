@@ -2,7 +2,7 @@ using MediatR;
 
 namespace CourseAppCourseService_Application.Quizzes.Commands.DeleteQuiz;
 
-public class DeleteQuizCommand: IRequest
+public record DeleteQuizCommand: IRequest
 {
-    public Guid QuizId { get; set; }
+    public Guid Id { get; set; }
 }

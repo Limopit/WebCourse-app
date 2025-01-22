@@ -1,13 +1,15 @@
 using CourseAppCourseService_Application.Interfaces;
 using CourseAppCourseService_Application.Interfaces.Repositories;
-using CourseAppCourseService_Infrastructure.DbPattenrs.Repositories;
 
-namespace CourseAppCourseService_Infrastructure.DbPattenrs
+namespace CourseAppCourseService_Infrastructure.DbPattenrs;
+
+public class UnitOfWork(
+    ICourseRepository courseRepository,
+    ILessonRepository lessonRepository,
+    IQuizRepository quizRepository)
+    : IUnitOfWork
 {
-    public class UnitOfWork(ICourseDbContext context) : IUnitOfWork
-    { 
-        public ICourseRepository Courses { get; set; } = new CourseRepository(context);
-        public ILessonRepository Lessons { get; set; } = new LessonRepository(context);
-        public IQuizRepository Quizzes { get; set; } = new QuizRepository(context);
-    }
+    public ICourseRepository Courses { get; } = courseRepository;
+    public ILessonRepository Lessons { get; } = lessonRepository;
+    public IQuizRepository Quizzes { get; } = quizRepository;
 }

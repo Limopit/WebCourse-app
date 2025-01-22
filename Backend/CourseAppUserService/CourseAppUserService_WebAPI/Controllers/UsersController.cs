@@ -1,15 +1,14 @@
 using CourseAppUserService_Application.Users.Commands.DeleteUser;
 using CourseAppUserService_Application.Users.Commands.UpdateUserData;
 using CourseAppUserService_Application.Users.Commands.UpdateUserPassword;
-using CourseAppUserService_Application.Users.Queries.GetUserInfo;
+using CourseAppUserService_Application.Users.Queries.GetUser;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CourseAppUserService.Controllers;
 
-[Route("api/[controller]")]
-public class UserController(IMediator mediator) : BaseController(mediator)
+public class UsersController(IMediator mediator) : BaseController(mediator)
 {
     [Authorize]
     [HttpPut]
@@ -28,15 +27,15 @@ public class UserController(IMediator mediator) : BaseController(mediator)
     }
 
     [Authorize(Roles = "Admin")]
-    [HttpGet("user-data")]
-    public async Task<IActionResult> GetUserData(string email)
+    [HttpGet("{email}")]
+    public async Task<IActionResult> GetUser(string email)
     {
-        var result = await Mediator.Send(new GetUserInfoCommand{Email = email});
+        var result = await Mediator.Send(new GetUserCommand{Email = email});
         return Ok(result);
     }
     
     [Authorize(Roles = "Admin")]
-    [HttpDelete]
+    [HttpDelete("{email}")]
     public async Task<IActionResult> DeleteUser(string email)
     {
         await Mediator.Send(new DeleteUserCommand{Email = email});

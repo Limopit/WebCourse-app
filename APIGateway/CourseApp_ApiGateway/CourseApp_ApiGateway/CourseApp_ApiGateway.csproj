@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.0" />
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.0"/>
+        <PackageReference Include="MMLib.SwaggerForOcelot" Version="8.3.2" />
+        <PackageReference Include="Ocelot" Version="23.4.2" />
+        <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="7.2.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="OcelotConfig\ocelot.Auth.json" />
+      <_ContentIncludedByDefault Remove="OcelotConfig\ocelot.Courses.json" />
+      <_ContentIncludedByDefault Remove="OcelotConfig\ocelot.Lessons.json" />
+      <_ContentIncludedByDefault Remove="OcelotConfig\ocelot.Quizzes.json" />
+      <_ContentIncludedByDefault Remove="OcelotConfig\ocelot.User.json" />
+      <_ContentIncludedByDefault Remove="OcelotConfig\ocelot.UserCourses.json" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="OcelotConfig\Docker\" />
+    </ItemGroup>
+
+</Project>

@@ -2,7 +2,7 @@ using MediatR;
 
 namespace CourseAppUserService_Application.Users.Commands.UpdateUserData;
 
-public class UpdateUserDataCommand: IRequest
+public record UpdateUserDataCommand: IRequest
 {
     public required string FirstName { get; set; }
     public required string LastName { get; set; }

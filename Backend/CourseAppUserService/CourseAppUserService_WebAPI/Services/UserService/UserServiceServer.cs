@@ -3,7 +3,7 @@ using CourseAppUserService_Application.Common.Exceptions;
 using CourseAppUserService_Application.Interfaces.Services;
 using CourseAppUserService_Application.UserCreatedCourse.Commands.CreateUserCreatedCourse;
 using CourseAppUserService_Application.UserCreatedCourse.Commands.DeleteUserCreatedCourse;
-using CourseAppUserService_Application.UserTakenCourse.Commands.DeleteUserTakenCourse;
+using CourseAppUserService_Application.UserTakenCourse.Commands.DeleteEachUserTakenCourse;
 using CourseAppUserService_Domain.Enums;
 using Grpc.Core;
 using MediatR;
@@ -35,11 +35,11 @@ namespace CourseAppUserService.Services.UserService
         {
             var deleteCreatedCourseCommand = new DeleteUserCreatedCourseCommand
             {
-                CourseId = request.CourseId
+                Id = request.CourseId
             };
-            var deleteUserTakenCoursesCommand = new DeleteUserTakenCourseCommand
+            var deleteUserTakenCoursesCommand = new DeleteEachUserTakenCourseCommand
             {
-                CourseId = request.CourseId
+                Id = request.CourseId
             };
             
             await mediator.Send(deleteCreatedCourseCommand);

@@ -6,7 +6,6 @@ RUN dotnet restore "CourseAppUserService_IdentityServer/CourseAppUserService_Ide
 
 COPY Backend/CourseAppUserService/CourseAppUserService_IdentityServer/ /src/CourseAppUserService_IdentityServer/
 
-# Публикуем приложение
 WORKDIR /src/CourseAppUserService_IdentityServer
 RUN dotnet publish -c Release -o /app/publish
 
@@ -15,7 +14,9 @@ WORKDIR /app
 
 COPY --from=build /app/publish .
 
-COPY ./certs /https:ro
+COPY ./certs /https
+
+RUN cp /https/cert.crt /usr/local/share/ca-certificates/cert.crt && update-ca-certificates
 
 EXPOSE 5001
 

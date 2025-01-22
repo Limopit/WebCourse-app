@@ -2,7 +2,7 @@ using MediatR;
 
 namespace CourseAppCourseService_Application.Lessons.Commands.DeleteLesson;
 
-public class DeleteLessonCommand: IRequest
+public record DeleteLessonCommand: IRequest
 {
-    public Guid LessonId { get; set; }
+    public Guid Id { get; set; }
 }
