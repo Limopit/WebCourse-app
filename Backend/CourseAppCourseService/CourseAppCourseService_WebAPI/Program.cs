@@ -7,6 +7,7 @@ using CourseAppCourseService_Infrastructure;
 using CourseAppCourseService.Middleware;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -85,6 +86,8 @@ builder.Services.AddAuthentication("Bearer")
         };
     });
 
+builder.Host.UseSerilog();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -104,10 +107,11 @@ using (var scope = app.Services.CreateScope())
     {
         var context = serviceProvider.GetRequiredService<ICourseDbContext>();
         await DbInitializer.Initialize(context);
+        Log.Information("DB context initialized successfully");
     }
     catch (Exception ex)
     {
-        Console.WriteLine($"Произошла ошибка при инициализации БД: {ex.Message}");
+        Log.Error(ex, "An error occurred while initializing the database.");
     }
 }
 

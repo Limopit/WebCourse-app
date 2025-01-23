@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Serilog;
 
 namespace CourseAppUserService_Persistance;
 
@@ -37,8 +38,11 @@ public static class DependencyInjection
             })
             .AddEntityFrameworkStores<UserServiceDbContext>()
             .AddDefaultTokenProviders();
-
-        //services.AddHttpContextAccessor();
+        
+        LoggingConfig.ConfigureLogging(configuration);
+        services.AddSingleton(Log.Logger);
+        services.AddSingleton<ILoggerService, LoggerService>();
+        
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IUserTakenCourseRepository, UserTakenCourseRepository>();
         services.AddScoped<IUserCreatedCourseRepository, UserCreatedCourseRepository>();

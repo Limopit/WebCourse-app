@@ -1,9 +1,8 @@
 using System.Security.Claims;
-using CourseAppUserService_Application.UserCreatedCourse.Commands.CreateUserCreatedCourse;
+using CourseAppUserService_Application.Interfaces.Services;
 using CourseAppUserService_Application.UserCreatedCourse.Commands.DeleteUserCreatedCourse;
 using CourseAppUserService_Application.UserCreatedCourse.Queries.GetUserCreatedCourses;
 using CourseAppUserService_Application.UserTakenCourse.Commands.CreateUserTakenCourse;
-using CourseAppUserService_Application.UserTakenCourse.Commands.DeleteEachUserTakenCourse;
 using CourseAppUserService_Application.UserTakenCourse.Commands.DeleteUserTakenCourse;
 using CourseAppUserService_Application.UserTakenCourse.Queries.GetUsersTakenCourses;
 using MediatR;
@@ -13,15 +12,17 @@ using Microsoft.AspNetCore.Mvc;
 namespace CourseAppUserService.Controllers;
 
 [Route("api/Users")]
-public class UserCourseController(IMediator mediator) : BaseController(mediator)
+public class UserCourseController(IMediator mediator, ILoggerService logger) : BaseController(mediator, logger)
 {
     [Authorize]
     [HttpPost("courses/taken")]
     public async Task<ActionResult<Guid>> CreateUserTakenCourse([FromBody] CreateUserTakenCourseCommand command)
     {
         command.Email = User.FindFirstValue(ClaimTypes.Email);
+        
         var result = await Mediator.Send(command);
         
+        Logger.Information($"User {command.Email} takes the {command.CourseId} course");
         return Ok(result);
     }
     
@@ -29,19 +30,11 @@ public class UserCourseController(IMediator mediator) : BaseController(mediator)
     [HttpGet("courses/taken")]
     public async Task<ActionResult<Guid>> GetUserTakenCourses()
     {
+        var email = User.FindFirstValue(ClaimTypes.NameIdentifier);
         var result = await Mediator
-            .Send(new GetUsersTakenCoursesQuery { Email = User.FindFirstValue(ClaimTypes.NameIdentifier) });
+            .Send(new GetUsersTakenCoursesQuery { Email = email });
         
-        return Ok(result);
-    }
-    
-    [Authorize]
-    [HttpPost("courses/created")]
-    public async Task<ActionResult<Guid>> CreateUserCreatedCourse([FromBody] CreateUserCreatedCourseCommand command)
-    {
-        command.Email = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        var result = await Mediator.Send(command);
-        
+        Logger.Information($"User {email} got the taken course list");
         return Ok(result);
     }
     
@@ -51,6 +44,7 @@ public class UserCourseController(IMediator mediator) : BaseController(mediator)
         var result = await Mediator
             .Send(new GetUserCreatedCoursesQuery { Email = email });
         
+        Logger.Information($"Executed listing {email} created courses");
         return Ok(result);
     }
 
@@ -59,7 +53,8 @@ public class UserCourseController(IMediator mediator) : BaseController(mediator)
     public async Task<ActionResult> DeleteUserTakenCourse(string id, string email)
     {
         await Mediator.Send(new DeleteUserTakenCourseCommand() { Id = id, Email = email });
-
+        
+        Logger.Information($"User`s ({email}) taken ({id}) course was deleted");
         return NoContent();
     }
     
@@ -69,6 +64,7 @@ public class UserCourseController(IMediator mediator) : BaseController(mediator)
     {
         await Mediator.Send(new DeleteUserCreatedCourseCommand() { Id = id });
 
+        Logger.Information($"{id} course was deleted");
         return NoContent();
     }
 }

@@ -76,6 +76,8 @@ services:
     depends_on:
       mssql:
         condition: service_healthy
+      elasticsearch:
+        condition: service_healthy
   
   webapi_course:
     build:
@@ -103,6 +105,8 @@ services:
     depends_on:
       webapi_user:
         condition: service_healthy
+      elasticsearch:
+        condition: service_healthy
         
   webapi_ocelot:
     build:
@@ -126,9 +130,39 @@ services:
       timeout: 20s
     depends_on:
        - webapi_course
+         
+  elasticsearch:
+    image: elasticsearch:8.17.1
+    ports:
+      - "9200:9200"
+    volumes:
+      - "elasticsearch-data:/usr/share/elasticsearch/data"
+    environment:
+      - xpack.security.enabled=false
+      - discovery.type=single-node
+    healthcheck:
+      test: nc -z localhost 9200
+      interval: 10s
+      retries: 5
+      start_period: 15s
+      timeout: 20s
+         
+  kibana:
+    image: kibana:8.17.1
+    ports:
+      - "5601:5601"
+    volumes:
+      - "elasticsearch-data:/usr/share/elasticsearch/data"
+    environment:
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+      - discovery.type=single-node
+    depends_on:
+      - elasticsearch
+         
 volumes:
   UserServiceDb:
   mongo-data:
     driver: local
   mssql-data:
     driver: local
+  elasticsearch-data:

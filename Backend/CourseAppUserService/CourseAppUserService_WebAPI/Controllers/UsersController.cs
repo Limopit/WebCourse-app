@@ -1,3 +1,4 @@
+using CourseAppUserService_Application.Interfaces.Services;
 using CourseAppUserService_Application.Users.Commands.DeleteUser;
 using CourseAppUserService_Application.Users.Commands.UpdateUserData;
 using CourseAppUserService_Application.Users.Commands.UpdateUserPassword;
@@ -8,13 +9,15 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CourseAppUserService.Controllers;
 
-public class UsersController(IMediator mediator) : BaseController(mediator)
+public class UsersController(IMediator mediator, ILoggerService logger) : BaseController(mediator, logger)
 {
     [Authorize]
     [HttpPut]
-    public async Task<IActionResult> UpdateUserData([FromBody] UpdateUserDataCommand command)
+    public async Task<IActionResult> UpdateUser([FromBody] UpdateUserDataCommand command)
     {
-        await Mediator.Send(command); 
+        await Mediator.Send(command);
+        
+        Logger.Information("User info was updated successfully");
         return Ok();
     }
     
@@ -22,7 +25,9 @@ public class UsersController(IMediator mediator) : BaseController(mediator)
     [HttpPut("password")]
     public async Task<IActionResult> UpdateUserPassword([FromBody] UpdateUserPasswordCommand command)
     {
-        await Mediator.Send(command); 
+        await Mediator.Send(command);
+        
+        Logger.Information("User password was updated successfully");
         return Ok();
     }
 
@@ -31,6 +36,8 @@ public class UsersController(IMediator mediator) : BaseController(mediator)
     public async Task<IActionResult> GetUser(string email)
     {
         var result = await Mediator.Send(new GetUserCommand{Email = email});
+        
+        Logger.Information("User info was retrieved successfully");
         return Ok(result);
     }
     
@@ -39,6 +46,8 @@ public class UsersController(IMediator mediator) : BaseController(mediator)
     public async Task<IActionResult> DeleteUser(string email)
     {
         await Mediator.Send(new DeleteUserCommand{Email = email});
+        
+        Logger.Information("User was deleted successfully");
         return Ok();
     }
 }

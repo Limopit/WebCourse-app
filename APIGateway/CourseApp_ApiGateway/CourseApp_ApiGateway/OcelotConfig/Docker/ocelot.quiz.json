@@ -1,7 +1,7 @@
 {
   "Routes": [
     {
-      "DownstreamPathTemplate": "/api/Quiz/{everything}",
+      "DownstreamPathTemplate": "/api/Quizzes/{everything}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {

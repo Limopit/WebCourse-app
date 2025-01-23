@@ -11,6 +11,7 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
+using Serilog;
 
 namespace CourseAppCourseService_Infrastructure;
 
@@ -33,6 +34,10 @@ public static class DependencyInjection
             var client = serviceProvider.GetRequiredService<IMongoClient>();
             return new CourseDbContext(client, databaseName);
         });
+        
+        LoggingConfig.ConfigureLogging(configuration);
+        services.AddSingleton(Log.Logger);
+        services.AddSingleton<ILoggerService, LoggerService>();
 
         services.AddScoped<ICourseRepository, CourseRepository>();
         services.AddScoped<ILessonRepository, LessonRepository>();
@@ -40,8 +45,8 @@ public static class DependencyInjection
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IMapperService, MapperService>();
         services.AddTransient<GrpcUserServiceClient>();
-
-
+        
+        
         return services;
     }
 }
