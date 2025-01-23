@@ -4,7 +4,6 @@ using CourseAppCourseService_Application;
 using CourseAppCourseService_Application.Common.Mappings;
 using CourseAppCourseService_Application.Interfaces;
 using CourseAppCourseService_Infrastructure;
-using CourseAppCourseService.Logging;
 using CourseAppCourseService.Middleware;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -17,8 +16,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true);
 
 builder.Services.AddOpenApi();
-
-LoggingConfig.ConfigureLogging(builder.Configuration);
 
 builder.Services.AddApplication();
 
@@ -114,7 +111,7 @@ using (var scope = app.Services.CreateScope())
     }
     catch (Exception ex)
     {
-        Console.WriteLine($"Произошла ошибка при инициализации БД: {ex.Message}");
+        Log.Error(ex, "An error occurred while initializing the database.");
     }
 }
 

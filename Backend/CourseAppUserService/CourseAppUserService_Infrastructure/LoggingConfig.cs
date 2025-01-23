@@ -1,12 +1,11 @@
 using Elastic.Ingest.Elasticsearch;
 using Elastic.Ingest.Elasticsearch.DataStreams;
 using Elastic.Serilog.Sinks;
-using Elastic.Transport;
-using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Configuration;
 using Serilog;
 using Serilog.Exceptions;
 
-namespace CourseAppCourseService.Logging;
+namespace CourseAppUserService_Persistance;
 
 public static class LoggingConfig
 {
@@ -18,9 +17,10 @@ public static class LoggingConfig
             .WriteTo.Console()
             .WriteTo.Elasticsearch(new [] {new Uri(configuration["ElasticConfiguration:Uri"])}, options =>
             {
-                options.DataStream = new DataStreamName("CourseService-DataStream");
+                options.DataStream = new DataStreamName("UserService-DataStream");
                 options.BootstrapMethod = BootstrapMethod.Failure;
             })
             .CreateLogger();
+        
     }
 }

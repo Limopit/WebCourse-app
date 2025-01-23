@@ -9,6 +9,7 @@ using CourseAppUserService.Middleware;
 using CourseAppUserService.Services.UserService;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.OpenApi.Models;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -93,6 +94,8 @@ builder.Services.AddGrpc(options =>
 });
 
 builder.Services.AddScoped<UserService>();
+
+builder.Host.UseSerilog();
 
 var app = builder.Build();
 
