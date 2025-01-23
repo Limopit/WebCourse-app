@@ -1,7 +1,7 @@
 {
   "Routes": [
     {
-      "DownstreamPathTemplate": "/api/Lesson/{everything}",
+      "DownstreamPathTemplate": "/api/Lessons/{everything}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {

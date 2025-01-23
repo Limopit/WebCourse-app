@@ -1,6 +1,5 @@
 using System.Security.Claims;
 using CourseAppUserService_Application.Interfaces.Services;
-using CourseAppUserService_Application.UserCreatedCourse.Commands.CreateUserCreatedCourse;
 using CourseAppUserService_Application.UserCreatedCourse.Commands.DeleteUserCreatedCourse;
 using CourseAppUserService_Application.UserCreatedCourse.Queries.GetUserCreatedCourses;
 using CourseAppUserService_Application.UserTakenCourse.Commands.CreateUserTakenCourse;
