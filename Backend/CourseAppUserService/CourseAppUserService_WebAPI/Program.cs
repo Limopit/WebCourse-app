@@ -24,12 +24,16 @@ builder.Configuration
 
 builder.Configuration.AddJsonFile(fullpath, optional: false, reloadOnChange: true);
 
-var handler = new HttpClientHandler();
-handler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
-var client = new HttpClient(handler);
-
-// Регистрируем HttpClient для использования в сервисе
-builder.Services.AddSingleton(client);
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins("http://localhost:3000")
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials();
+    });
+});
 
 builder.Services.AddOpenApi();
 
@@ -46,16 +50,6 @@ builder.Services.AddPersistance(builder.Configuration);
 builder.Services.AddDbContext<UserServiceDbContext>();
 
 builder.Services.AddAuthenticationAndAuthorization(builder.Configuration);
-
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowAll", policy =>
-    {
-        policy.AllowAnyHeader();
-        policy.AllowAnyMethod();
-        policy.AllowAnyOrigin();
-    });
-});
 
 builder.Services.AddControllers();
 
@@ -129,7 +123,9 @@ app.UseCustomExceptionHandler();
 
 app.UseHttpsRedirection();
 
-app.UseCors("AllowAll");
+app.UseRouting();
+
+app.UseCors("AllowFrontend");
 
 app.UseAuthentication();
 app.UseAuthorization();
