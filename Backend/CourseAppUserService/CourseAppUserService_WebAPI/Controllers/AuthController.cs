@@ -28,6 +28,17 @@ public class AuthController(IMediator mediator, ILoggerService logger) : BaseCon
         var (jwt, refresh) = await Mediator.Send(command);
         
         logger.Information($"User {command.Email} logged in");
+        
+        var cookieOptions = new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = true,
+            SameSite = SameSiteMode.Strict,
+            Expires = DateTime.UtcNow.AddDays(7)
+        };
+
+        Response.Cookies.Append("RefreshToken", refresh, cookieOptions);
+        
         return Ok(new { jwt, refresh });
     }
     

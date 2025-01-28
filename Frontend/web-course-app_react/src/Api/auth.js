@@ -4,17 +4,23 @@ export const login = async (email, password) => {
     try {
         const response = await fetch(`${API_BASE_URL}/login`, {
             method: 'POST',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({ email, password }),
         });
-
+        
         if (!response.ok) {
-            throw new Error('Failed to login');
+            var responseData = await response.json();
+            throw new Error(responseData.error);
         }
 
-        return await response.json();
+        const { jwt, refreshToken } = await response.json();
+        
+        sessionStorage.setItem("accessToken", jwt);
+        
+        return true
     } catch (error) {
         throw error;
     }

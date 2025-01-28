@@ -28,7 +28,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("http://localhost:3000")
+        policy.WithOrigins("https://localhost:3000")
             .AllowAnyMethod()
             .AllowAnyHeader()
             .AllowCredentials();
@@ -91,6 +91,15 @@ builder.Services.AddScoped<UserService>();
 
 builder.Host.UseSerilog();
 
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.Cookie.Name = "RefreshToken";
+    options.Cookie.HttpOnly = true;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    options.Cookie.SameSite = SameSiteMode.Strict;
+    options.ExpireTimeSpan = TimeSpan.FromDays(7);
+});
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
@@ -130,6 +139,8 @@ app.UseCors("AllowFrontend");
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseCookiePolicy();
+    
 app.MapControllers();
 
 using (var scope = app.Services.CreateScope())
