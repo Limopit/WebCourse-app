@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useContext, useState} from "react";
 import "./SignInSignUp.css";
 
 import email_icon from "../../Assets/email.png";
@@ -6,6 +6,8 @@ import password_icon from "../../Assets/password.png";
 import user_icon from "../../Assets/user.png";
 import { login, signup } from "../../../Api/auth";
 import Header from "../../Elements/Header/Header";
+import {AuthContext} from "../../../Context/AuthContext";
+import {useNavigate} from "react-router-dom";
 
 const SignInSignUp = () => {
     const [active, setActive] = useState("signin");
@@ -14,7 +16,9 @@ const SignInSignUp = () => {
     const [password, setPassword] = useState("");
     const [firstname, setFirstname] = useState("");
     const [lastname, setLastname] = useState("");
+    const { login: authLogin } = useContext(AuthContext);
     const [error, setError] = useState(null);
+    const navigate = useNavigate();
 
     const handleSwitch = (newState) => {
         if (newState !== active) {
@@ -28,6 +32,8 @@ const SignInSignUp = () => {
         try {
             if (active === "signin") {
                 await login(email, password);
+                authLogin();
+                navigate('/');
             } else if (active === "signup") {
                 await signup(firstname, lastname, email, password);
             }

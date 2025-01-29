@@ -45,3 +45,33 @@ export const signup = async (firstname, lastname, email, password) => {
         throw error;
     }
 };
+
+export const logout = async () => {
+    try {
+        const token = sessionStorage.getItem("accessToken");
+
+        if (!token) {
+            console.error("No access token found");
+            throw new Error("No token found");
+        }
+        
+        sessionStorage.clear();
+        
+        const response = await fetch(`${API_BASE_URL}/logout`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+        });
+        
+        if (!response.ok) {
+            throw new Error('Failed log out');
+        }
+
+        window.location.reload();
+    } catch (error) {
+        throw error;
+    }
+};

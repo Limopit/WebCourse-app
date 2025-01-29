@@ -34,12 +34,31 @@ public class AuthController(IMediator mediator, ILoggerService logger) : BaseCon
             HttpOnly = true,
             Secure = true,
             SameSite = SameSiteMode.Strict,
+            Path = "/",
             Expires = DateTime.UtcNow.AddDays(7)
         };
 
         Response.Cookies.Append("RefreshToken", refresh, cookieOptions);
         
         return Ok(new { jwt, refresh });
+    }
+    
+    [Authorize]
+    [HttpPost("logout")]
+    public IActionResult Logout()
+    {
+        Response.Cookies.Delete("RefreshToken", new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = true,
+            SameSite = SameSiteMode.Strict,
+            Path = "/",
+            Expires = DateTime.UtcNow.AddDays(-1)
+        });
+        
+        Logger.Information("Logged out successfully");
+        
+        return Ok();
     }
     
     [Authorize(Roles = "Admin")]

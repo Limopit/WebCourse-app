@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { fetchCourses } from "../../../Api/fetchCourses";
 import "./BrainBrick.css";
 import Header from "../../Elements/Header/Header";
 import { useLocation } from 'react-router-dom';
-
+import AdditionalContent from "../../../Api/getAdditionalContent";
+import { AuthContext } from "../../../Context/AuthContext";
 
 const BrainBrick = () => {
     const [courses, setCourses] = useState([]);
@@ -11,6 +12,7 @@ const BrainBrick = () => {
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState("");
     const location = useLocation();
+    const { isAuthenticated } = useContext(AuthContext);
 
     useEffect(() => {
         const loadItems = async () => {
@@ -37,22 +39,9 @@ const BrainBrick = () => {
         setFilteredCourses(filtered);
     }, [search, courses]);
 
-    const getAdditionalContent = () => {
-        if (location.pathname === '/auth') {
-            return null;
-        }
-        return (
-            <div className="signin-container">
-                <a href="/auth" className="auth-link">
-                    <button className="signin-button">Sign In / Sign Up</button>
-                </a>
-            </div>
-        );
-    };
-    
     return (
         <div>
-            <Header additionalContent={getAdditionalContent()}></Header>
+            <Header additionalContent={<AdditionalContent location={location} isAuthenticated={isAuthenticated} />} />
             <div className="course-container">
                 <input
                     type="text"
@@ -63,7 +52,7 @@ const BrainBrick = () => {
                 />
                 <div className="courses-list">
                     {loading ? (
-                        <p>Загрузка...</p>
+                        <p>Loading...</p>
                     ) : filteredCourses.length > 0 ? (
                         filteredCourses.map(item => (
                             <div key={item.id} className="course-item">

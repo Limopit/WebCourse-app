@@ -36,8 +36,8 @@ public static class DbInitializer
         {
             var initialCourses = new List<Course>
             {
-                new Course { Title = "C# Basics" },
-                new Course { Title = "ASP.NET Core" }
+                new Course { Title = "C# Basics" , Logo = "https://www.dropbox.com/scl/fi/gggymkbbosos5la0kgw8n/c.svg?rlkey=7qv7rk4agmlzgukjx3k7xtsum&st=rei3pvlh&raw=1"},
+                new Course { Title = "ASP.NET Core" , Logo = "https://www.dropbox.com/scl/fi/c03x8ezccn0uwcymd8si6/ASP.NET.png?rlkey=w2hgi6hzpkctn84ildoxh1lvm&st=ritaxien&raw=1"}
             };
             await Courses.InsertManyAsync(initialCourses);
         }
