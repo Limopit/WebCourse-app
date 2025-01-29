@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import "./SignInSignUp.css";
 
-import email_icon from "../Assets/email.png";
-import password_icon from "../Assets/password.png";
-import user_icon from "../Assets/user.png";
-import { login, signup } from "../../Api/auth";
-import logo from "../Assets/brain-brick.png";
-import logo_text from "../Assets/brain-brick-text.png";
+import email_icon from "../../Assets/email.png";
+import password_icon from "../../Assets/password.png";
+import user_icon from "../../Assets/user.png";
+import { login, signup } from "../../../Api/auth";
+import Header from "../../Elements/Header/Header";
 
 const SignInSignUp = () => {
     const [active, setActive] = useState("signin");
@@ -39,14 +38,7 @@ const SignInSignUp = () => {
 
     return (
         <div>
-            <div className="header">
-                <a href="/" style={{ display: 'inline-flex', alignItems: 'center', textDecoration: 'none' }}>
-                <div className="logo-container">
-                    <img src={logo} alt="Logo" className="logo" />
-                    <img src={logo_text} alt="Logo text" className="logo-text" />
-                </div>
-                </a>
-            </div>
+            <Header></Header>
             <div className="main-container" style={{height: previous === "signin" ? "75vh" : "55vh"}}>
                 <div className="main-container-header">
                     <div className="text">
@@ -63,6 +55,7 @@ const SignInSignUp = () => {
                         </div>
                     </div>
                 </div>
+                
                 <div className="inputs">
                     <div className="input">
                         <img src={email_icon} alt="Email Icon"/>
@@ -105,6 +98,7 @@ const SignInSignUp = () => {
                         </>
                     )}
                 </div>
+                
                 <div className="sign-modes-container">
                     <div className={`sign-mode ${active === "signin" ? "active" : ""}`}
                          onClick={() => handleSwitch("signin")}>

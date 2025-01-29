@@ -1,7 +1,8 @@
 // src/App.js
 import './App.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import SignInSignUp from "./Components/SignInSignUp/SignInSignUp";
+import SignInSignUp from "./Components/Pages/SignInSignUp/SignInSignUp";
+import BrainBrick from "./Components/Pages/BrainBrick/BrainBrick";
 
 function App() {
     return (
@@ -9,7 +10,7 @@ function App() {
             <div>
                 <Routes>
                     <Route path="/auth" element={<SignInSignUp />} />
-                    <Route path="/" element={<h1>Home Page</h1>} />
+                    <Route path="/" element={<BrainBrick />} />
                 </Routes>
             </div>
         </Router>
