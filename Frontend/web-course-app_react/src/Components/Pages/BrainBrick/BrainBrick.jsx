@@ -11,6 +11,7 @@ import Dropdown from "../../Elements/Dropdown/Dropdown";
 const BrainBrick = () => {
     const [courses, setCourses] = useState([]);
     const [filteredCourses, setFilteredCourses] = useState([]);
+    const [initialOrder, setInitialOrder] = useState([]);
     
     const [loading, setLoading] = useState(true);
     
@@ -28,12 +29,16 @@ const BrainBrick = () => {
                 const data = await fetchCourses();
                 setCourses(data);
                 setFilteredCourses(data);
+                setInitialOrder(data);
             } catch (error) {
                 console.error("Data loading error: ", error);
                 setCourses([]);
                 setFilteredCourses([]);
+                setInitialOrder([]);
             } finally {
-                setLoading(false);
+                setTimeout(() => {
+                    setLoading(false);
+                }, 2000);
             }
         };
 
@@ -47,11 +52,19 @@ const BrainBrick = () => {
         setFilteredCourses(filtered);
     }, [search, courses]);
 
+    const resetSort = () => {
+        setFilteredCourses([...initialOrder]);
+        setSearch("")
+        setSortText("Sort")
+    };
+
+
     return (
         <div>
             <Header additionalContent={<AdditionalContent location={location} isAuthenticated={isAuthenticated} />} />
             <div className="course-container">
                 <div className="sort-and-filter-container">
+                    <button className="reset-list-button" onClick={resetSort}>Reset</button>
                     <input
                         type="text"
                         placeholder="Search courses..."
@@ -88,9 +101,9 @@ const BrainBrick = () => {
                     </Dropdown>
                 </div>
 
-                <div className="course-list-container">
+                <div className={`course-list-container ${loading ? "loading" : ""}`}>
                     {loading ? (
-                        <p>Loading...</p>
+                        <p>Please, wait...</p>
                     ) : filteredCourses.length > 0 ? (
                         filteredCourses.map(item => (
                             <div key={item.id} className="course-item">
