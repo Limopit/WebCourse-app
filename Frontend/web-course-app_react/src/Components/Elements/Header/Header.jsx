@@ -1,4 +1,3 @@
-// GeneralHeader.js
 import React from 'react';
 import logo from "../../Assets/brain-brick.png";
 import logo_text from "../../Assets/brain-brick-text.png";

@@ -12,12 +12,16 @@ import {useNavigate} from "react-router-dom";
 const SignInSignUp = () => {
     const [active, setActive] = useState("signin");
     const [previous, setPrevious] = useState(null);
+    
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [firstname, setFirstname] = useState("");
     const [lastname, setLastname] = useState("");
+    
     const { login: authLogin } = useContext(AuthContext);
+    
     const [error, setError] = useState(null);
+    
     const navigate = useNavigate();
 
     const handleSwitch = (newState) => {

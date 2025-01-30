@@ -4,14 +4,22 @@ import "./BrainBrick.css";
 import Header from "../../Elements/Header/Header";
 import { useLocation } from 'react-router-dom';
 import AdditionalContent from "../../../Api/getAdditionalContent";
+import { Sort } from "../../../Api/sort";
 import { AuthContext } from "../../../Context/AuthContext";
+import Dropdown from "../../Elements/Dropdown/Dropdown";
 
 const BrainBrick = () => {
     const [courses, setCourses] = useState([]);
     const [filteredCourses, setFilteredCourses] = useState([]);
+    
     const [loading, setLoading] = useState(true);
+    
     const [search, setSearch] = useState("");
+    const [sortText, setSortText] = useState("Sort");
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    
     const location = useLocation();
+    
     const { isAuthenticated } = useContext(AuthContext);
 
     useEffect(() => {
@@ -43,20 +51,50 @@ const BrainBrick = () => {
         <div>
             <Header additionalContent={<AdditionalContent location={location} isAuthenticated={isAuthenticated} />} />
             <div className="course-container">
-                <input
-                    type="text"
-                    placeholder="Search courses..."
-                    className="search-input"
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                />
-                <div className="courses-list">
+                <div className="sort-and-filter-container">
+                    <input
+                        type="text"
+                        placeholder="Search courses..."
+                        className="search-input"
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                    />
+                    <Dropdown
+                        trigger={
+                            <button className={`sort-options-button ${isDropdownOpen ? "active" : ""}`}>
+                                {sortText}
+                            </button>
+                        }
+                        onToggle={(isOpen) => setIsDropdownOpen(isOpen)}
+                    >
+                        <button
+                            className="dropdown-item"
+                            onClick={() => {
+                                Sort(filteredCourses, setFilteredCourses, 'title', 'asc');
+                                setSortText("A - Z");
+                            }}
+                        >
+                            A - Z
+                        </button>
+                        <button
+                            className="dropdown-item"
+                            onClick={() => {
+                                Sort(filteredCourses, setFilteredCourses, 'title', 'desc');
+                                setSortText("Z - A");
+                            }}
+                        >
+                            Z - A
+                        </button>
+                    </Dropdown>
+                </div>
+
+                <div className="course-list-container">
                     {loading ? (
                         <p>Loading...</p>
                     ) : filteredCourses.length > 0 ? (
                         filteredCourses.map(item => (
                             <div key={item.id} className="course-item">
-                                <img src={item.logo} alt="Image is missing" />
+                                <img src={item.logo} alt="Image is missing"/>
                                 <div className="course-text">
                                     <h3>{item.title}</h3>
                                     <p>{item.description ? item.description : "Description is missing"}</p>

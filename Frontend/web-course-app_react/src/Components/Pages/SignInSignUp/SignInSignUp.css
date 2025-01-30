@@ -145,7 +145,6 @@
     font-size: 18px;
 }
 
-
 .sign-modes-container {
     position: relative;
     display: flex;
@@ -223,5 +222,3 @@
 .signup-input {
     animation: goIn 0.4s forwards;
 }
-
-

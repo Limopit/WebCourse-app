@@ -28,10 +28,10 @@
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    min-width: 160px;
+    width: 160px;
 }
 
-.signin-button, .image-button {
+.signin-button, .profile-button {
     padding: 8px 16px;
     background-color: var(--secondary-color);
     color: white;
@@ -41,55 +41,24 @@
     font-size: 14px;
 }
 
-.image-button img {
-    height: 40px;
-    width: auto;
-}
-
-.signin-button:hover, .image-button:hover {
-    background-color: var(--hover-color);
-}
-
-.profile-menu-container {
-    position: relative;
-    display: inline-block;
-}
-
-.image-button {
+.profile-button {
     border: none;
     background: none;
     cursor: pointer;
     padding: 0;
 }
 
-.image-button img {
+.profile-button img {
     width: 40px;
     height: 40px;
     border-radius: 50%;
 }
 
-.dropdown-menu {
-    position: absolute;
-    top: 45px;
-    right: 0;
-    background: white;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-    border-radius: 5px;
-    min-width: 120px;
-    z-index: 10;
-    display: flex;
-    flex-direction: column;
+.signin-button:hover, .profile-button:hover {
+    background-color: var(--hover-color);
 }
 
-.dropdown-item {
-    padding: 10px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    text-align: left;
-    width: 100%;
-}
-
-.dropdown-item:hover {
-    background: #f0f0f0;
+.profile-menu-container {
+    position: relative;
+    display: inline-block;
 }
