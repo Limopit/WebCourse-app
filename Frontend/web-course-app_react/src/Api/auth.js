@@ -12,7 +12,7 @@ export const login = async (email, password) => {
         });
         
         if (!response.ok) {
-            var responseData = await response.json();
+            const responseData = await response.json();
             throw new Error(responseData.error);
         }
 
@@ -69,6 +69,8 @@ export const logout = async () => {
         if (!response.ok) {
             throw new Error('Failed log out');
         }
+
+        localStorage.removeItem("isAuthenticated");
 
         window.location.reload();
     } catch (error) {

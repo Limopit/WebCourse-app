@@ -62,6 +62,7 @@ const BrainBrick = () => {
     return (
         <div>
             <Header additionalContent={<AdditionalContent location={location} isAuthenticated={isAuthenticated} />} />
+            
             <div className="course-container">
                 <div className="sort-and-filter-container">
                     <button className="reset-list-button" onClick={resetSort}>Reset</button>

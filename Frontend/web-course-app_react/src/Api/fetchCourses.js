@@ -1,6 +1,6 @@
 export const fetchCourses = async () => {
     try {
-        const response = await fetch("https://localhost:5003/gateway/courses");
+        const response = await fetch("https://localhost:5003/gateway/courses/approved");
         if (!response.ok) {
             throw new Error(`Error while loading data: ${response.status}`);
         }

@@ -14,6 +14,12 @@ public abstract class BaseRepository<T>(ICourseDbContext context, string collect
         var filter = Builders<T>.Filter.Eq("_id", id);
         return await _collection.Find(filter).FirstOrDefaultAsync(token);
     }
+    
+    public async Task<List<T>> GetEntityListInfoByIdAsync(List<Guid> ids, CancellationToken token)
+    {
+        var filter = Builders<T>.Filter.In("_id", ids);
+        return await _collection.Find(filter).ToListAsync(token);
+    }
 
     public async Task AddEntityAsync(T entity, CancellationToken token)
     {

@@ -10,7 +10,7 @@ import {AuthContext} from "../../../Context/AuthContext";
 import {useNavigate} from "react-router-dom";
 
 const SignInSignUp = () => {
-    const [active, setActive] = useState("signin");
+    const [active, setActive] = useState("signIn");
     const [previous, setPrevious] = useState(null);
     
     const [email, setEmail] = useState("");
@@ -34,11 +34,11 @@ const SignInSignUp = () => {
     const handleSubmit = async () => {
         setError(null);
         try {
-            if (active === "signin") {
+            if (active === "signIn") {
                 await login(email, password);
                 authLogin();
                 navigate('/');
-            } else if (active === "signup") {
+            } else if (active === "signUp") {
                 await signup(firstname, lastname, email, password);
             }
         } catch (error) {
@@ -49,18 +49,19 @@ const SignInSignUp = () => {
     return (
         <div>
             <Header></Header>
-            <div className="main-container" style={{height: previous === "signin" ? "75vh" : "55vh"}}>
+            
+            <div className="main-container" style={{height: previous === "signIn" ? "75vh" : "55vh"}}>
                 <div className="main-container-header">
                     <div className="text">
                         <span className="fixed">Sign</span>
                         <div className="animated-wrapper">
                             {previous && (
-                                <span className={`animated ${previous === "signin" ? "move-down" : "move-up"}`}>
+                                <span className={`animated ${previous === "signIn" ? "move-down" : "move-up"}`}>
                                     {previous === "signin" ? "In" : "Up"}
                                 </span>
                             )}
-                            <span className={`animated ${active === "signin" ? "appear-down" : "appear-up"}`}>
-                                {active === "signin" ? "In" : "Up"}
+                            <span className={`animated ${active === "signIn" ? "appear-down" : "appear-up"}`}>
+                                {active === "signIn" ? "In" : "Up"}
                             </span>
                         </div>
                     </div>
@@ -85,7 +86,7 @@ const SignInSignUp = () => {
                             onChange={(e) => setPassword(e.target.value)}
                         />
                     </div>
-                    {active === "signup" && (
+                    {active === "signUp" && (
                         <>
                             <div className="signup-input">
                                 <img src={user_icon} alt="Password Icon"/>
@@ -110,19 +111,19 @@ const SignInSignUp = () => {
                 </div>
                 
                 <div className="sign-modes-container">
-                    <div className={`sign-mode ${active === "signin" ? "active" : ""}`}
-                         onClick={() => handleSwitch("signin")}>
+                    <div className={`sign-mode ${active === "signIn" ? "active" : ""}`}
+                         onClick={() => handleSwitch("signIn")}>
                         Sign In
                     </div>
-                    <div className={`sign-mode ${active === "signup" ? "active" : ""}`}
-                        onClick={() => handleSwitch("signup")}>
+                    <div className={`sign-mode ${active === "signUp" ? "active" : ""}`}
+                        onClick={() => handleSwitch("signUp")}>
                         Sign Up
                     </div>
-                    <div className="slider" style={{transform: active === "signin" ? "translateX(0)" : "translateX(100%)"}}/>
+                    <div className="slider" style={{transform: active === "signIn" ? "translateX(0)" : "translateX(100%)"}}/>
                 </div>
                 <div className="action-button-container">
                     <button className="action-button" onClick={handleSubmit}>
-                        {active === "signin" ? "Sign In" : "Register"}
+                        {active === "signIn" ? "Sign In" : "Sign Up"}
                     </button>
                 </div>
                 {error && <div className="error-message">{error}</div>}

@@ -7,6 +7,7 @@ package userServiceRpc;
 service UserService {
   rpc CreateUserCreatedCourseRecord(CreateCourseRequest) returns (CreateRecordResponse);
   rpc DeleteCourseRecords(DeleteCourseRecordRequest) returns (DeleteCourseRecordResponse);
+  rpc GetApprovedCourseList(EmptyMessage) returns (GetApprovedCourseListResponse);
 }
 
 message CreateCourseRequest {
@@ -18,6 +19,10 @@ message CreateRecordResponse {
   string record_id = 1;
 }
 
+message GetApprovedCourseListResponse {
+  repeated string course_list = 1;
+}
+
 message DeleteCourseRecordRequest {
   string course_id = 1;
 }
@@ -25,3 +30,5 @@ message DeleteCourseRecordRequest {
 message DeleteCourseRecordResponse {
   bool result = 1;
 }
+
+message EmptyMessage{}

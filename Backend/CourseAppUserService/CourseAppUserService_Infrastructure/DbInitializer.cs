@@ -67,7 +67,7 @@ public class DbInitializer
                 CourseId = "fourthCourse",
                 UserId = AdminId.ToString(),
                 ApprovementDate = DateTime.Now,
-                ApprovementStatus = ApprovementStatus.Accepted.ToString()
+                ApprovementStatus = ApprovementStatus.Rejected.ToString()
             }
         };
         context.UserTakenCourses.AddRange(takenCourses);

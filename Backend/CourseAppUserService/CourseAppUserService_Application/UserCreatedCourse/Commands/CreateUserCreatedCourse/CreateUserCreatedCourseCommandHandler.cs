@@ -2,6 +2,7 @@ using CourseAppUserService_Application.Common.Exceptions;
 using CourseAppUserService_Application.Interfaces;
 using CourseAppUserService_Application.Interfaces.Services;
 using CourseAppUserService_Domain.Entities;
+using CourseAppUserService_Domain.Enums;
 using MediatR;
 
 namespace CourseAppUserService_Application.UserCreatedCourse.Commands.CreateUserCreatedCourse;
@@ -21,6 +22,7 @@ public class CreateUserCreatedCourseCommandHandler(IUnitOfWork unitOfWork, IMapp
         var userCreatedCourse = await mapper.MapAsync<CreateUserCreatedCourseCommand, UserCreatedCourses>(request);
         
         userCreatedCourse.UserId = user.Id;
+        userCreatedCourse.ApprovementStatus = ApprovementStatus.Accepted.ToString();
         
         await unitOfWork.UserCreatedCourses.AddEntityAsync(userCreatedCourse, cancellationToken);
         await unitOfWork.SaveChangesAsync(cancellationToken);
