@@ -7,6 +7,7 @@ import AdditionalContent from "../../../Api/getAdditionalContent";
 import { Sort } from "../../../Api/sort";
 import { AuthContext } from "../../../Context/AuthContext";
 import Dropdown from "../../Elements/Dropdown/Dropdown";
+import CreateCourseButton from "../../../Api/getCreateCourseButton";
 
 const BrainBrick = () => {
     const [courses, setCourses] = useState([]);
@@ -61,7 +62,9 @@ const BrainBrick = () => {
 
     return (
         <div>
-            <Header additionalContent={<AdditionalContent location={location} isAuthenticated={isAuthenticated} />} />
+            <Header
+                createCourseButton={<CreateCourseButton isAuthenticated={isAuthenticated} />}    
+                additionalContent={<AdditionalContent location={location} isAuthenticated={isAuthenticated} />} />
             
             <div className="course-container">
                 <div className="sort-and-filter-container">

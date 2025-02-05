@@ -70,7 +70,7 @@ export const logout = async () => {
             throw new Error('Failed log out');
         }
 
-        localStorage.removeItem("isAuthenticated");
+        localStorage.setItem("isAuthenticated", "false");
 
         window.location.reload();
     } catch (error) {

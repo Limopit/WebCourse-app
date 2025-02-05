@@ -15,6 +15,6 @@ public class CourseMapper: IMapWith<Course>
             .ForMember(course => course.Level, opt => opt.MapFrom(command => command.Level))
             .ForMember(course => course.Category, opt => opt.MapFrom(command => command.Category))
             .ForMember(course => course.Language, opt => opt.MapFrom(command => command.Language))
-            .ForMember(course => course.Requierments, opt => opt.MapFrom(command => command.Requierments));
+            .ForMember(course => course.Requierments, opt => opt.MapFrom(command => command.Requirements));
     }
 }

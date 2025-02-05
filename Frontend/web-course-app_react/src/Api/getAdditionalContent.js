@@ -28,21 +28,23 @@ const AdditionalContent = ({ location, isAuthenticated }) => {
     }
 
     return (
-        <div className="signin-container">
-            {isAuthenticated ? (
-                <div className="profile-menu-container" ref={menuRef}>
-                    <Dropdown trigger={<button className="profile-button" onClick={() => setMenuOpen(!menuOpen)}>
-                        <img src={user_icon} alt="Profile"/>
-                    </button>}>
-                            <button className="dropdown-item">Profile</button>
-                            <button className="dropdown-item" onClick={logout}>Logout</button>
-                    </Dropdown>
-                </div>
-            ) : (
-                <a href="/auth" className="auth-link">
-                    <button className="signin-button">Sign In / Sign Up</button>
-                </a>
-            )}
+        <div className="additional-content">
+            <div className="signin-container">
+                {isAuthenticated ? (
+                    <div className="profile-menu-container" ref={menuRef}>
+                        <Dropdown trigger={<button className="profile-button" onClick={() => setMenuOpen(!menuOpen)}>
+                            <img src={user_icon} alt="Profile"/>
+                        </button>}>
+                                <button className="dropdown-item">Profile</button>
+                                <button className="dropdown-item" onClick={logout}>Logout</button>
+                        </Dropdown>
+                    </div>
+                ) : (
+                    <a href="/auth" className="auth-link">
+                        <button className="signin-button">Sign In / Sign Up</button>
+                    </a>
+                )}
+            </div>
         </div>
     );
 };

@@ -1,0 +1,114 @@
+.course-form {
+    width: 95%;
+    height: 100%;
+    padding: 20px;
+    background: var(--ui-list-color);
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.course-form h2 {
+    margin-bottom: 20px;
+    color: #fff;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group.title-group input {
+    max-width: 300px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #fff;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #555;
+    border-radius: 5px;
+    background: #333;
+    color: #fff;
+    font-size: 16px;
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.submit-button {
+    width: 100%;
+    padding: 10px;
+    background: var(--secondary-color);
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.submit-button:hover {
+    background: var(--hover-color);
+}
+
+.course-logo-container {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 80px;
+    height: 80px;
+    background: #555;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.course-logo-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.course-logo-form {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 10px;
+    width: 200px;
+}
+
+.course-logo-input {
+    flex: 1;
+    padding: 6px;
+    border: 1px solid #555;
+    border-radius: 5px;
+    background: #333;
+    color: white;
+    font-size: 14px;
+    width: 140px;
+}
+
+.apply-logo-button {
+    padding: 6px 10px;
+    border: none;
+    background: var(--secondary-color);
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.apply-logo-button:hover {
+    background: var(--hover-color);
+}
