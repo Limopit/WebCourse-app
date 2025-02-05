@@ -1,5 +1,5 @@
-.course-form {
-    width: 95%;
+.form-container {
+    width: 100%;
     height: 100%;
     padding: 20px;
     background: var(--ui-list-color);
@@ -8,7 +8,7 @@
     position: relative;
 }
 
-.course-form h2 {
+.form-container h2 {
     margin-bottom: 20px;
     color: #fff;
 }

@@ -1,9 +1,11 @@
-import './CourseForm.css';
-import { useState } from "react";
-import { submitCourseForm } from "../../../Api/createNewCourse";
+import {useState, useEffect, useImperativeHandle, forwardRef} from "react";
+import { submitCourseForm } from "../../../Api/createNewEntity";
+import { useNavigate } from "react-router-dom";
 
-export const CourseForm = ({ selectedButton }) => {
-    const [formData, setFormData] = useState({
+export const CourseForm = forwardRef(({ selectedButton, formData, onFormChange }, ref) => {
+    const navigate = useNavigate();
+
+    const [localFormData, setLocalFormData] = useState({
         title: '',
         description: '',
         level: '',
@@ -15,12 +17,20 @@ export const CourseForm = ({ selectedButton }) => {
 
     const [showLogoInput, setShowLogoInput] = useState(false);
 
+    useEffect(() => {
+        if (formData) {
+            setLocalFormData(formData);
+        }
+    }, [formData]);
+
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData((prevData) => ({
-            ...prevData,
+        const updatedData = {
+            ...localFormData,
             [name]: value
-        }));
+        };
+        setLocalFormData(updatedData);
+        onFormChange(updatedData);
     };
 
     const handleLogoSubmit = (e) => {
@@ -28,43 +38,44 @@ export const CourseForm = ({ selectedButton }) => {
         setShowLogoInput(false);
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
+    const handleSubmit = async (lessonResults = []) => {
         const requestData = {
-            title: formData.title,
-            description: formData.description,
-            logo: formData.logo,
-            level: formData.level,
-            category: formData.category,
-            language: formData.language,
-            requirements: formData.requirements
+            title: localFormData.title,
+            description: localFormData.description,
+            logo: localFormData.logo,
+            level: localFormData.level,
+            category: localFormData.category,
+            language: localFormData.language,
+            requirements: localFormData.requirements,
+            lessons: lessonResults
         };
 
-        const result = await submitCourseForm(requestData);
-
-        if (result) {
-            setFormData({
-                title: '',
-                description: '',
-                level: '',
-                category: '',
-                language: '',
-                requirements: '',
-                logo: ''
-            });
-        } else {
-            alert("Error while creating a course");
+        try {
+            const result = await submitCourseForm(requestData);
+            if (result) {
+                navigate("/");
+                return result;
+            } else {
+                throw new Error("Course creation failed");
+            }
+        } catch (error) {
+            console.error("Error while creating a course:", error);
+            throw error;
         }
     };
 
+    useImperativeHandle(ref, () => ({
+        submit: (lessonResults = []) => handleSubmit(lessonResults)
+    }));
+
+
     return (
-        <div className="course-form">
+        <div className="form-container">
             <h2>Course Configuration: {selectedButton?.label}</h2>
 
             <div className="course-logo-container" onClick={() => setShowLogoInput(true)}>
-                {formData.logo ? (
-                    <img src={formData.logo} alt="Course Logo" />
+                {localFormData.logo ? (
+                    <img src={localFormData.logo} alt="Course Logo" />
                 ) : (
                     <span>+</span>
                 )}
@@ -76,7 +87,7 @@ export const CourseForm = ({ selectedButton }) => {
                         type="text"
                         className="course-logo-input"
                         placeholder="Enter image URL"
-                        value={formData.logo}
+                        value={localFormData.logo}
                         onChange={handleChange}
                         name="logo"
                         autoFocus
@@ -91,7 +102,7 @@ export const CourseForm = ({ selectedButton }) => {
                     <input
                         type="text"
                         name="title"
-                        value={formData.title}
+                        value={localFormData.title}
                         onChange={handleChange}
                         required
                     />
@@ -100,7 +111,7 @@ export const CourseForm = ({ selectedButton }) => {
                     <label>Description</label>
                     <textarea
                         name="description"
-                        value={formData.description}
+                        value={localFormData.description}
                         onChange={handleChange}
                         required
                     />
@@ -110,7 +121,7 @@ export const CourseForm = ({ selectedButton }) => {
                     <input
                         type="text"
                         name="level"
-                        value={formData.level}
+                        value={localFormData.level}
                         onChange={handleChange}
                         required
                     />
@@ -120,7 +131,7 @@ export const CourseForm = ({ selectedButton }) => {
                     <input
                         type="text"
                         name="category"
-                        value={formData.category}
+                        value={localFormData.category}
                         onChange={handleChange}
                         required
                     />
@@ -130,7 +141,7 @@ export const CourseForm = ({ selectedButton }) => {
                     <input
                         type="text"
                         name="language"
-                        value={formData.language}
+                        value={localFormData.language}
                         onChange={handleChange}
                         required
                     />
@@ -139,13 +150,12 @@ export const CourseForm = ({ selectedButton }) => {
                     <label>Requirements</label>
                     <textarea
                         name="requirements"
-                        value={formData.requirements}
+                        value={localFormData.requirements}
                         onChange={handleChange}
                         required
                     />
                 </div>
-                <button type="submit" className="submit-button">Save</button>
             </form>
         </div>
     );
-};
+});
