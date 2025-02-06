@@ -12,3 +12,17 @@ export const fetchCourses = async () => {
         return [];
     }
 };
+
+export const fetchCourseDetails = async (id) => {
+    try {
+        const response = await fetch(`https://localhost:5003/gateway/courses/${id}`);
+        if (!response.ok) {
+            throw new Error(`Error while loading data: ${response.status}`);
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error("Loading error: ", error);
+        return null;
+    }
+};

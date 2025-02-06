@@ -12,9 +12,9 @@ const CreateCourse = () => {
     const location = useLocation();
     const { isAuthenticated } = useContext(AuthContext);
 
-    const [buttons, setButtons] = useState([{ id: 1, label: 'Course Config', type: 'course' }]);
+    const [buttons, setButtons] = useState([{ id: 1, label: 'New Course', type: 'course' }]);
     const [animating, setAnimating] = useState(false);
-    const [activeFormId, setActiveFormId] = useState(null);
+    const [activeFormId, setActiveFormId] = useState(buttons[0].id);
     const [formsData, setFormsData] = useState({});
 
     const formRefs = useRef({});
@@ -36,6 +36,14 @@ const CreateCourse = () => {
         }));
     };
 
+    const updateButtonLabel = (buttonId, newLabel) => {
+        setButtons(prevButtons =>
+            prevButtons.map(button =>
+                button.id === buttonId ? { ...button, label: newLabel } : button
+            )
+        );
+    };
+
     const handleSaveAll = async () => {
         try {
             const lessonResults = [];
@@ -46,16 +54,15 @@ const CreateCourse = () => {
                     lessonResults.push(result);
                 }
             }
-            
+
             const courseButton = buttons.find(button => button.type === 'course');
-            
             const formRef = formRefs.current[courseButton.id];
             await formRef.submit(lessonResults);
         } catch (error) {
             alert("Error saving data");
         }
     };
-    
+
     return (
         <div>
             <Header additionalContent={<AdditionalContent location={location} isAuthenticated={isAuthenticated} />} />
@@ -66,8 +73,7 @@ const CreateCourse = () => {
                             {buttons.map((button, index) => (
                                 <button
                                     key={button.id}
-                                    className={`course-config-page ${animating && index === buttons.length - 1 ? 'adding' : ''}`}
-                                    onClick={() => setActiveFormId(button.id)}
+                                    className={`course-config-page ${animating && index === buttons.length - 1 ? 'adding' : ''} ${index >= 1 ? 'lesson' : ''}`}                                    onClick={() => setActiveFormId(button.id)}
                                 >
                                     {button.label}
                                 </button>
@@ -85,6 +91,7 @@ const CreateCourse = () => {
                                 selectedButton={button}
                                 formData={formsData[button.id] || {}}
                                 onFormChange={(data) => handleFormChange(button.id, { ...data, type: 'course' })}
+                                onButtonLabelChange={(newLabel) => updateButtonLabel(button.id, newLabel)}
                             />
                         ) : (
                             <LessonForm
@@ -92,6 +99,7 @@ const CreateCourse = () => {
                                 selectedButton={button}
                                 formData={formsData[button.id] || {}}
                                 onFormChange={(data) => handleFormChange(button.id, { ...data, type: 'lesson' })}
+                                onButtonLabelChange={(newLabel) => updateButtonLabel(button.id, newLabel)}
                             />
                         )}
                     </div>

@@ -1,8 +1,7 @@
-import {useState, useEffect, useImperativeHandle, forwardRef} from "react";
-import { useNavigate } from "react-router-dom";
-import { submitLessonForm } from "../../../Api/createNewEntity"
+import { useState, useEffect, useImperativeHandle, forwardRef } from "react";
+import { submitLessonForm } from "../../../Api/createNewEntity";
 
-export const LessonForm = forwardRef(({ selectedButton, formData, onFormChange }, ref) => {
+export const LessonForm = forwardRef(({ selectedButton, formData, onFormChange, onButtonLabelChange }, ref) => {
     const [localFormData, setLocalFormData] = useState({
         title: '',
         description: '',
@@ -25,6 +24,10 @@ export const LessonForm = forwardRef(({ selectedButton, formData, onFormChange }
         };
         setLocalFormData(updatedData);
         onFormChange(updatedData);
+
+        if (name === 'title') {
+            onButtonLabelChange(value || `Lesson ${selectedButton.id}`);
+        }
     };
 
     const handleSubmit = async () => {

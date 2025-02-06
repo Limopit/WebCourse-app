@@ -8,18 +8,22 @@ import { Sort } from "../../../Api/sort";
 import { AuthContext } from "../../../Context/AuthContext";
 import Dropdown from "../../Elements/Dropdown/Dropdown";
 import CreateCourseButton from "../../../Api/getCreateCourseButton";
+import CourseDetails from "../../Popups/CourseDetails";
+import {fetchCourseDetails} from "../../../Api/fetchCourses";
 
 const BrainBrick = () => {
     const [courses, setCourses] = useState([]);
     const [filteredCourses, setFilteredCourses] = useState([]);
-    const [initialOrder, setInitialOrder] = useState([]);
+    const [initialCourseOrder, setInitialCourseOrder] = useState([]);
+    const [selectedCourse, setSelectedCourse] = useState(null);
     
     const [loading, setLoading] = useState(true);
     
     const [search, setSearch] = useState("");
     const [sortText, setSortText] = useState("Sort");
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
     const location = useLocation();
     
     const { isAuthenticated } = useContext(AuthContext);
@@ -30,12 +34,12 @@ const BrainBrick = () => {
                 const data = await fetchCourses();
                 setCourses(data);
                 setFilteredCourses(data);
-                setInitialOrder(data);
+                setInitialCourseOrder(data);
             } catch (error) {
                 console.error("Data loading error: ", error);
                 setCourses([]);
                 setFilteredCourses([]);
-                setInitialOrder([]);
+                setInitialCourseOrder([]);
             } finally {
                 setTimeout(() => {
                     setLoading(false);
@@ -54,18 +58,31 @@ const BrainBrick = () => {
     }, [search, courses]);
 
     const resetSort = () => {
-        setFilteredCourses([...initialOrder]);
-        setSearch("")
-        setSortText("Sort")
+        setFilteredCourses([...initialCourseOrder]);
+        setSearch("");
+        setSortText("Sort");
     };
 
+    const handleCourseClick = async (course) => {
+        try {
+            const courseDetails = await fetchCourseDetails(course.id);
+            setSelectedCourse(courseDetails);
+        } catch (error) {
+            console.error("Error getting course data:", error);
+        }
+    };
+
+    const handleCloseDetails = () => {
+        setSelectedCourse(null);
+    };
 
     return (
         <div>
             <Header
-                createCourseButton={<CreateCourseButton isAuthenticated={isAuthenticated} />}    
-                additionalContent={<AdditionalContent location={location} isAuthenticated={isAuthenticated} />} />
-            
+                createCourseButton={<CreateCourseButton isAuthenticated={isAuthenticated} />}
+                additionalContent={<AdditionalContent location={location} isAuthenticated={isAuthenticated} />}
+            />
+
             <div className="course-container">
                 <div className="sort-and-filter-container">
                     <button className="reset-list-button" onClick={resetSort}>Reset</button>
@@ -110,12 +127,17 @@ const BrainBrick = () => {
                         <p>Please, wait...</p>
                     ) : filteredCourses.length > 0 ? (
                         filteredCourses.map(item => (
-                            <div key={item.id} className="course-item">
+                            <div key={item.id} className="course-item" onClick={() => handleCourseClick(item)}>
                                 <img src={item.logo} alt="Image is missing"/>
                                 <div className="course-text">
                                     <h3>{item.title}</h3>
-                                    <p>{item.description ? item.description : "Description is missing"}</p>
+                                    <p>
+                                        {item.description.length > 50
+                                            ? item.description.substring(0, 50) + "..."
+                                            : item.description || "Description is missing"}
+                                    </p>
                                 </div>
+
                             </div>
                         ))
                     ) : (
@@ -123,6 +145,10 @@ const BrainBrick = () => {
                     )}
                 </div>
             </div>
+
+            {selectedCourse && (
+                <CourseDetails course={selectedCourse} onClose={handleCloseDetails} />
+            )}
         </div>
     );
 };

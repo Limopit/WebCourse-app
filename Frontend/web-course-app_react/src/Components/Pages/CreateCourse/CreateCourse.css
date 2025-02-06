@@ -122,6 +122,11 @@
     transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
 }
 
+.course-config-page.lesson{
+    min-height: 40px;
+    background: #353b43;
+}
+
 .course-config-page.adding {
     transform: scale(1.05);
     opacity: 0;

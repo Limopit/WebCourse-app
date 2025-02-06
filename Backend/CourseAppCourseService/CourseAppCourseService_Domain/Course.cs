@@ -18,4 +18,6 @@ public class Course
     public List<Guid> Lessons {get; set;} = new();
     public List<Guid> Quizzes {get; set;} = new();
     public string Requierments {get; set;}
+    
+    public List<Lesson> LessonDetails { get; set; } = new();
 }

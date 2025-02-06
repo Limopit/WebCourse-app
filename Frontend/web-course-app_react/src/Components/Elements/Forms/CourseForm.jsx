@@ -1,8 +1,8 @@
-import {useState, useEffect, useImperativeHandle, forwardRef} from "react";
+import { useState, useEffect, useImperativeHandle, forwardRef } from "react";
 import { submitCourseForm } from "../../../Api/createNewEntity";
 import { useNavigate } from "react-router-dom";
 
-export const CourseForm = forwardRef(({ selectedButton, formData, onFormChange }, ref) => {
+export const CourseForm = forwardRef(({ selectedButton, formData, onFormChange, onButtonLabelChange }, ref) => {
     const navigate = useNavigate();
 
     const [localFormData, setLocalFormData] = useState({
@@ -31,6 +31,10 @@ export const CourseForm = forwardRef(({ selectedButton, formData, onFormChange }
         };
         setLocalFormData(updatedData);
         onFormChange(updatedData);
+
+        if (name === 'title') {
+            onButtonLabelChange(value || 'Course Config');
+        }
     };
 
     const handleLogoSubmit = (e) => {
@@ -67,7 +71,6 @@ export const CourseForm = forwardRef(({ selectedButton, formData, onFormChange }
     useImperativeHandle(ref, () => ({
         submit: (lessonResults = []) => handleSubmit(lessonResults)
     }));
-
 
     return (
         <div className="form-container">

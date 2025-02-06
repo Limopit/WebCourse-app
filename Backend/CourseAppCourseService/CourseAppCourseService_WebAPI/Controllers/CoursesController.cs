@@ -2,6 +2,7 @@ using System.Security.Claims;
 using CourseAppCourseService_Application.Courses.Commands.CreateCourse;
 using CourseAppCourseService_Application.Courses.Commands.DeleteCourse;
 using CourseAppCourseService_Application.Courses.Commands.UpdateCourse;
+using CourseAppCourseService_Application.Courses.Queries.GetCourseById;
 using CourseAppCourseService_Application.Courses.Queries.GetCourseList;
 using CourseAppCourseService_Application.Courses.Queries.GetCourseListInfo;
 using CourseAppCourseService_Application.Interfaces.Services;
@@ -19,6 +20,15 @@ public class CoursesController(IMediator mediator, ILoggerService logger, GrpcUs
     {
         Logger.Information("Executing GetCourseList");
         var result = await Mediator.Send(new GetCourseListQuery());
+        
+        return Ok(result);
+    }
+    
+    [HttpGet("{courseId}")]
+    public async Task<ActionResult<Guid>> GetCourseWithLessons(Guid courseId)
+    {
+        Logger.Information("Executing GetCourseWithLessons");
+        var result = await Mediator.Send(new GetCourseByIdQuery() { Id = courseId });
         
         return Ok(result);
     }
