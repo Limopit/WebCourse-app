@@ -8,14 +8,6 @@
   --hover-color: #0d5105;
   --background-color: rgba(20, 46, 0, 0.3);
 }
-/*
-:root {
-    --ui-color: #111D59;
-    --secondary-color: #433FC6;
-    --hover-color: #0d5105;
-    --background-color: rgba(150, 182, 215, 0.3);
-}
-*/
 
 body {
   height: 100vh;

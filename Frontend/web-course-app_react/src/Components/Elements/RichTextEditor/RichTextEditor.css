@@ -1,11 +1,28 @@
-.ql-container {
-    max-width: 100%;
+.rich-text-editor-wrapper {
+    position: absolute;
+    bottom: 0;
+    left: 20px;
+    right: 20px;
+    height: 100px;
+    width: 97%;
+    transition: height 0.3s ease, bottom 0.3s ease;
+    overflow: hidden;
+    z-index: 1;
+    background: var(--ui-list-color);
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.ql-editor {
-    max-width: 100%;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    word-break: break-word;
-    white-space: pre-wrap;
+.rich-text-editor-wrapper.expanded {
+    height: calc(100% - 40px);
+    bottom: 20px;
+}
+
+.rich-text-editor-container {
+    height: 100%;
+    transition: height 0.3s ease;
+}
+
+.rich-text-editor-container.expanded {
+    height: 100%;
 }

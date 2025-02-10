@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./CourseDetails.css";
+import ReactQuill from "react-quill";
 
 const CourseDetails = ({ course, onClose }) => {
     const [activeItem, setActiveItem] = useState(null);
@@ -46,6 +47,15 @@ const CourseDetails = ({ course, onClose }) => {
                                         <div className="lesson-meta">
                                             <p><strong>Duration:</strong> {activeItem.duration} hours</p>
                                             <p><strong>Type:</strong> {activeItem.type}</p>
+                                        </div>
+                                        <div>
+                                            <h2>Сохраненное содержимое</h2>
+                                            <ReactQuill
+                                                value={activeItem.content}
+                                                readOnly={true}
+                                                theme="snow"
+                                                modules={{toolbar: false}}
+                                            />
                                         </div>
                                     </div>
                                 )}

@@ -1,5 +1,6 @@
-import { useState, useEffect, useImperativeHandle, forwardRef } from "react";
+import { useState, useEffect, useRef, useImperativeHandle, forwardRef } from "react";
 import { submitLessonForm } from "../../../Api/createNewEntity";
+import RichTextEditor from "../RichTextEditor/RichTextEditor";
 
 export const LessonForm = forwardRef(({ selectedButton, formData, onFormChange, onButtonLabelChange }, ref) => {
     const [localFormData, setLocalFormData] = useState({
@@ -10,11 +11,27 @@ export const LessonForm = forwardRef(({ selectedButton, formData, onFormChange, 
         content: ''
     });
 
+    const [isExpanded, setIsExpanded] = useState(false);
+    const richTextEditorRef = useRef(null);
+
     useEffect(() => {
         if (formData) {
             setLocalFormData(formData);
         }
     }, [formData]);
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (richTextEditorRef.current && !richTextEditorRef.current.contains(event.target)) {
+                setIsExpanded(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -28,6 +45,15 @@ export const LessonForm = forwardRef(({ selectedButton, formData, onFormChange, 
         if (name === 'title') {
             onButtonLabelChange(value || `Lesson ${selectedButton.id}`);
         }
+    };
+
+    const handleContentChange = (content) => {
+        const updatedData = {
+            ...localFormData,
+            content: content
+        };
+        setLocalFormData(updatedData);
+        onFormChange(updatedData);
     };
 
     const handleSubmit = async () => {
@@ -111,12 +137,17 @@ export const LessonForm = forwardRef(({ selectedButton, formData, onFormChange, 
                 </div>
                 <div className="form-group">
                     <label>Content</label>
-                    <textarea
-                        name="content"
-                        value={localFormData.content}
-                        onChange={handleChange}
-                        required
-                    />
+                    <div
+                        ref={richTextEditorRef}
+                        className={`rich-text-editor-wrapper ${isExpanded ? "expanded" : ""}`}
+                    >
+                        <RichTextEditor
+                            value={localFormData.content || ""}
+                            onChange={handleContentChange}
+                            onFocus={() => setIsExpanded(true)}
+                            isExpanded={isExpanded}
+                        />
+                    </div>
                 </div>
             </form>
         </div>
