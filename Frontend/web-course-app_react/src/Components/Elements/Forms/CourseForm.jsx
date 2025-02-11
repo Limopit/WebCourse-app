@@ -1,5 +1,5 @@
 import { useState, useEffect, useImperativeHandle, forwardRef } from "react";
-import { submitCourseForm } from "../../../Api/createNewEntity";
+import { createCourseEntity } from "../../../Api/createNewEntity";
 import { useNavigate } from "react-router-dom";
 
 export const CourseForm = forwardRef(({ selectedButton, formData, onFormChange, onButtonLabelChange }, ref) => {
@@ -55,7 +55,7 @@ export const CourseForm = forwardRef(({ selectedButton, formData, onFormChange, 
         };
 
         try {
-            const result = await submitCourseForm(requestData);
+            const result = await createCourseEntity(requestData);
             if (result) {
                 navigate("/");
                 return result;

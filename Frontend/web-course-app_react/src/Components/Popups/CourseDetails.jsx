@@ -1,12 +1,20 @@
 import React, { useState } from "react";
 import "./CourseDetails.css";
 import ReactQuill from "react-quill";
+import {useNavigate} from "react-router-dom";
+import {createTakenCourseRecord} from "../../Api/createNewEntity";
 
 const CourseDetails = ({ course, onClose }) => {
     const [activeItem, setActiveItem] = useState(null);
+    const navigate = useNavigate();
 
     const handleItemClick = (item) => {
         setActiveItem(item);
+    };
+
+    const handleTakeCourse = async (id) => {
+        await createTakenCourseRecord(id);
+        navigate(`courses/${id}`);
     };
 
     return (
@@ -36,6 +44,7 @@ const CourseDetails = ({ course, onClose }) => {
                                 </li>
                             ))}
                         </ul>
+                    <button className="take-course-button" onClick={() => handleTakeCourse(course.id)}>Take a course</button> 
                     </div>
                     <div className="item-details">
                         {activeItem ? (

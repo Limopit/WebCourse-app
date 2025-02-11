@@ -1,10 +1,10 @@
-// src/App.js
 import './App.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import SignInSignUp from "./Components/Pages/SignInSignUp/SignInSignUp";
 import BrainBrick from "./Components/Pages/BrainBrick/BrainBrick";
 import {AuthProvider} from "./Context/AuthContext";
 import CreateCourse from "./Components/Pages/CreateCourse/CreateCourse";
+import CourseContent from "./Components/Pages/CourseContent/CourseContent";
 
 function App() {
     return (
@@ -14,7 +14,8 @@ function App() {
                     <Routes>
                         <Route path="/auth" element={<SignInSignUp />} />
                         <Route path="/" element={<BrainBrick />} />
-                        <Route path="/create" element={<CreateCourse />}></Route>
+                        <Route path="/create" element={<CreateCourse />} />
+                        <Route path="/courses/:id" element={<CourseContent />} />
                     </Routes>
                 </div>
             </Router>

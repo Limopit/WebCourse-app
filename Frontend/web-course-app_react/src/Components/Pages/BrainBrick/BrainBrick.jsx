@@ -25,7 +25,6 @@ const BrainBrick = () => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
     const location = useLocation();
-    
     const { isAuthenticated } = useContext(AuthContext);
 
     useEffect(() => {

@@ -18,11 +18,10 @@ public class UserCourseController(IMediator mediator, ILoggerService logger) : B
     [HttpPost("courses/taken")]
     public async Task<ActionResult<Guid>> CreateUserTakenCourse([FromBody] CreateUserTakenCourseCommand command)
     {
-        command.Email = User.FindFirstValue(ClaimTypes.Email);
+        Logger.Information($"User {command.Email} takes the {command.CourseId} course");
         
         var result = await Mediator.Send(command);
         
-        Logger.Information($"User {command.Email} takes the {command.CourseId} course");
         return Ok(result);
     }
     

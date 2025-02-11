@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useImperativeHandle, forwardRef } from "react";
-import { submitLessonForm } from "../../../Api/createNewEntity";
+import { createLessonEntity } from "../../../Api/createNewEntity";
 import RichTextEditor from "../RichTextEditor/RichTextEditor";
 
 export const LessonForm = forwardRef(({ selectedButton, formData, onFormChange, onButtonLabelChange }, ref) => {
@@ -66,7 +66,7 @@ export const LessonForm = forwardRef(({ selectedButton, formData, onFormChange, 
         };
 
         try {
-            const result = await submitLessonForm(requestData);
+            const result = await createLessonEntity(requestData);
             if (result) {
                 setLocalFormData({
                     title: '',
