@@ -37,6 +37,24 @@ export const createLessonEntity = async (formData) => {
     return data;
 }
 
+export const createQuizEntity = async (formData) => {
+    const response = await fetch(`${API_BASE_URL}/quizzes`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${sessionStorage.getItem("accessToken")}`
+        },
+        body: JSON.stringify(formData)
+    });
+
+    if (!response.ok) {
+        throw new Error(`Error: ${response.status} ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    return data;
+}
+
 export const createTakenCourseRecord = async (courseId) => {
     const token = sessionStorage.getItem("accessToken");
     const payload = jwtDecode(token);

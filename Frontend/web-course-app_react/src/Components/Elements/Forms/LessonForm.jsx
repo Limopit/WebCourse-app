@@ -1,13 +1,13 @@
 import { useState, useEffect, useRef, useImperativeHandle, forwardRef } from "react";
-import { createLessonEntity } from "../../../Api/createNewEntity";
+import { createQuizEntity, createLessonEntity } from "../../../Api/createNewEntity";
 import RichTextEditor from "../RichTextEditor/RichTextEditor";
+import QuizForm from "./QuizForm";
 
-export const LessonForm = forwardRef(({ selectedButton, formData, onFormChange, onButtonLabelChange }, ref) => {
+export const LessonForm = forwardRef(({ selectedButton, formData, onFormChange, onButtonLabelChange, quizzes, onQuizzesChange, onQuizRemove }, ref) => {
     const [localFormData, setLocalFormData] = useState({
         title: '',
         description: '',
         duration: 0,
-        type: '',
         content: ''
     });
 
@@ -19,19 +19,6 @@ export const LessonForm = forwardRef(({ selectedButton, formData, onFormChange, 
             setLocalFormData(formData);
         }
     }, [formData]);
-
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (richTextEditorRef.current && !richTextEditorRef.current.contains(event.target)) {
-                setIsExpanded(false);
-            }
-        };
-
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
-    }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -56,25 +43,48 @@ export const LessonForm = forwardRef(({ selectedButton, formData, onFormChange, 
         onFormChange(updatedData);
     };
 
-    const handleSubmit = async () => {
-        const requestData = {
-            title: localFormData.title,
-            description: localFormData.description,
-            duration: localFormData.duration,
-            type: localFormData.type,
-            content: localFormData.content
-        };
+    const handleQuizChange = (index, quiz) => {
+        const newQuizzes = [...quizzes];
+        newQuizzes[index] = quiz;
+        onQuizzesChange(newQuizzes);
+    };
 
+    const handleQuizRemove = (index) => {
+        const newQuizzes = quizzes.filter((_, i) => i !== index);
+        onQuizzesChange(newQuizzes);
+    };
+
+    const handleSubmit = async () => {
         try {
+            const quizIds = await Promise.all(
+                quizzes.map(async (quiz) => {
+                    const quizData = {
+                        question: quiz.question,
+                        options: quiz.options,
+                        answer: quiz.answer
+                    };
+                    const quizResult = await createQuizEntity(quizData);
+                    return quizResult;
+                })
+            );
+
+            const requestData = {
+                title: localFormData.title,
+                description: localFormData.description,
+                duration: localFormData.duration,
+                content: localFormData.content,
+                Quizzes: quizIds
+            };
+
             const result = await createLessonEntity(requestData);
             if (result) {
                 setLocalFormData({
                     title: '',
                     description: '',
                     duration: 0,
-                    type: '',
                     content: ''
                 });
+                onQuizzesChange([]);
                 return result;
             } else {
                 throw new Error("Lesson creation failed");
@@ -92,7 +102,7 @@ export const LessonForm = forwardRef(({ selectedButton, formData, onFormChange, 
     }));
 
     return (
-        <div className="form-container">
+        <div className="form-container-content">
             <h2>Lesson Configuration: {selectedButton?.label}</h2>
 
             <form onSubmit={handleSubmit}>
@@ -126,16 +136,6 @@ export const LessonForm = forwardRef(({ selectedButton, formData, onFormChange, 
                     />
                 </div>
                 <div className="form-group">
-                    <label>Type</label>
-                    <input
-                        type="text"
-                        name="type"
-                        value={localFormData.type}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <div className="form-group">
                     <label>Content</label>
                     <div
                         ref={richTextEditorRef}
@@ -145,9 +145,28 @@ export const LessonForm = forwardRef(({ selectedButton, formData, onFormChange, 
                             value={localFormData.content || ""}
                             onChange={handleContentChange}
                             onFocus={() => setIsExpanded(true)}
+                            onBlur={() => setIsExpanded(false)}
                             isExpanded={isExpanded}
                         />
                     </div>
+                </div>
+                <div className="quizzes-section">
+                    {quizzes.map((quiz, index) => (
+                        <QuizForm
+                            key={index}
+                            quiz={quiz}
+                            index={index}
+                            onChange={handleQuizChange}
+                            onRemove={handleQuizRemove}
+                        />
+                    ))}
+                    <button
+                        type="button"
+                        onClick={() => onQuizzesChange([...quizzes, { question: '', options: [], answer: '' }])}
+                        className="add-quiz-button"
+                    >
+                        Add Quiz
+                    </button>
                 </div>
             </form>
         </div>

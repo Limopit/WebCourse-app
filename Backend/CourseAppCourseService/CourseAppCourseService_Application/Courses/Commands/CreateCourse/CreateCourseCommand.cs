@@ -12,5 +12,4 @@ public record CreateCourseCommand: IRequest<Guid>
     public string Language {get; set;}
     public string Requirements {get; set;}
     public List<Guid> Lessons {get; set;}
-    //public List<Guid> Quizzes {get; set;} //Temporary commented for testing
 }

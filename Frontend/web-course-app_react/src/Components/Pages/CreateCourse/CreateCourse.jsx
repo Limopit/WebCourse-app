@@ -16,6 +16,7 @@ const CreateCourse = () => {
     const [animating, setAnimating] = useState(false);
     const [activeFormId, setActiveFormId] = useState(buttons[0].id);
     const [formsData, setFormsData] = useState({});
+    const [quizzes, setQuizzes] = useState({});
 
     const formRefs = useRef({});
 
@@ -33,6 +34,20 @@ const CreateCourse = () => {
         setFormsData(prevFormsData => ({
             ...prevFormsData,
             [buttonId]: data,
+        }));
+    };
+
+    const handleQuizzesChange = (buttonId, newQuizzes) => {
+        setQuizzes(prevQuizzes => ({
+            ...prevQuizzes,
+            [buttonId]: newQuizzes,
+        }));
+    };
+
+    const handleQuizRemove = (buttonId, index) => {
+        setQuizzes(prevQuizzes => ({
+            ...prevQuizzes,
+            [buttonId]: prevQuizzes[buttonId].filter((_, i) => i !== index),
         }));
     };
 
@@ -73,7 +88,8 @@ const CreateCourse = () => {
                             {buttons.map((button, index) => (
                                 <button
                                     key={button.id}
-                                    className={`course-config-page ${animating && index === buttons.length - 1 ? 'adding' : ''} ${index >= 1 ? 'lesson' : ''}`}                                    onClick={() => setActiveFormId(button.id)}
+                                    className={`course-config-page ${animating && index === buttons.length - 1 ? 'adding' : ''} ${index >= 1 ? 'lesson' : ''}`}
+                                    onClick={() => setActiveFormId(button.id)}
                                 >
                                     {button.label}
                                 </button>
@@ -100,6 +116,9 @@ const CreateCourse = () => {
                                 formData={formsData[button.id] || {}}
                                 onFormChange={(data) => handleFormChange(button.id, { ...data, type: 'lesson' })}
                                 onButtonLabelChange={(newLabel) => updateButtonLabel(button.id, newLabel)}
+                                quizzes={quizzes[button.id] || []}
+                                onQuizzesChange={(newQuizzes) => handleQuizzesChange(button.id, newQuizzes)}
+                                onQuizRemove={(index) => handleQuizRemove(button.id, index)}
                             />
                         )}
                     </div>

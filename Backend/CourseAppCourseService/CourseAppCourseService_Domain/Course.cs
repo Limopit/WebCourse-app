@@ -16,7 +16,6 @@ public class Course
     public DateTime CreationDate {get; set;}
     public DateTime UpdateDate {get; set;}
     public List<Guid> Lessons {get; set;} = new();
-    public List<Guid> Quizzes {get; set;} = new();
     public string Requierments {get; set;}
     
     public List<Lesson> LessonDetails { get; set; } = new();

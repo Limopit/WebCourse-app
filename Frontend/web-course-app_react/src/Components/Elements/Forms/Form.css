@@ -1,11 +1,13 @@
-.form-container {
-    width: 100%;
+.form-container-content {
+    width: 95%;
     height: 100%;
-    padding: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
     background: var(--ui-list-color);
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     position: relative;
+    overflow-y: auto;
 }
 
 .form-container h2 {
@@ -110,5 +112,38 @@
 }
 
 .apply-logo-button:hover {
+    background: var(--hover-color);
+}
+
+.quizzes-section {
+    position: relative;
+    z-index: 2;
+    margin-top: 20px;
+    padding-bottom: 150px;
+}
+
+.quiz-form {
+    margin-bottom: 20px;
+    padding: 15px;
+    background: #444;
+    border-radius: 5px;
+}
+
+.quiz-form h3 {
+   color : #fff;
+}
+
+.add-quiz-button, .add-option-button, .remove-quiz-button {
+    padding: 6px 10px;
+    border: none;
+    background: var(--secondary-color);
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.add-quiz-button:hover, .add-option-button:hover, .remove-quiz-button:hover {
     background: var(--hover-color);
 }

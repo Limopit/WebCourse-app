@@ -3,7 +3,7 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import "./RichTextEditor.css";
 
-const RichTextEditor = ({ value, onChange, onFocus, isExpanded }) => {
+const RichTextEditor = ({ value, onChange, onFocus, onBlur, isExpanded }) => {
     const quillRef = useRef(null);
 
     useEffect(() => {
@@ -15,12 +15,14 @@ const RichTextEditor = ({ value, onChange, onFocus, isExpanded }) => {
 
             const quillElement = quillRef.current.getEditor().root;
             quillElement.addEventListener("focus", onFocus);
+            quillElement.addEventListener("blur", onBlur); // Добавлено
 
             return () => {
                 quillElement.removeEventListener("focus", onFocus);
+                quillElement.removeEventListener("blur", onBlur); // Добавлено
             };
         }
-    }, [value, onFocus]);
+    }, [value, onFocus, onBlur]);
 
     const modules = {
         toolbar: {
@@ -51,7 +53,6 @@ const RichTextEditor = ({ value, onChange, onFocus, isExpanded }) => {
     return (
         <div
             className={`rich-text-editor-container ${isExpanded ? "expanded" : ""}`}
-            style={{ height: isExpanded ? "500px" : "300px" }}
         >
             <ReactQuill
                 ref={quillRef}

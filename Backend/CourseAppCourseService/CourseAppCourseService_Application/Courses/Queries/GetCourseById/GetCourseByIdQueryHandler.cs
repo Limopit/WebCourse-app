@@ -10,7 +10,7 @@ public class GetCourseByIdQueryHandler(IUnitOfWork unitOfWork, IMapperService ma
 {
     public async Task<CourseDto> Handle(GetCourseByIdQuery request, CancellationToken cancellationToken)
     {
-        var course = await unitOfWork.Courses.GetCourseByIdWithLessonsAsync(request.Id, cancellationToken);
+        var course = await unitOfWork.Courses.GetCourseByIdWithLessonsAsync(request.Id, unitOfWork.Lessons ,cancellationToken);
 
         if (course == null)
         {

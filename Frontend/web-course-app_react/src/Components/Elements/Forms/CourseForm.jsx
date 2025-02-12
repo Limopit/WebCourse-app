@@ -73,7 +73,7 @@ export const CourseForm = forwardRef(({ selectedButton, formData, onFormChange, 
     }));
 
     return (
-        <div className="form-container">
+        <div className="form-container-content">
             <h2>Course Configuration: {selectedButton?.label}</h2>
 
             <div className="course-logo-container" onClick={() => setShowLogoInput(true)}>

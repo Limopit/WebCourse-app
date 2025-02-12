@@ -14,6 +14,5 @@ public class CourseDto
     public DateTime CreationDate {get; set;}
     public DateTime UpdateDate {get; set;}
     public List<LessonDto> LessonDetails {get; set;}
-    //public List<Guid> Quizzes {get; set;}
     public string Requierments {get; set;}
 }

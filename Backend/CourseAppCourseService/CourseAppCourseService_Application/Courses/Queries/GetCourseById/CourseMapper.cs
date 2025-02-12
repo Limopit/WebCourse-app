@@ -10,5 +10,6 @@ public class CourseMapper : IMapWith<Course>
     {
         profile.CreateMap<Course, CourseDto>();
         profile.CreateMap<Lesson, LessonDto>();
+        profile.CreateMap<Quiz, QuizDto>();
     }
 }
