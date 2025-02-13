@@ -16,6 +16,8 @@ const CourseContent = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [activeItem, setActiveItem] = useState(null);
+    const [userAnswers, setUserAnswers] = useState({});
+    const [answerStatus, setAnswerStatus] = useState({});
 
     useEffect(() => {
         const fetchData = async () => {
@@ -36,6 +38,26 @@ const CourseContent = () => {
 
     const handleItemClick = (item) => {
         setActiveItem(item);
+        setUserAnswers({});
+        setAnswerStatus({});
+    };
+
+    const handleAnswerSelect = (questionIndex, selectedOption) => {
+        setUserAnswers((prevAnswers) => ({
+            ...prevAnswers,
+            [questionIndex]: selectedOption,
+        }));
+    };
+
+    const checkAnswers = () => {
+        if (!activeItem || !activeItem.quizDetails) return;
+
+        const newStatus = {};
+        activeItem.quizDetails.forEach((quiz, index) => {
+            newStatus[index] = userAnswers[index] === quiz.answer;
+        });
+
+        setAnswerStatus(newStatus);
     };
 
     if (loading) return <p>Loading course...</p>;
@@ -72,17 +94,50 @@ const CourseContent = () => {
                 <div className="course-content-main">
                     {activeItem ? (
                         <>
-                            {activeItem.type === "lesson" && (
-                                <div className="lesson-info">
-                                    <h3>{activeItem.title}</h3>
-                                    <div>
-                                        <ReactQuill
-                                            value={activeItem.content || ""}
-                                            readOnly={true}
-                                            theme="snow"
-                                            modules={{ toolbar: false }}
-                                        />
-                                    </div>
+                            <div className="lesson-info">
+                                <h3>{activeItem.title}</h3>
+                                <div>
+                                    <ReactQuill
+                                        value={activeItem.content || ""}
+                                        readOnly={true}
+                                        theme="snow"
+                                        modules={{ toolbar: false }}
+                                    />
+                                </div>
+                            </div>
+
+                            {activeItem.quizDetails && activeItem.quizDetails.length > 0 && (
+                                <div className="quiz-section">
+                                    <h4>Quiz</h4>
+                                    {activeItem.quizDetails.map((quiz, quizIndex) => (
+                                        <div key={quizIndex} className="quiz-question">
+                                            <p>
+                                                <strong>Question {quizIndex + 1}:</strong> {quiz.question}
+                                                {answerStatus[quizIndex] !== undefined && (
+                                                    <span className="answer-status">
+                                                    {answerStatus[quizIndex] ? "✔️" : "❌"}
+                                                </span>
+                                                )}
+                                            </p>
+                                            <div className="quiz-options">
+                                                {quiz.options.map((option, optionIndex) => (
+                                                    <label key={optionIndex}>
+                                                        <input
+                                                            type="radio"
+                                                            name={`question-${quizIndex}`}
+                                                            value={option}
+                                                            onChange={() => handleAnswerSelect(quizIndex, option)}
+                                                            checked={userAnswers[quizIndex] === option}
+                                                        />
+                                                        {option}
+                                                    </label>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    ))}
+                                    <button onClick={checkAnswers} className="submit-quiz-button">
+                                        Submit Answers
+                                    </button>
                                 </div>
                             )}
                         </>

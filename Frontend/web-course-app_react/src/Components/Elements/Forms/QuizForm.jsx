@@ -16,6 +16,11 @@ const QuizForm = ({ quiz, index, onChange, onRemove }) => {
         onChange(index, { ...quiz, options: [...quiz.options, ''] });
     };
 
+    const removeOption = (optionIndex) => {
+        const newOptions = quiz.options.filter((_, i) => i !== optionIndex);
+        onChange(index, { ...quiz, options: newOptions });
+    };
+
     return (
         <div className="quiz-form">
             <h3>Question {index + 1}</h3>
@@ -32,13 +37,21 @@ const QuizForm = ({ quiz, index, onChange, onRemove }) => {
             <div className="form-group">
                 <label>Options</label>
                 {quiz.options.map((option, optionIndex) => (
-                    <input
-                        key={optionIndex}
-                        type="text"
-                        value={option}
-                        onChange={(e) => handleOptionChange(optionIndex, e.target.value)}
-                        required
-                    />
+                    <div key={optionIndex} className="option-container">
+                        <input
+                            type="text"
+                            value={option}
+                            onChange={(e) => handleOptionChange(optionIndex, e.target.value)}
+                            required
+                        />
+                        <button
+                            type="button"
+                            onClick={() => removeOption(optionIndex)}
+                            className="remove-option-button"
+                        >
+                            ×
+                        </button>
+                    </div>
                 ))}
                 <button type="button" onClick={addOption} className="add-option-button">
                     Add Option

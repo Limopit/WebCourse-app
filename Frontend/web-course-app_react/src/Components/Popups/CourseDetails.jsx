@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import "./CourseDetails.css";
 import ReactQuill from "react-quill";
-import {useNavigate} from "react-router-dom";
-import {createTakenCourseRecord} from "../../Api/createNewEntity";
+import { useNavigate } from "react-router-dom";
+import { createTakenCourseRecord } from "../../Api/createNewEntity";
 
 const CourseDetails = ({ course, onClose }) => {
     const [activeItem, setActiveItem] = useState(null);
@@ -15,6 +15,10 @@ const CourseDetails = ({ course, onClose }) => {
     const handleTakeCourse = async (id) => {
         await createTakenCourseRecord(id);
         navigate(`courses/${id}`);
+    };
+
+    const isLesson = (item) => {
+        return item.duration !== undefined && item.quizDetails !== undefined;
     };
 
     return (
@@ -44,32 +48,44 @@ const CourseDetails = ({ course, onClose }) => {
                                 </li>
                             ))}
                         </ul>
-                    <button className="take-course-button" onClick={() => handleTakeCourse(course.id)}>Take a course</button> 
+                        <button className="take-course-button" onClick={() => handleTakeCourse(course.id)}>
+                            Take a course
+                        </button>
                     </div>
                     <div className="item-details">
                         {activeItem ? (
                             <>
-                                {activeItem.type === "lesson" && (
+                                {isLesson(activeItem) ? (
                                     <div className="lesson-info">
                                         <h3>{activeItem.title}</h3>
                                         <p className="item-description">{activeItem.description}</p>
                                         <div className="lesson-meta">
                                             <p><strong>Duration:</strong> {activeItem.duration} hours</p>
-                                            <p><strong>Type:</strong> {activeItem.type}</p>
+                                            <p><strong>Type:</strong> Lesson</p>
                                         </div>
                                         <div>
-                                            <h2>Сохраненное содержимое</h2>
+                                            <h4>Content</h4>
                                             <ReactQuill
-                                                value={activeItem.content}
+                                                value={activeItem.content || "<p>No content available.</p>"}
                                                 readOnly={true}
                                                 theme="snow"
-                                                modules={{toolbar: false}}
+                                                modules={{ toolbar: false }}
                                             />
                                         </div>
+                                        {activeItem.quizDetails && activeItem.quizDetails.length > 0 && (
+                                            <div>
+                                                <h4>Quizzes</h4>
+                                                {activeItem.quizDetails.map((quiz, quizIndex) => (
+                                                    <div key={quizIndex} className="quiz-info">
+                                                        <p><strong>Question:</strong> {quiz.question}</p>
+                                                        <p><strong>Options:</strong> {quiz.options.join(", ")}</p>
+                                                        <p><strong>Answer:</strong> {quiz.answer}</p>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
                                     </div>
-                                )}
-
-                                {activeItem === course && (
+                                ) : (
                                     <div className="course-info">
                                         <div className="course-details-info">
                                             <h3>Course Description</h3>
@@ -82,6 +98,10 @@ const CourseDetails = ({ course, onClose }) => {
                                             <div className="course-dates">
                                                 <p><strong>Creation Date:</strong> {new Date(course.creationDate).toLocaleDateString()}</p>
                                                 <p><strong>Update Date:</strong> {new Date(course.updateDate).toLocaleDateString()}</p>
+                                            </div>
+                                            <div>
+                                                <h4>Requirements</h4>
+                                                <p>{course.requierments || "No requirements available."}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -96,6 +116,5 @@ const CourseDetails = ({ course, onClose }) => {
         </div>
     );
 };
-
 
 export default CourseDetails;
