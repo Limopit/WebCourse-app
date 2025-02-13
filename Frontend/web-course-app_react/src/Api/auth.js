@@ -1,26 +1,14 @@
-const API_BASE_URL = 'https://localhost:5003/gateway/auth';
+import api from "../Interceptors/InterceptorSetup";
+
+const API_BASE_URL = '/auth';
 
 export const login = async (email, password) => {
     try {
-        const response = await fetch(`${API_BASE_URL}/login`, {
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ email, password }),
-        });
-        
-        if (!response.ok) {
-            const responseData = await response.json();
-            throw new Error(responseData.error);
-        }
-
-        const { jwt, refreshToken } = await response.json();
+        const response = await api.post(`${API_BASE_URL}/login`, { email, password });
+        const { jwt, refreshToken } = response.data;
         
         sessionStorage.setItem("accessToken", jwt);
-        
-        return true
+        return true;
     } catch (error) {
         throw error;
     }
@@ -28,19 +16,15 @@ export const login = async (email, password) => {
 
 export const signup = async (firstname, lastname, email, password) => {
     try {
-        const response = await fetch(`${API_BASE_URL}/register`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({firstname, lastname, email, password, role: 'user' }),
+        const response = await api.post(`${API_BASE_URL}/register`, {
+            firstname,
+            lastname,
+            email,
+            password,
+            role: 'user',
         });
-
-        if (!response.ok) {
-            throw new Error('Failed to sign up');
-        }
-
-        return await response.json();
+        
+        return response.data;
     } catch (error) {
         throw error;
     }
@@ -49,29 +33,17 @@ export const signup = async (firstname, lastname, email, password) => {
 export const logout = async () => {
     try {
         const token = sessionStorage.getItem("accessToken");
-
         if (!token) {
             console.error("No access token found");
             throw new Error("No token found");
         }
         
-        sessionStorage.clear();
-        
-        const response = await fetch(`${API_BASE_URL}/logout`, {
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
+        await api.post(`${API_BASE_URL}/logout`, {}, {
         });
         
-        if (!response.ok) {
-            throw new Error('Failed log out');
-        }
-
+        sessionStorage.clear();
         localStorage.setItem("isAuthenticated", "false");
-
+        
         window.location.reload();
     } catch (error) {
         throw error;

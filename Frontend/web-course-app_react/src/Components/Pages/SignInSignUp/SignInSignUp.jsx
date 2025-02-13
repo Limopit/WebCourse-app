@@ -7,7 +7,7 @@ import user_icon from "../../Assets/user.png";
 import { login, signup } from "../../../Api/auth";
 import Header from "../../Elements/Header/Header";
 import {AuthContext} from "../../../Context/AuthContext";
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 
 const SignInSignUp = () => {
     const [active, setActive] = useState("signIn");
@@ -23,6 +23,7 @@ const SignInSignUp = () => {
     const [error, setError] = useState(null);
     
     const navigate = useNavigate();
+    const location = useLocation();
 
     const handleSwitch = (newState) => {
         if (newState !== active) {
@@ -37,7 +38,8 @@ const SignInSignUp = () => {
             if (active === "signIn") {
                 await login(email, password);
                 authLogin();
-                navigate('/');
+                const from = location.state?.from || "/";
+                navigate(from, { replace: true });
             } else if (active === "signUp") {
                 await signup(firstname, lastname, email, password);
             }

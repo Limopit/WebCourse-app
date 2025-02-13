@@ -1,12 +1,19 @@
+import api from "../Interceptors/InterceptorSetup";
+
 export const fetchCourses = async () => {
     try {
-        const response = await fetch("https://localhost:5003/gateway/courses/approved");
-        if (!response.ok) {
-            throw new Error(`Error while loading data: ${response.status}`);
-        }
+        const response = await api.get("/courses/approved");
+        return response.data.courses;
+    } catch (error) {
+        console.error("Loading error: ", error);
+        return [];
+    }
+};
 
-        const data = await response.json();
-        return data.courses;
+export const fetchTakenCourses = async () => {
+    try {
+        const response = await api.get("user/courses/taken");
+        return response.data.userTakenCourses;
     } catch (error) {
         console.error("Loading error: ", error);
         return [];
@@ -15,12 +22,8 @@ export const fetchCourses = async () => {
 
 export const fetchCourseDetails = async (id) => {
     try {
-        const response = await fetch(`https://localhost:5003/gateway/courses/${id}`);
-        if (!response.ok) {
-            throw new Error(`Error while loading data: ${response.status}`);
-        }
-
-        return await response.json();
+        const response = await api.get(`/courses/${id}`);
+        return response.data;
     } catch (error) {
         console.error("Loading error: ", error);
         return null;

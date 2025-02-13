@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { fetchCourses } from "../../../Api/fetchCourses";
+import { fetchCourses, fetchTakenCourses } from "../../../Api/fetchCourses";
 import "./BrainBrick.css";
 import Header from "../../Elements/Header/Header";
 import { useLocation } from 'react-router-dom';
@@ -9,20 +9,23 @@ import { AuthContext } from "../../../Context/AuthContext";
 import Dropdown from "../../Elements/Dropdown/Dropdown";
 import CreateCourseButton from "../../../Api/getCreateCourseButton";
 import CourseDetails from "../../Popups/CourseDetails";
-import {fetchCourseDetails} from "../../../Api/fetchCourses";
+import { fetchCourseDetails } from "../../../Api/fetchCourses";
 
 const BrainBrick = () => {
     const [courses, setCourses] = useState([]);
+    const [takenCourses, setTakenCourses] = useState([]);
     const [filteredCourses, setFilteredCourses] = useState([]);
     const [initialCourseOrder, setInitialCourseOrder] = useState([]);
     const [selectedCourse, setSelectedCourse] = useState(null);
-    
+
     const [loading, setLoading] = useState(true);
-    
+
     const [search, setSearch] = useState("");
     const [sortText, setSortText] = useState("Sort");
-    
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const [statusFilter, setStatusFilter] = useState("All");
+
+    const [isSortDropdownOpen, setIsSortDropdownOpen] = useState(false);
+    const [isFilterDropdownOpen, setIsFilterDropdownOpen] = useState(false);
 
     const location = useLocation();
     const { isAuthenticated } = useContext(AuthContext);
@@ -31,6 +34,8 @@ const BrainBrick = () => {
         const loadItems = async () => {
             try {
                 const data = await fetchCourses();
+                const takenCoursesData = await fetchTakenCourses();
+                setTakenCourses(takenCoursesData);
                 setCourses(data);
                 setFilteredCourses(data);
                 setInitialCourseOrder(data);
@@ -50,16 +55,26 @@ const BrainBrick = () => {
     }, []);
 
     useEffect(() => {
-        const filtered = courses.filter(course =>
-            course.title.toLowerCase().includes(search.toLowerCase())
-        );
+        const filtered = courses.filter(course => {
+            const matchesSearch = course.title.toLowerCase().includes(search.toLowerCase());
+
+            const isTaken = takenCourses.some(takenCourse => takenCourse.id === course.id);
+            const matchesStatus =
+                statusFilter === "All" ||
+                (statusFilter === "Taken" && isTaken) ||
+                (statusFilter === "Not Taken" && !isTaken);
+
+            return matchesSearch && matchesStatus;
+        });
+
         setFilteredCourses(filtered);
-    }, [search, courses]);
+    }, [search, courses, statusFilter, takenCourses]);
 
     const resetSort = () => {
         setFilteredCourses([...initialCourseOrder]);
         setSearch("");
         setSortText("Sort");
+        setStatusFilter("All");
     };
 
     const handleCourseClick = async (course) => {
@@ -94,11 +109,11 @@ const BrainBrick = () => {
                     />
                     <Dropdown
                         trigger={
-                            <button className={`sort-options-button ${isDropdownOpen ? "active" : ""}`}>
+                            <button className={`sort-options-button ${isSortDropdownOpen ? "active" : ""}`}>
                                 {sortText}
                             </button>
                         }
-                        onToggle={(isOpen) => setIsDropdownOpen(isOpen)}
+                        onToggle={(isOpen) => setIsSortDropdownOpen(isOpen)}
                     >
                         <button
                             className="dropdown-item"
@@ -119,6 +134,33 @@ const BrainBrick = () => {
                             Z - A
                         </button>
                     </Dropdown>
+                    <Dropdown
+                        trigger={
+                            <button className={`sort-options-button ${isFilterDropdownOpen ? "active" : ""}`}>
+                                {statusFilter}
+                            </button>
+                        }
+                        onToggle={(isOpen) => setIsFilterDropdownOpen(isOpen)}
+                    >
+                        <button
+                            className="dropdown-item"
+                            onClick={() => setStatusFilter("All")}
+                        >
+                            All
+                        </button>
+                        <button
+                            className="dropdown-item"
+                            onClick={() => setStatusFilter("Taken")}
+                        >
+                            Taken
+                        </button>
+                        <button
+                            className="dropdown-item"
+                            onClick={() => setStatusFilter("Not Taken")}
+                        >
+                            Not Taken
+                        </button>
+                    </Dropdown>
                 </div>
 
                 <div className={`course-list-container ${loading ? "loading" : ""}`}>
@@ -136,7 +178,6 @@ const BrainBrick = () => {
                                             : item.description || "Description is missing"}
                                     </p>
                                 </div>
-
                             </div>
                         ))
                     ) : (
@@ -146,7 +187,11 @@ const BrainBrick = () => {
             </div>
 
             {selectedCourse && (
-                <CourseDetails course={selectedCourse} onClose={handleCloseDetails} />
+                <CourseDetails
+                    course={selectedCourse}
+                    onClose={handleCloseDetails}
+                    takenCourses={takenCourses}
+                />
             )}
         </div>
     );

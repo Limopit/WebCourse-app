@@ -5,6 +5,7 @@ import BrainBrick from "./Components/Pages/BrainBrick/BrainBrick";
 import {AuthProvider} from "./Context/AuthContext";
 import CreateCourse from "./Components/Pages/CreateCourse/CreateCourse";
 import CourseContent from "./Components/Pages/CourseContent/CourseContent";
+import PrivateRoute from "./Components/Elements/PrivateRoute/PrivateRoute";
 
 function App() {
     return (
@@ -14,8 +15,11 @@ function App() {
                     <Routes>
                         <Route path="/auth" element={<SignInSignUp />} />
                         <Route path="/" element={<BrainBrick />} />
-                        <Route path="/create" element={<CreateCourse />} />
-                        <Route path="/courses/:id" element={<CourseContent />} />
+                        
+                        <Route element={<PrivateRoute />}>
+                            <Route path="/create" element={<CreateCourse />} />
+                            <Route path="/courses/:id" element={<CourseContent />} />
+                        </Route>
                     </Routes>
                 </div>
             </Router>
