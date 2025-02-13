@@ -18,7 +18,12 @@ export const createQuizEntity = async (formData) => {
 
 export const createTakenCourseRecord = async (courseId) => {
     const token = sessionStorage.getItem("accessToken");
+    if (!token) {
+        window.location.href = "/auth";
+        return;
+    }
     const payload = jwtDecode(token);
+    
     const response = await api.post("/user/courses/taken", {
         email: payload.sub,
         courseId: courseId,

@@ -5,7 +5,7 @@ const API_BASE_URL = '/auth';
 export const login = async (email, password) => {
     try {
         const response = await api.post(`${API_BASE_URL}/login`, { email, password });
-        const { jwt, refreshToken } = response.data;
+        const { jwt } = response.data;
         
         sessionStorage.setItem("accessToken", jwt);
         return true;

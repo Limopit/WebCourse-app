@@ -1,25 +1,31 @@
 import { useState, useEffect, useImperativeHandle, forwardRef } from "react";
 import { createCourseEntity } from "../../../Api/createNewEntity";
 import { useNavigate } from "react-router-dom";
+import { validateField, validateForm, hasErrors } from "../../../Api/validationHandler";
 
 export const CourseForm = forwardRef(({ selectedButton, formData, onFormChange, onButtonLabelChange }, ref) => {
     const navigate = useNavigate();
 
-    const [localFormData, setLocalFormData] = useState({
-        title: '',
-        description: '',
-        level: '',
-        category: '',
-        language: '',
-        requirements: '',
-        logo: ''
-    });
+    const [localFormData, setLocalFormData] = useState({});
 
     const [showLogoInput, setShowLogoInput] = useState(false);
+    
+    const [errors, setErrors] = useState({});
+    const validationExcludedFields = ['logo']
 
     useEffect(() => {
-        if (formData) {
+        if (formData && Object.keys(formData).length > 0) {
             setLocalFormData(formData);
+        } else {
+            setLocalFormData({
+                title: '',
+                description: '',
+                level: '',
+                category: '',
+                language: '',
+                requirements: '',
+                logo: ''
+            });
         }
     }, [formData]);
 
@@ -35,6 +41,11 @@ export const CourseForm = forwardRef(({ selectedButton, formData, onFormChange, 
         if (name === 'title') {
             onButtonLabelChange(value || 'Course Config');
         }
+
+        setErrors((prevErrors) => ({
+            ...prevErrors,
+            [name]: validationExcludedFields.includes(name) ? "" : validateField(name, value),
+        }));
     };
 
     const handleLogoSubmit = (e) => {
@@ -43,6 +54,14 @@ export const CourseForm = forwardRef(({ selectedButton, formData, onFormChange, 
     };
 
     const handleSubmit = async (lessonResults = []) => {
+        const formErrors = validateForm(localFormData, validationExcludedFields);
+        setErrors(formErrors);
+        if (hasErrors(formErrors)) {
+            console.error(formErrors);
+            console.error("Form has errors. Please fix them before submitting.");
+            return;
+        }
+
         const requestData = {
             title: localFormData.title,
             description: localFormData.description,
@@ -69,7 +88,12 @@ export const CourseForm = forwardRef(({ selectedButton, formData, onFormChange, 
     };
 
     useImperativeHandle(ref, () => ({
-        submit: (lessonResults = []) => handleSubmit(lessonResults)
+        submit: (lessonResults = []) => handleSubmit(lessonResults),
+        validate: () => {
+            const formErrors = validateForm(localFormData, validationExcludedFields);
+            setErrors(formErrors);
+            return formErrors;
+        }
     }));
 
     return (
@@ -96,6 +120,7 @@ export const CourseForm = forwardRef(({ selectedButton, formData, onFormChange, 
                         autoFocus
                     />
                     <button type="submit" className="apply-logo-button">✔</button>
+                    {errors.logo && <span className="error-message">{errors.logo}</span>}
                 </form>
             )}
 
@@ -107,8 +132,13 @@ export const CourseForm = forwardRef(({ selectedButton, formData, onFormChange, 
                         name="title"
                         value={localFormData.title}
                         onChange={handleChange}
+                        onBlur={(e) => setErrors((prevErrors) => ({
+                            ...prevErrors,
+                            title: validateField("title", e.target.value)
+                        }))}
                         required
                     />
+                    {errors.title && <span className="error-message">{errors.title}</span>}
                 </div>
                 <div className="form-group">
                     <label>Description</label>
@@ -116,8 +146,13 @@ export const CourseForm = forwardRef(({ selectedButton, formData, onFormChange, 
                         name="description"
                         value={localFormData.description}
                         onChange={handleChange}
+                        onBlur={(e) => setErrors((prevErrors) => ({
+                            ...prevErrors,
+                            description: validateField("description", e.target.value)
+                        }))}
                         required
                     />
+                    {errors.description && <span className="error-message">{errors.description}</span>}
                 </div>
                 <div className="form-group">
                     <label>Level</label>
@@ -126,8 +161,13 @@ export const CourseForm = forwardRef(({ selectedButton, formData, onFormChange, 
                         name="level"
                         value={localFormData.level}
                         onChange={handleChange}
+                        onBlur={(e) => setErrors((prevErrors) => ({
+                            ...prevErrors,
+                            level: validateField("level", e.target.value)
+                        }))}
                         required
                     />
+                    {errors.level && <span className="error-message">{errors.level}</span>}
                 </div>
                 <div className="form-group">
                     <label>Category</label>
@@ -136,8 +176,13 @@ export const CourseForm = forwardRef(({ selectedButton, formData, onFormChange, 
                         name="category"
                         value={localFormData.category}
                         onChange={handleChange}
+                        onBlur={(e) => setErrors((prevErrors) => ({
+                            ...prevErrors,
+                            category: validateField("category", e.target.value)
+                        }))}
                         required
                     />
+                    {errors.category && <span className="error-message">{errors.category}</span>}
                 </div>
                 <div className="form-group">
                     <label>Language</label>
@@ -146,8 +191,13 @@ export const CourseForm = forwardRef(({ selectedButton, formData, onFormChange, 
                         name="language"
                         value={localFormData.language}
                         onChange={handleChange}
+                        onBlur={(e) => setErrors((prevErrors) => ({
+                            ...prevErrors,
+                            language: validateField("language", e.target.value)
+                        }))}
                         required
                     />
+                    {errors.language && <span className="error-message">{errors.language}</span>}
                 </div>
                 <div className="form-group">
                     <label>Requirements</label>
@@ -155,8 +205,13 @@ export const CourseForm = forwardRef(({ selectedButton, formData, onFormChange, 
                         name="requirements"
                         value={localFormData.requirements}
                         onChange={handleChange}
+                        onBlur={(e) => setErrors((prevErrors) => ({
+                            ...prevErrors,
+                            requirements: validateField("requirements", e.target.value)
+                        }))}
                         required
                     />
+                    {errors.requirements && <span className="error-message">{errors.requirements}</span>}
                 </div>
             </form>
         </div>

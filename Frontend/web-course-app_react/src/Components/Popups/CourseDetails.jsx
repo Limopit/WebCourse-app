@@ -31,6 +31,7 @@ const CourseDetails = ({ course, onClose, takenCourses }) => {
         <div className="course-details-overlay">
             <div className="course-details-container">
                 <button className="close-button" onClick={onClose}>×</button>
+                
                 <div className="header-container">
                     <div className="course-logo">
                         {course.logo ? (
@@ -41,6 +42,7 @@ const CourseDetails = ({ course, onClose, takenCourses }) => {
                     </div>
                     <h2>{course.title}</h2>
                 </div>
+                
                 <div className="course-content">
                     <div className="course-items">
                         <h3>Course Content</h3>
@@ -61,6 +63,7 @@ const CourseDetails = ({ course, onClose, takenCourses }) => {
                             {isCourseTaken ? "Continue a course" : "Take a course"}
                         </button>
                     </div>
+                    
                     <div className="item-details">
                         {activeItem ? (
                             <>

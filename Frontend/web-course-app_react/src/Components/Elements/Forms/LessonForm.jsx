@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useImperativeHandle, forwardRef } from "re
 import { createQuizEntity, createLessonEntity } from "../../../Api/createNewEntity";
 import RichTextEditor from "../RichTextEditor/RichTextEditor";
 import QuizForm from "./QuizForm";
+import { hasErrors, validateField, validateForm } from "../../../Api/validationHandler";
 
 export const LessonForm = forwardRef(({ selectedButton, formData, onFormChange, onButtonLabelChange, quizzes, onQuizzesChange, onQuizRemove }, ref) => {
     const [localFormData, setLocalFormData] = useState({
@@ -12,11 +13,21 @@ export const LessonForm = forwardRef(({ selectedButton, formData, onFormChange, 
     });
 
     const [isExpanded, setIsExpanded] = useState(false);
+    const [errors, setErrors] = useState({});
     const richTextEditorRef = useRef(null);
 
+    const validationExcludedFields = [];
+
     useEffect(() => {
-        if (formData) {
+        if (formData && Object.keys(formData).length > 0) {
             setLocalFormData(formData);
+        } else {
+            setLocalFormData({
+                title: '',
+                description: '',
+                duration: 0,
+                content: ''
+            });
         }
     }, [formData]);
 
@@ -32,6 +43,11 @@ export const LessonForm = forwardRef(({ selectedButton, formData, onFormChange, 
         if (name === 'title') {
             onButtonLabelChange(value || `Lesson ${selectedButton.id}`);
         }
+
+        setErrors((prevErrors) => ({
+            ...prevErrors,
+            [name]: validationExcludedFields.includes(name) ? "" : validateField(name, value),
+        }));
     };
 
     const handleContentChange = (content) => {
@@ -55,6 +71,15 @@ export const LessonForm = forwardRef(({ selectedButton, formData, onFormChange, 
     };
 
     const handleSubmit = async () => {
+        const formErrors = validateForm(localFormData, validationExcludedFields);
+        setErrors(formErrors);
+        console.error(formErrors);
+
+        if (hasErrors(formErrors)) {
+            console.error("Form has errors. Please fix them before submitting.");
+            return;
+        }
+
         try {
             const quizIds = await Promise.all(
                 quizzes.map(async (quiz) => {
@@ -98,6 +123,11 @@ export const LessonForm = forwardRef(({ selectedButton, formData, onFormChange, 
     useImperativeHandle(ref, () => ({
         submit: async () => {
             return await handleSubmit();
+        },
+        validate: () => {
+            const formErrors = validateForm(localFormData, validationExcludedFields);
+            setErrors(formErrors);
+            return formErrors;
         }
     }));
 
@@ -113,8 +143,13 @@ export const LessonForm = forwardRef(({ selectedButton, formData, onFormChange, 
                         name="title"
                         value={localFormData.title}
                         onChange={handleChange}
+                        onBlur={(e) => setErrors((prevErrors) => ({
+                            ...prevErrors,
+                            title: validateField("title", e.target.value)
+                        }))}
                         required
                     />
+                    {errors.title && <span className="error-message">{errors.title}</span>}
                 </div>
                 <div className="form-group">
                     <label>Description</label>
@@ -122,8 +157,13 @@ export const LessonForm = forwardRef(({ selectedButton, formData, onFormChange, 
                         name="description"
                         value={localFormData.description}
                         onChange={handleChange}
+                        onBlur={(e) => setErrors((prevErrors) => ({
+                            ...prevErrors,
+                            description: validateField("description", e.target.value)
+                        }))}
                         required
                     />
+                    {errors.description && <span className="error-message">{errors.description}</span>}
                 </div>
                 <div className="form-group">
                     <label>Duration (hours)</label>
@@ -132,8 +172,13 @@ export const LessonForm = forwardRef(({ selectedButton, formData, onFormChange, 
                         name="duration"
                         value={localFormData.duration}
                         onChange={handleChange}
+                        onBlur={(e) => setErrors((prevErrors) => ({
+                            ...prevErrors,
+                            duration: validateField("duration", e.target.value)
+                        }))}
                         required
                     />
+                    {errors.duration && <span className="error-message">{errors.duration}</span>}
                 </div>
                 <div className="form-group">
                     <label>Content</label>
@@ -149,6 +194,7 @@ export const LessonForm = forwardRef(({ selectedButton, formData, onFormChange, 
                             isExpanded={isExpanded}
                         />
                     </div>
+                    {errors.content && <span className="error-message">{errors.content}</span>}
                 </div>
                 <div className="quizzes-section">
                     {quizzes.map((quiz, index) => (

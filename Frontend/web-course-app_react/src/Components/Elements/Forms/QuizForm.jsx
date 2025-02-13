@@ -1,29 +1,55 @@
 import React from "react";
+import {validateQuiz} from "../../../Api/validationHandler";
 
 const QuizForm = ({ quiz, index, onChange, onRemove }) => {
+    const [errors, setErrors] = React.useState({
+        question: '',
+        options: [],
+        answer: ''
+    });
+
     const handleChange = (e) => {
         const { name, value } = e.target;
-        onChange(index, { ...quiz, [name]: value });
+        const updatedQuiz = { ...quiz, [name]: value };
+        
+        onChange(index, updatedQuiz);
+        
+        const errors = validateQuiz(updatedQuiz);
+        setErrors(errors);
     };
 
     const handleOptionChange = (optionIndex, value) => {
         const newOptions = [...quiz.options];
         newOptions[optionIndex] = value;
-        onChange(index, { ...quiz, options: newOptions });
+        
+        const updatedQuiz = { ...quiz, options: newOptions };
+        onChange(index, updatedQuiz);
+        
+        const errors = validateQuiz(updatedQuiz);
+        setErrors(errors);
     };
 
     const addOption = () => {
-        onChange(index, { ...quiz, options: [...quiz.options, ''] });
+        const updatedQuiz = { ...quiz, options: [...quiz.options, ''] };
+        onChange(index, updatedQuiz);
+        
+        const errors = validateQuiz(updatedQuiz);
+        setErrors(errors);
     };
 
     const removeOption = (optionIndex) => {
         const newOptions = quiz.options.filter((_, i) => i !== optionIndex);
-        onChange(index, { ...quiz, options: newOptions });
+        const updatedQuiz = { ...quiz, options: newOptions };
+        onChange(index, updatedQuiz);
+        
+        const errors = validateQuiz(updatedQuiz);
+        setErrors(errors);
     };
 
     return (
         <div className="quiz-form">
             <h3>Question {index + 1}</h3>
+            
             <div className="form-group">
                 <label>Question</label>
                 <input
@@ -33,6 +59,7 @@ const QuizForm = ({ quiz, index, onChange, onRemove }) => {
                     onChange={handleChange}
                     required
                 />
+                {errors.question && <span className="error-message">{errors.question}</span>}
             </div>
             <div className="form-group">
                 <label>Options</label>
@@ -53,6 +80,7 @@ const QuizForm = ({ quiz, index, onChange, onRemove }) => {
                         </button>
                     </div>
                 ))}
+                {errors.options && <span className="error-message">{errors.options}</span>}
                 <button type="button" onClick={addOption} className="add-option-button">
                     Add Option
                 </button>
@@ -66,6 +94,7 @@ const QuizForm = ({ quiz, index, onChange, onRemove }) => {
                     onChange={handleChange}
                     required
                 />
+                {errors.answer && <span className="error-message">{errors.answer}</span>}
             </div>
             <button type="button" onClick={() => onRemove(index)} className="remove-quiz-button">
                 Remove Quiz

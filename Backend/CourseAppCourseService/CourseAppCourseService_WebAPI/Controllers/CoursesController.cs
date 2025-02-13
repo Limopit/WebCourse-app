@@ -24,11 +24,11 @@ public class CoursesController(IMediator mediator, ILoggerService logger, GrpcUs
         return Ok(result);
     }
     
-    [HttpGet("{courseId}")]
-    public async Task<ActionResult<Guid>> GetCourseWithLessons(Guid courseId)
+    [HttpGet("{id}")]
+    public async Task<ActionResult<Guid>> GetCourseWithLessons(Guid id)
     {
         Logger.Information("Executing GetCourseWithLessons");
-        var result = await Mediator.Send(new GetCourseByIdQuery() { Id = courseId });
+        var result = await Mediator.Send(new GetCourseByIdQuery() { Id = id });
         
         return Ok(result);
     }

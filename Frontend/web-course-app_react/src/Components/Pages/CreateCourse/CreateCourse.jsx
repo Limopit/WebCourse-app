@@ -7,17 +7,19 @@ import { useLocation } from "react-router-dom";
 import { AuthContext } from "../../../Context/AuthContext";
 import { CourseForm } from "../../Elements/Forms/CourseForm";
 import { LessonForm } from "../../Elements/Forms/LessonForm";
+import {hasErrors} from "../../../Api/validationHandler";
 
 const CreateCourse = () => {
     const location = useLocation();
     const { isAuthenticated } = useContext(AuthContext);
 
     const [buttons, setButtons] = useState([{ id: 1, label: 'New Course', type: 'course' }]);
+    
     const [animating, setAnimating] = useState(false);
+    
     const [activeFormId, setActiveFormId] = useState(buttons[0].id);
     const [formsData, setFormsData] = useState({});
     const [quizzes, setQuizzes] = useState({});
-
     const formRefs = useRef({});
 
     const addButton = () => {
@@ -62,6 +64,23 @@ const CreateCourse = () => {
     const handleSaveAll = async () => {
         try {
             const lessonResults = [];
+            let hasValidationErrors = false;
+
+            for (const button of buttons) {
+                const formRef = formRefs.current[button.id];
+                const formErrors = await formRef.validate();
+                if (hasErrors(formErrors)) {
+                    console.log(formErrors);
+                    hasValidationErrors = true;
+                    console.error(`Form ${button.label} has errors.`);
+                }
+            }
+
+            if (hasValidationErrors) {
+                alert("Please fix all errors before saving.");
+                return;
+            }
+
             for (const button of buttons) {
                 if (button.type === 'lesson') {
                     const formRef = formRefs.current[button.id];
@@ -74,6 +93,7 @@ const CreateCourse = () => {
             const formRef = formRefs.current[courseButton.id];
             await formRef.submit(lessonResults);
         } catch (error) {
+            console.log(error);
             alert("Error saving data");
         }
     };
@@ -81,6 +101,7 @@ const CreateCourse = () => {
     return (
         <div>
             <Header additionalContent={<AdditionalContent location={location} isAuthenticated={isAuthenticated} />} />
+            
             <div className="course-form-container">
                 <div className="content-container">
                     <div className="course-config-container">

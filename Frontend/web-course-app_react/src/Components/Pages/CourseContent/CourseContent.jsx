@@ -11,14 +11,18 @@ import "react-quill/dist/quill.snow.css";
 
 const CourseContent = () => {
     const { id } = useParams();
-    const { isAuthenticated } = useContext(AuthContext);
     const [course, setCourse] = useState(null);
+    
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    
     const [activeItem, setActiveItem] = useState(null);
+    
     const [userAnswers, setUserAnswers] = useState({});
     const [answerStatus, setAnswerStatus] = useState({});
-
+    
+    const { isAuthenticated } = useContext(AuthContext);
+    
     useEffect(() => {
         const fetchData = async () => {
             try {

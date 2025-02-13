@@ -34,11 +34,14 @@ const BrainBrick = () => {
         const loadItems = async () => {
             try {
                 const data = await fetchCourses();
-                const takenCoursesData = await fetchTakenCourses();
-                setTakenCourses(takenCoursesData);
                 setCourses(data);
                 setFilteredCourses(data);
                 setInitialCourseOrder(data);
+
+                if (isAuthenticated) {
+                    const takenCoursesData = await fetchTakenCourses();
+                    setTakenCourses(takenCoursesData);
+                }
             } catch (error) {
                 console.error("Data loading error: ", error);
                 setCourses([]);
@@ -52,7 +55,7 @@ const BrainBrick = () => {
         };
 
         loadItems();
-    }, []);
+    }, [isAuthenticated]);
 
     useEffect(() => {
         const filtered = courses.filter(course => {
@@ -134,33 +137,35 @@ const BrainBrick = () => {
                             Z - A
                         </button>
                     </Dropdown>
-                    <Dropdown
-                        trigger={
-                            <button className={`sort-options-button ${isFilterDropdownOpen ? "active" : ""}`}>
-                                {statusFilter}
+                    {isAuthenticated && (
+                        <Dropdown
+                            trigger={
+                                <button className={`sort-options-button ${isFilterDropdownOpen ? "active" : ""}`}>
+                                    {statusFilter}
+                                </button>
+                            }
+                            onToggle={(isOpen) => setIsFilterDropdownOpen(isOpen)}
+                        >
+                            <button
+                                className="dropdown-item"
+                                onClick={() => setStatusFilter("All")}
+                            >
+                                All
                             </button>
-                        }
-                        onToggle={(isOpen) => setIsFilterDropdownOpen(isOpen)}
-                    >
-                        <button
-                            className="dropdown-item"
-                            onClick={() => setStatusFilter("All")}
-                        >
-                            All
-                        </button>
-                        <button
-                            className="dropdown-item"
-                            onClick={() => setStatusFilter("Taken")}
-                        >
-                            Taken
-                        </button>
-                        <button
-                            className="dropdown-item"
-                            onClick={() => setStatusFilter("Not Taken")}
-                        >
-                            Not Taken
-                        </button>
-                    </Dropdown>
+                            <button
+                                className="dropdown-item"
+                                onClick={() => setStatusFilter("Taken")}
+                            >
+                                Taken
+                            </button>
+                            <button
+                                className="dropdown-item"
+                                onClick={() => setStatusFilter("Not Taken")}
+                            >
+                                Not Taken
+                            </button>
+                        </Dropdown>
+                    )}
                 </div>
 
                 <div className={`course-list-container ${loading ? "loading" : ""}`}>
