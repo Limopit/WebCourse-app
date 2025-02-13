@@ -21,6 +21,7 @@
     background: var(--ui-list-color);
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    background-color: #eceaea;
 }
 
 .rich-text-editor-wrapper.expanded {

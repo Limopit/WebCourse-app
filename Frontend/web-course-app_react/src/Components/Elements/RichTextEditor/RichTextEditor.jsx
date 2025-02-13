@@ -15,11 +15,11 @@ const RichTextEditor = ({ value, onChange, onFocus, onBlur, isExpanded }) => {
 
             const quillElement = quillRef.current.getEditor().root;
             quillElement.addEventListener("focus", onFocus);
-            quillElement.addEventListener("blur", onBlur); // Добавлено
+            quillElement.addEventListener("blur", onBlur);
 
             return () => {
                 quillElement.removeEventListener("focus", onFocus);
-                quillElement.removeEventListener("blur", onBlur); // Добавлено
+                quillElement.removeEventListener("blur", onBlur);
             };
         }
     }, [value, onFocus, onBlur]);
