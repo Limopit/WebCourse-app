@@ -20,4 +20,10 @@ public class GrpcUserServiceClient(UserServiceRpc.UserService.UserServiceClient 
             CourseId = courseId
         });
     }
+
+    public List<string> GetApprovedCourseList()
+    {
+        var response = grpcClient.GetApprovedCourseList(new EmptyMessage());
+        return response.CourseList.ToList();
+    }
 }

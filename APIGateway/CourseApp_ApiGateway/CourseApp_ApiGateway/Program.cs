@@ -20,6 +20,16 @@ builder.Services.AddAuthentication("Bearer")
         options.Audience = "api_scope";
     });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins("https://localhost:3000")
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials();
+    });
+});
 
 builder.Services.AddOcelot();
 builder.Services.AddSwaggerForOcelot(builder.Configuration);
@@ -30,6 +40,8 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
+
+app.UseCors("AllowFrontend");
 
 app.UseAuthentication();
 app.UseAuthorization();

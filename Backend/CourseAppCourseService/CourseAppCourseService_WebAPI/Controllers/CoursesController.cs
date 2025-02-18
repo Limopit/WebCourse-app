@@ -2,7 +2,9 @@ using System.Security.Claims;
 using CourseAppCourseService_Application.Courses.Commands.CreateCourse;
 using CourseAppCourseService_Application.Courses.Commands.DeleteCourse;
 using CourseAppCourseService_Application.Courses.Commands.UpdateCourse;
+using CourseAppCourseService_Application.Courses.Queries.GetCourseById;
 using CourseAppCourseService_Application.Courses.Queries.GetCourseList;
+using CourseAppCourseService_Application.Courses.Queries.GetCourseListInfo;
 using CourseAppCourseService_Application.Interfaces.Services;
 using CourseAppCourseService_Infrastructure.Services.UserService;
 using MediatR;
@@ -18,6 +20,15 @@ public class CoursesController(IMediator mediator, ILoggerService logger, GrpcUs
     {
         Logger.Information("Executing GetCourseList");
         var result = await Mediator.Send(new GetCourseListQuery());
+        
+        return Ok(result);
+    }
+    
+    [HttpGet("{id}")]
+    public async Task<ActionResult<Guid>> GetCourseWithLessons(Guid id)
+    {
+        Logger.Information("Executing GetCourseWithLessons");
+        var result = await Mediator.Send(new GetCourseByIdQuery() { Id = id });
         
         return Ok(result);
     }
@@ -58,6 +69,19 @@ public class CoursesController(IMediator mediator, ILoggerService logger, GrpcUs
         var result = userServiceClient.DeleteUserCourseRecord(id.ToString());
 
         return NoContent();
+
+    }
+    
+    [HttpGet("approved")]
+    public async Task<ActionResult<Guid>> GetApprovedCourseList(Guid id)
+    {
+        Logger.Information("Getting Approved Course List");
+        var approvedCourseList = userServiceClient.GetApprovedCourseList();
+        
+        Logger.Information("Getting Approved Courses info");
+        var result = await Mediator.Send(new GetCourseListInfoQuery() { CourseIds = approvedCourseList });
+
+        return Ok(result);
 
     }
 }

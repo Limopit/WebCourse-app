@@ -1,0 +1,29 @@
+.rich-text-editor-container {
+    height: 100px;
+    transition: height 0.3s ease;
+}
+
+.rich-text-editor-container.expanded {
+    height: 500px;
+    transition: height 0.3s ease;
+}
+
+.rich-text-editor-wrapper {
+    position: relative;
+    bottom: 0;
+    left: 20px;
+    right: 20px;
+    height: 150px;
+    width: calc(100% - 40px);
+    transition: height 0.3s ease, bottom 0.3s ease;
+    overflow: hidden;
+    z-index: 1;
+    background: var(--ui-list-color);
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    background-color: #eceaea;
+}
+
+.rich-text-editor-wrapper.expanded {
+    height: 550px;
+}

@@ -3,6 +3,7 @@ using CourseAppUserService_Application.Common.Exceptions;
 using CourseAppUserService_Application.Interfaces.Services;
 using CourseAppUserService_Application.UserCreatedCourse.Commands.CreateUserCreatedCourse;
 using CourseAppUserService_Application.UserCreatedCourse.Commands.DeleteUserCreatedCourse;
+using CourseAppUserService_Application.UserCreatedCourse.Queries.GetApprovedCourseList;
 using CourseAppUserService_Application.UserTakenCourse.Commands.DeleteEachUserTakenCourse;
 using CourseAppUserService_Domain.Enums;
 using Grpc.Core;
@@ -48,6 +49,18 @@ namespace CourseAppUserService.Services.UserService
             return new DeleteCourseRecordResponse()
             {
                 Result = true
+            };
+        }
+
+        public override async Task<GetApprovedCourseListResponse> GetApprovedCourseList(EmptyMessage request, ServerCallContext context)
+        {
+            var query = new GetApprovedCourseListQuery();
+            
+            var result = await mediator.Send(query);
+
+            return new GetApprovedCourseListResponse()
+            {
+                CourseList = { result }
             };
         }
     }

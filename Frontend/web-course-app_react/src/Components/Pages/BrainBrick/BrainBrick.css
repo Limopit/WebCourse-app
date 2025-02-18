@@ -1,0 +1,180 @@
+.course-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 85vh;
+    width: 90%;
+    min-width: 95vw;
+    background: var(--ui-color);
+    margin: 70px auto 0 auto;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.sort-and-filter-container {
+    background: var(--ui-secondary-color);
+    border-radius: 10px;
+    position: relative;
+    width: 40%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 10px;
+    min-height: 40px;
+    box-sizing: border-box;
+    gap: 10px;
+}
+
+.sort-and-filter-container > * {
+    display: flex;
+    align-items: center;
+    align-self: center;
+    height: 100%;
+}
+
+.search-input {
+    height: 60%;
+    width: 100%;
+    max-width: 400px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.sort-options-button {
+    margin-top: 3px;
+    margin-left: 5px;
+    width: 60px;
+    height: 30px;
+    background-color: transparent;
+    border: solid 1px #ccc;
+    cursor: pointer;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.sort-options-button::after {
+    content: "";
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 6px solid #fff;
+    transition: transform 0.3s ease;
+}
+
+.sort-options-button.active::after {
+    transform: rotate(180deg);
+}
+
+.course-list-container {
+    overflow: visible;
+    position: relative;
+    background-color: var(--ui-secondary-color);
+    border-radius: 10px;
+    margin-top: 5px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    flex: 1;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-content: flex-start;
+    width: 90%;
+    overflow-y: auto;
+    padding: 10px;
+}
+
+@keyframes loading-border {
+    0% {
+        clip-path: inset(100% 0 0 0);
+    }
+    25% {
+        clip-path: inset(0 100% 0 0);
+    }
+    50% {
+        clip-path: inset(0 0 100% 0);
+    }
+    75% {
+        clip-path: inset(0 0 0 100%);
+    }
+    100% {
+        clip-path: inset(100% 0 0 0);
+    }
+}
+
+.course-list-container.loading::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    outline: 3px solid var(--hover-color);
+    outline-offset: -3px;
+    animation: loading-border 2s linear infinite;
+}
+
+.course-list-container p {
+    width: 100%;
+    text-align: center;
+    color: #fff
+}
+
+.course-item {
+    display: flex;
+    flex: 1 1 calc(20% - 20px);
+    margin: 5px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: left;
+    justify-content: flex-start;
+    align-items: center;
+    min-height: 150px;
+    padding: 10px;
+    box-sizing: border-box;
+    gap: 10px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.course-item:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 0 5px 5px rgba(27, 131, 0, 1);
+}
+
+.course-item img {
+    width: 30%;
+    height: auto;
+    max-height: 100px;
+    object-fit: contain;
+    border-radius: 4px;
+}
+
+.course-text {
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.course-text h3 {
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.course-text p {
+    font-size: 14px;
+    color: #555;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

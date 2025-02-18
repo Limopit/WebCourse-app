@@ -1,0 +1,150 @@
+.course-form-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    height: 90vh;
+    width: 100%;
+    min-width: 95vw;
+    background: var(--ui-color);
+    margin: 70px auto 0 auto;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    gap: 20px;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.content-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 25%;
+    height: 90%;
+    background: var(--ui-list-color);
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow:
+            inset 4px 4px 10px rgba(0, 0, 0, 0.2),
+            0 4px 10px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+
+.course-config-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    background: transparent;
+    border: solid 1px #555555;
+    border-radius: 5px;
+    padding: 10px;
+    gap: 10px;
+    box-sizing: border-box;
+    min-height: max-content;
+    overflow: hidden;
+}
+
+.buttons-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+    overflow-y: auto;
+    flex-grow: 1;
+}
+
+.course-config-page {
+    width: 100%;
+    min-height: 50px;
+    background: var(--ui-secondary-color);
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding-left: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    flex-shrink: 0;
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+.add-button {
+    width: 100%;
+    min-height: 50px;
+    background: var(--secondary-color);
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.add-button:hover {
+    background-color: var(--hover-color);
+}
+
+
+.form-container {
+    width: 80%;
+    height: 100%;
+    padding: 10px;
+    background: var(--ui-list-color);
+    border-radius: 5px;
+    box-shadow: inset 4px 4px 10px rgba(0, 0, 0, 0.2);
+    box-sizing: border-box;
+}
+
+
+.course-config-page {
+    width: 100%;
+    min-height: 50px;
+    background: var(--ui-secondary-color);
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding-left: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    flex-shrink: 0;
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+.course-config-page.lesson{
+    min-height: 40px;
+    background: #353b43;
+}
+
+.course-config-page.adding {
+    transform: scale(1.05);
+    opacity: 0;
+}
+
+.save-all-button {
+    position: absolute;
+    width: 300px;
+    bottom: 25px;
+    left: 50px;
+    padding: 10px 20px;
+    background: var(--secondary-color);
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.save-all-button:hover {
+    background: var(--hover-color);
+}

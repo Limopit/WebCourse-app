@@ -1,0 +1,43 @@
+@import "./Components/Elements/Header/Header.css";
+
+:root {
+  --ui-color: #282c34;
+  --ui-secondary-color: #2a3037;
+  --ui-list-color: #22252c;
+  --secondary-color: #06840d;
+  --hover-color: #0d5105;
+  --background-color: rgba(20, 46, 0, 0.3);
+  --active-color: #4CAF50;
+}
+
+body {
+  height: 100vh;
+  background-image: url(https://img.freepik.com/premium-vector/geometric-seamless-pattern-minimal-wrapping-background-contemporary-abstract-design_2239-39398.jpg?w=1800);
+  background-size: 500px;
+  display: grid;
+  place-items: center;
+  animation: movingBackground 200s linear infinite;
+  position: relative;
+  overflow: hidden;
+}
+
+body::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--background-color);
+  z-index: -1;
+  pointer-events: none;
+}
+
+@keyframes movingBackground {
+  from {
+    background-position: -3000px -3000px;
+  }
+  to {
+    background-position: 3000px 3000px;
+  }
+}

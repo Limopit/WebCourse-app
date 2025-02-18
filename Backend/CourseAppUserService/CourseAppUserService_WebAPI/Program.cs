@@ -24,12 +24,16 @@ builder.Configuration
 
 builder.Configuration.AddJsonFile(fullpath, optional: false, reloadOnChange: true);
 
-var handler = new HttpClientHandler();
-handler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
-var client = new HttpClient(handler);
-
-// Регистрируем HttpClient для использования в сервисе
-builder.Services.AddSingleton(client);
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins("https://localhost:3000")
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials();
+    });
+});
 
 builder.Services.AddOpenApi();
 
@@ -46,16 +50,6 @@ builder.Services.AddPersistance(builder.Configuration);
 builder.Services.AddDbContext<UserServiceDbContext>();
 
 builder.Services.AddAuthenticationAndAuthorization(builder.Configuration);
-
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowAll", policy =>
-    {
-        policy.AllowAnyHeader();
-        policy.AllowAnyMethod();
-        policy.AllowAnyOrigin();
-    });
-});
 
 builder.Services.AddControllers();
 
@@ -97,6 +91,15 @@ builder.Services.AddScoped<UserService>();
 
 builder.Host.UseSerilog();
 
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.Cookie.Name = "RefreshToken";
+    options.Cookie.HttpOnly = true;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    options.Cookie.SameSite = SameSiteMode.Strict;
+    options.ExpireTimeSpan = TimeSpan.FromDays(7);
+});
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
@@ -129,11 +132,15 @@ app.UseCustomExceptionHandler();
 
 app.UseHttpsRedirection();
 
-app.UseCors("AllowAll");
+app.UseRouting();
+
+app.UseCors("AllowFrontend");
 
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseCookiePolicy();
+    
 app.MapControllers();
 
 using (var scope = app.Services.CreateScope())

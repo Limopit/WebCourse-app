@@ -15,7 +15,8 @@ public class Course
     public string Language {get; set;}
     public DateTime CreationDate {get; set;}
     public DateTime UpdateDate {get; set;}
-    public List<Lesson> Lessons {get; set;} = new();
-    public List<Quiz> Quizzes {get; set;} = new();
+    public List<Guid> Lessons {get; set;} = new();
     public string Requierments {get; set;}
+    
+    public List<Lesson> LessonDetails { get; set; } = new();
 }
