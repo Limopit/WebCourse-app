@@ -33,6 +33,15 @@ services:
       retries: 5
       start_period: 15s
       timeout: 20s
+      
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    restart: always
   
   webapi_identity:
     build:
@@ -107,6 +116,29 @@ services:
         condition: service_healthy
       elasticsearch:
         condition: service_healthy
+    
+  webapi_notification:
+    build:
+      context: .
+      dockerfile: Backend/CourseAppNotificationService/CourseAppNotificationService_WebAPI/Dockerfile
+    env_file:
+      - .env
+    ports:
+      - "5004:5004"
+    environment:
+      - DOTNET_ENVIRONMENT=Docker
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=${KESTREL_CERT_PATH}
+      - ASPNETCORE_Kestrel__Certificates__Default__KeyPath=${KESTREL_CERT_PASS}
+    volumes:
+      - ./certs:/https:ro
+    healthcheck:
+      test: nc -z localhost 5004
+      interval: 10s
+      retries: 5
+      start_period: 15s
+      timeout: 20s
+    depends_on:
+      - redis
         
   webapi_ocelot:
     build:
@@ -164,5 +196,7 @@ volumes:
   mongo-data:
     driver: local
   mssql-data:
+    driver: local
+  redis-data:
     driver: local
   elasticsearch-data:
