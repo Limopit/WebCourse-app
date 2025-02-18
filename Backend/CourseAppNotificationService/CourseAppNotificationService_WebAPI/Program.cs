@@ -1,4 +1,5 @@
 using CourseAppNotificationService_Domain.Interfaces.Repositories;
+using CourseAppNotificationService_Domain.Interfaces.Services;
 using CourseAppNotificationService_Infrastructure;
 using Microsoft.OpenApi.Models;
 using StackExchange.Redis;
@@ -23,6 +24,23 @@ using (var scope = app.Services.CreateScope())
 
     await DbInitializer.Initialize(database, notificationRepository);
 }
+
+using (var scope = app.Services.CreateScope())
+{
+    var messageQueueService = scope.ServiceProvider.GetRequiredService<IRabbitMqService>();
+    await messageQueueService.SubscribeAsync(async message =>
+    {
+        Console.WriteLine($"Received message: {message}");
+        await Task.CompletedTask;
+    });
+}
+
+using (var scope = app.Services.CreateScope())
+{
+    var messageQueueService = scope.ServiceProvider.GetRequiredService<IRabbitMqService>();
+    await messageQueueService.PublishAsync("Hello, RabbitMQ!");
+}
+
 
 if (app.Environment.IsDevelopment())
 {
