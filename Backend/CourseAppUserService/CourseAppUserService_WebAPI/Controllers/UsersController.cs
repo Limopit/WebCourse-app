@@ -13,9 +13,9 @@ public class UsersController(IMediator mediator, ILoggerService logger) : BaseCo
 {
     [Authorize]
     [HttpPut]
-    public async Task<IActionResult> UpdateUser([FromBody] UpdateUserDataCommand command)
+    public async Task<IActionResult> UpdateUser([FromBody] UpdateUserDataCommand command, CancellationToken cancellationToken)
     {
-        await Mediator.Send(command);
+        await Mediator.Send(command, cancellationToken);
         
         Logger.Information("User info was updated successfully");
         return Ok();
@@ -23,9 +23,9 @@ public class UsersController(IMediator mediator, ILoggerService logger) : BaseCo
     
     [Authorize]
     [HttpPut("password")]
-    public async Task<IActionResult> UpdateUserPassword([FromBody] UpdateUserPasswordCommand command)
+    public async Task<IActionResult> UpdateUserPassword([FromBody] UpdateUserPasswordCommand command, CancellationToken cancellationToken)
     {
-        await Mediator.Send(command);
+        await Mediator.Send(command, cancellationToken);
         
         Logger.Information("User password was updated successfully");
         return Ok();
@@ -33,9 +33,9 @@ public class UsersController(IMediator mediator, ILoggerService logger) : BaseCo
 
     [Authorize(Roles = "Admin")]
     [HttpGet("{email}")]
-    public async Task<IActionResult> GetUser(string email)
+    public async Task<IActionResult> GetUser(string email, CancellationToken cancellationToken)
     {
-        var result = await Mediator.Send(new GetUserCommand{Email = email});
+        var result = await Mediator.Send(new GetUserCommand{Email = email}, cancellationToken);
         
         Logger.Information("User info was retrieved successfully");
         return Ok(result);
@@ -43,9 +43,9 @@ public class UsersController(IMediator mediator, ILoggerService logger) : BaseCo
     
     [Authorize(Roles = "Admin")]
     [HttpDelete("{email}")]
-    public async Task<IActionResult> DeleteUser(string email)
+    public async Task<IActionResult> DeleteUser(string email, CancellationToken cancellationToken)
     {
-        await Mediator.Send(new DeleteUserCommand{Email = email});
+        await Mediator.Send(new DeleteUserCommand{Email = email}, cancellationToken);
         
         Logger.Information("User was deleted successfully");
         return Ok();
