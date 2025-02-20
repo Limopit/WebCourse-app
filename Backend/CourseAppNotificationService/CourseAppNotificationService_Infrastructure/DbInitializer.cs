@@ -30,7 +30,7 @@ public static class DbInitializer
         {
             new Notification
             {
-                UserId = Guid.NewGuid(),
+                Email = "admin@gmail.com",
                 NotificationId = Guid.NewGuid(),
                 Title = "Добро пожаловать!",
                 Message = "Спасибо за регистрацию в нашем сервисе.",
@@ -40,7 +40,7 @@ public static class DbInitializer
             },
             new Notification
             {
-                UserId = Guid.NewGuid(),
+                Email = "user@gmail.com",
                 NotificationId = Guid.NewGuid(),
                 Title = "Важное обновление",
                 Message = "Мы выпустили новую версию приложения.",

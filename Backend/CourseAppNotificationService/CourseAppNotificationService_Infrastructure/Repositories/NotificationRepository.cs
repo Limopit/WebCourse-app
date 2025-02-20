@@ -9,21 +9,21 @@ public class NotificationRepository(IDatabase database) : INotificationRepositor
 {
     public async Task AddNotificationAsync(Notification notification)
     {
-        var key = $"notifications:{notification.UserId}:{notification.NotificationId}";
+        var key = $"notifications:{notification.Email}:{notification.NotificationId}";
         var value = JsonSerializer.Serialize(notification);
         await database.StringSetAsync(key, value);
     }
 
-    public async Task<Notification> GetNotificationAsync(Guid userId, Guid notificationId)
+    public async Task<Notification> GetNotificationAsync(string email, Guid notificationId)
     {
-        var key = $"notifications:{userId}:{notificationId}";
+        var key = $"notifications:{email}:{notificationId}";
         var value = await database.StringGetAsync(key);
         return value.HasValue ? JsonSerializer.Deserialize<Notification>(value) : null;
     }
 
-    public async Task<IEnumerable<Notification>> GetUserNotificationsAsync(Guid userId)
+    public async Task<IEnumerable<Notification>> GetUserNotificationsAsync(string email)
     {
-        var pattern = $"notifications:{userId}:*";
+        var pattern = $"notifications:{email}:*";
         var keys = database.Multiplexer.GetServer(database.Multiplexer.GetEndPoints().First()).Keys(pattern: pattern);
 
         var notifications = new List<Notification>();
@@ -39,9 +39,9 @@ public class NotificationRepository(IDatabase database) : INotificationRepositor
         return notifications;
     }
 
-    public async Task MarkAsReadAsync(Guid userId, Guid notificationId)
+    public async Task MarkAsReadAsync(string email, Guid notificationId)
     {
-        var key = $"notifications:{userId}:{notificationId}";
+        var key = $"notifications:{email}:{notificationId}";
         var value = await database.StringGetAsync(key);
 
         if (value.HasValue)
@@ -52,9 +52,9 @@ public class NotificationRepository(IDatabase database) : INotificationRepositor
         }
     }
 
-    public async Task DeleteNotificationAsync(Guid userId, Guid notificationId)
+    public async Task DeleteNotificationAsync(string email, Guid notificationId)
     {
-        var key = $"notifications:{userId}:{notificationId}";
+        var key = $"notifications:{email}:{notificationId}";
         await database.KeyDeleteAsync(key);
     }
 }

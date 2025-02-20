@@ -2,8 +2,8 @@ namespace CourseAppNotificationService_Domain;
 
 public class Notification
 {
-    public Guid UserId { get; set; }
     public Guid NotificationId { get; set; }
+    public string Email { get; set; }
     public string Title { get; set; }
     public string Message { get; set; }
     public DateTime Timestamp { get; set; }

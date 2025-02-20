@@ -16,7 +16,6 @@ const Header = ({ createCourseButton, additionalContent }) => {
             </div>
             {additionalContent && <div className="additional-content">{additionalContent}</div>}
         </div>
-
     );
 };
 

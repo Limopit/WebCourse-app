@@ -5,6 +5,8 @@ using Microsoft.Extensions.DependencyInjection;
 using StackExchange.Redis;
 using CourseAppNotificationService_Infrastructure.Repositories;
 using CourseAppNotificationService_Infrastructure.Services;
+using Hangfire;
+using Hangfire.Redis.StackExchange;
 
 namespace CourseAppNotificationService_Infrastructure;
 
@@ -22,6 +24,14 @@ public static class DependencyInjection
             return connectionMultiplexer.GetDatabase();
         });
 
+        services.AddHangfire(config =>
+        {
+            config.UseRedisStorage(redisConnectionString);
+        });
+        services.AddHangfireServer();
+        
+        services.AddSignalR();
+        
         services.AddScoped<INotificationRepository, NotificationRepository>();
         services.AddSingleton<IRabbitMqService, RabbitMqService>();
 

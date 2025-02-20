@@ -3,8 +3,8 @@ namespace CourseAppNotificationService_Domain.Interfaces.Repositories;
 public interface INotificationRepository
 {
     Task AddNotificationAsync(Notification notification);
-    Task<Notification> GetNotificationAsync(Guid userId, Guid notificationId);
-    Task<IEnumerable<Notification>> GetUserNotificationsAsync(Guid userId);
-    Task MarkAsReadAsync(Guid userId, Guid notificationId);
-    Task DeleteNotificationAsync(Guid userId, Guid notificationId);
+    Task<Notification> GetNotificationAsync(string email, Guid notificationId);
+    Task<IEnumerable<Notification>> GetUserNotificationsAsync(string email);
+    Task MarkAsReadAsync(string email, Guid notificationId);
+    Task DeleteNotificationAsync(string email, Guid notificationId);
 }

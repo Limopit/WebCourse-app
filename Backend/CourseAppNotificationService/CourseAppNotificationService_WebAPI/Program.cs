@@ -1,6 +1,8 @@
 using CourseAppNotificationService_Domain.Interfaces.Repositories;
 using CourseAppNotificationService_Domain.Interfaces.Services;
 using CourseAppNotificationService_Infrastructure;
+using CourseAppNotificationService_Infrastructure.Hubs;
+using Hangfire;
 using Microsoft.OpenApi.Models;
 using StackExchange.Redis;
 
@@ -15,7 +17,32 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddInfrastructure(builder.Configuration);
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins("https://localhost:3000")
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials();
+    });
+});
+
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var recurringJobManager = scope.ServiceProvider.GetRequiredService<IRecurringJobManager>();
+    
+    recurringJobManager.AddOrUpdate<IRabbitMqService>(
+        "scheduled-notification-job",
+        service => 
+            service.PublishAsync("Scheduled notification"),
+        Cron.Minutely
+    );
+}
+
+
 
 using (var scope = app.Services.CreateScope())
 {
@@ -50,9 +77,13 @@ if (app.Environment.IsDevelopment())
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "Notification Service API v1");
     });
 }
+app.MapHub<NotificationHub>("/notificationHub");
+
+app.UseCors("AllowFrontend");
 
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
 
+app.UseHangfireDashboard();
 app.Run();
