@@ -33,6 +33,7 @@ public static class DependencyInjection
         services.AddSignalR();
         
         services.AddScoped<INotificationRepository, NotificationRepository>();
+        services.AddScoped<INotificationService, NotificationService>();
         services.AddSingleton<IRabbitMqService, RabbitMqService>();
 
         return services;

@@ -30,8 +30,8 @@ const AdditionalContent = ({ location, isAuthenticated }) => {
         const token = sessionStorage.getItem("accessToken");
         if (token) {
             const decodedToken = jwtDecode(token);
-            setEmail(decodedToken.sub);
-            console.log(decodedToken.sub);
+            setEmail(decodedToken.nameid);
+            console.log(decodedToken.nameid);
         }
     }, []);
 

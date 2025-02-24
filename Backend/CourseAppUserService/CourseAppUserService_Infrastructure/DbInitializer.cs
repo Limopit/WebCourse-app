@@ -108,7 +108,7 @@ public class DbInitializer
             }
         }
 
-        if (await userManager.FindByEmailAsync("user@email.com") == null)
+        if (await userManager.FindByEmailAsync("user@gmail.com") == null)
         {
             var user = new User
             {

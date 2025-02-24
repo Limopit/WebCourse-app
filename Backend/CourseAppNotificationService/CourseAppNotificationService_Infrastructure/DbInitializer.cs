@@ -32,7 +32,6 @@ public static class DbInitializer
             {
                 Email = "admin@gmail.com",
                 NotificationId = Guid.NewGuid(),
-                Title = "Добро пожаловать!",
                 Message = "Спасибо за регистрацию в нашем сервисе.",
                 Timestamp = DateTime.UtcNow,
                 IsRead = false,
@@ -42,7 +41,6 @@ public static class DbInitializer
             {
                 Email = "user@gmail.com",
                 NotificationId = Guid.NewGuid(),
-                Title = "Важное обновление",
                 Message = "Мы выпустили новую версию приложения.",
                 Timestamp = DateTime.UtcNow,
                 IsRead = false,

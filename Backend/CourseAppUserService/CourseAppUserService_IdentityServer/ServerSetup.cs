@@ -18,11 +18,6 @@ public static class ServerSetup
                 options.Authority = configuration["IdentityServer:Authority"];
                 options.RequireHttpsMetadata = bool.Parse(configuration["IdentityServer:RequireHttpsMetadata"]);
                 
-                options.BackchannelHttpHandler = new HttpClientHandler
-                {
-                    ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
-                };
-                
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,

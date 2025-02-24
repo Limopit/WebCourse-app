@@ -41,7 +41,7 @@ public class TokenService(IConfiguration configuration, IUserServiceDbContext db
 
         var claims = new List<Claim>
         {
-            new Claim(JwtRegisteredClaimNames.Sub, user.Email),
+            new Claim("nameid", user.Email),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
 

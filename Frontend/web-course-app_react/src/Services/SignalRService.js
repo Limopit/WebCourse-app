@@ -16,7 +16,9 @@ class SignalRService {
         if (!userEmail || this.connection) return;
 
         this.connection = new HubConnectionBuilder()
-            .withUrl('https://localhost:5004/notificationHub')
+            .withUrl("https://localhost:5004/notificationHub", {
+                accessTokenFactory: () => sessionStorage.getItem("accessToken"),
+            })
             .withAutomaticReconnect()
             .build();
 
@@ -30,8 +32,6 @@ class SignalRService {
                 this.notifyListeners();
             });
 
-            const missedNotifications = await this.connection.invoke('GetMissedNotifications', userEmail);
-            this.notifications = [...this.notifications, ...missedNotifications];
             this.notifyListeners();
         } catch (err) {
             console.error('SignalR Connection Error: ', err);

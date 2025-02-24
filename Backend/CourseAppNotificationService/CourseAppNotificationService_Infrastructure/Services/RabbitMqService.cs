@@ -1,10 +1,7 @@
 using System.Text;
 using CourseAppNotificationService_Domain;
 using CourseAppNotificationService_Domain.Interfaces.Services;
-using CourseAppNotificationService_Infrastructure.Hubs;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
@@ -15,16 +12,16 @@ namespace CourseAppNotificationService_Infrastructure.Services
         private readonly IConnection _connection;
         private readonly IChannel _channel;
         private readonly string _queueName;
-        private readonly IHubContext<NotificationHub> _hubContext;
+        private readonly INotificationService _notificationService;
 
-        public RabbitMqService(IConfiguration configuration, IHubContext<NotificationHub> hubContext)
+        public RabbitMqService(IConfiguration configuration, INotificationService notificationService)
         {
             var hostName = configuration["RabbitMQ:HostName"];
             var port = int.Parse(configuration["RabbitMQ:Port"]);
             var userName = configuration["RabbitMQ:UserName"];
             var password = configuration["RabbitMQ:Password"];
             _queueName = configuration["RabbitMQ:QueueName"];
-            _hubContext = hubContext;
+            _notificationService = notificationService;
 
             var factory = new ConnectionFactory
             {
@@ -40,17 +37,15 @@ namespace CourseAppNotificationService_Infrastructure.Services
             _channel.QueueDeclareAsync(_queueName, durable: false, exclusive: false, autoDelete: false);
         }
 
-        public async Task PublishAsync(string message)
+        public async Task PublishAsync(Notification notification)
         {
-            Console.WriteLine($"Sending message: {message}");
-            var body = Encoding.UTF8.GetBytes(message);
+            var body = Encoding.UTF8.GetBytes(notification.Message);
 
             await _channel.BasicPublishAsync(exchange: string.Empty,
                 routingKey: _queueName,
                 body: body);
-
-            var notification = new Notification { Email = "admin@gmail.com", Message = message };
-            await _hubContext.Clients.All.SendAsync("ReceiveNotification", notification.Message);
+            
+            await _notificationService.SendNotificationToUserAsync(notification);
         }
 
 
@@ -62,9 +57,7 @@ namespace CourseAppNotificationService_Infrastructure.Services
                 var body = ea.Body.ToArray();
                 var message = Encoding.UTF8.GetString(body);
                 
-                var notification = JsonConvert.DeserializeObject<Notification>(message);
-                await _hubContext.Clients.User(notification.Email)
-                    .SendAsync("ReceiveNotification", notification.Message);
+                //var notification = JsonConvert.DeserializeObject<Notification>(message);
                 
                 await handler(message);
             };

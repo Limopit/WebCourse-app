@@ -1,19 +1,36 @@
+using System.Text;
 using CourseAppNotificationService_Domain.Interfaces.Repositories;
 using CourseAppNotificationService_Domain.Interfaces.Services;
 using CourseAppNotificationService_Infrastructure;
+using CourseAppNotificationService_Infrastructure.Hangfire;
+using CourseAppNotificationService_Infrastructure.Hangfire.Jobs;
 using CourseAppNotificationService_Infrastructure.Hubs;
 using Hangfire;
-using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Notification Service API", Version = "v1" });
-});
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+        };
+    });
+
+builder.Services.AddAuthorization();
 
 builder.Services.AddInfrastructure(builder.Configuration);
 
@@ -32,17 +49,8 @@ var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
-    var recurringJobManager = scope.ServiceProvider.GetRequiredService<IRecurringJobManager>();
-    
-    recurringJobManager.AddOrUpdate<IRabbitMqService>(
-        "scheduled-notification-job",
-        service => 
-            service.PublishAsync("Scheduled notification"),
-        Cron.Minutely
-    );
+    RecurringJobs.RegisterRecurringJobs(scope.ServiceProvider);
 }
-
-
 
 using (var scope = app.Services.CreateScope())
 {
@@ -62,28 +70,18 @@ using (var scope = app.Services.CreateScope())
     });
 }
 
-using (var scope = app.Services.CreateScope())
-{
-    var messageQueueService = scope.ServiceProvider.GetRequiredService<IRabbitMqService>();
-    await messageQueueService.PublishAsync("Hello, RabbitMQ!");
-}
-
-
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Notification Service API v1");
-    });
-}
 app.MapHub<NotificationHub>("/notificationHub");
 
 app.UseCors("AllowFrontend");
 
 app.UseHttpsRedirection();
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
-app.UseHangfireDashboard();
+app.UseHangfireDashboard("/hangfire", new DashboardOptions
+{
+    Authorization = new[] { new HangfireDashboardAuthorization() }
+});
+
 app.Run();
