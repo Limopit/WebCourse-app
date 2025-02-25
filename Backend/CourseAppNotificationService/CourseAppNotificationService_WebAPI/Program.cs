@@ -1,6 +1,5 @@
 using System.Text;
 using CourseAppNotificationService_Domain.Interfaces.Repositories;
-using CourseAppNotificationService_Domain.Interfaces.Services;
 using CourseAppNotificationService_Infrastructure;
 using CourseAppNotificationService_Infrastructure.Hangfire;
 using CourseAppNotificationService_Infrastructure.Hangfire.Jobs;
@@ -20,6 +19,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     {
         options.TokenValidationParameters = new TokenValidationParameters
         {
+            NameClaimType = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier",
+            RoleClaimType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role",
             ValidateIssuer = true,
             ValidateAudience = true,
             ValidateLifetime = true,
@@ -27,6 +28,26 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidIssuer = builder.Configuration["Jwt:Issuer"],
             ValidAudience = builder.Configuration["Jwt:Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+        };
+        
+        options.Events = new JwtBearerEvents
+        {
+            OnMessageReceived = context =>
+            {
+                var accessToken = context.Request.Query["access_token"];
+        
+                if (!string.IsNullOrEmpty(accessToken))
+                {
+                    context.Token = accessToken;
+                    Console.WriteLine("Token set successfully.");
+                }
+                else
+                {
+                    Console.WriteLine("token is null or empty");
+                }
+                return Task.CompletedTask;
+            },
+            
         };
     });
 
@@ -60,16 +81,6 @@ using (var scope = app.Services.CreateScope())
     await DbInitializer.Initialize(database, notificationRepository);
 }
 
-using (var scope = app.Services.CreateScope())
-{
-    var messageQueueService = scope.ServiceProvider.GetRequiredService<IRabbitMqService>();
-    await messageQueueService.SubscribeAsync(async message =>
-    {
-        Console.WriteLine($"Received message: {message}");
-        await Task.CompletedTask;
-    });
-}
-
 app.MapHub<NotificationHub>("/notificationHub");
 
 app.UseCors("AllowFrontend");
@@ -78,6 +89,7 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+app.UseWebSockets();
 
 app.UseHangfireDashboard("/hangfire", new DashboardOptions
 {

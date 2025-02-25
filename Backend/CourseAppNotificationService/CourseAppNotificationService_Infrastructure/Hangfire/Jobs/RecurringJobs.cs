@@ -10,14 +10,26 @@ public static class RecurringJobs
     public static void RegisterRecurringJobs(IServiceProvider serviceProvider)
     {
         var recurringJobManager = serviceProvider.GetRequiredService<IRecurringJobManager>();
-        recurringJobManager.AddOrUpdate<IRabbitMqService>(
+
+        recurringJobManager.AddOrUpdate<INotificationService>(
             "scheduled-notification-admin-job",
-            service => service.PublishAsync(new Notification { Email = "admin@gmail.com", Message = "scheduled notification", IsRead = false }),
+            service => service.SendNotificationToUserAsync(new Notification 
+            { 
+                Email = "admin@gmail.com", 
+                Message = "Scheduled notification for admin", 
+                IsRead = false 
+            }),
             Cron.Minutely
         );
-        recurringJobManager.AddOrUpdate<IRabbitMqService>(
+
+        recurringJobManager.AddOrUpdate<INotificationService>(
             "scheduled-notification-user-job",
-            service => service.PublishAsync(new Notification { Email = "user@gmail.com", Message = "scheduled user notification", IsRead = false }),
+            service => service.SendNotificationToUserAsync(new Notification 
+            { 
+                Email = "user@gmail.com", 
+                Message = "Scheduled notification for user", 
+                IsRead = false 
+            }),
             Cron.Minutely
         );
     }

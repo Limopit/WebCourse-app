@@ -6,12 +6,22 @@ using Microsoft.AspNetCore.SignalR;
 
 namespace CourseAppNotificationService_Infrastructure.Services;
 
-public class NotificationService(IHubContext<NotificationHub> context, INotificationRepository repository): INotificationService
+public class NotificationService(IHubContext<NotificationHub> context, INotificationRepository repository, IRabbitMqService rabbitMqService): INotificationService
 {
     public async Task SendNotificationToUserAsync(Notification notification)
     {
         await repository.AddNotificationAsync(notification);
-        await context.Clients.User(notification.Email).SendAsync("ReceiveNotification", notification.Message);
+
+        if (NotificationHub.IsUserConnected(notification.Email))
+        {
+            Console.WriteLine($"{notification.Email} Notification sent");
+            await context.Clients.User(notification.Email).SendAsync("ReceiveNotification", notification.Message);
+        }
+        else
+        {
+            Console.WriteLine($"{notification.Email} Notification published");
+            await rabbitMqService.PublishAsync(notification);
+        }
     }
     
     public async Task SendNotificationAsync(Notification notification)
