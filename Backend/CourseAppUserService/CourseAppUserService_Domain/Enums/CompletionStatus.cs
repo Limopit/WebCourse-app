@@ -2,6 +2,6 @@ namespace CourseAppUserService_Domain.Enums;
 
 public enum CompletionStatus
 {
-    InProgress,
-    Completed
+    InProgress = 0,
+    Completed = 1
 }

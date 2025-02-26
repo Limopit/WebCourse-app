@@ -1,10 +1,12 @@
 using System.Security.Claims;
 using CourseAppUserService_Application.Interfaces.Services;
 using CourseAppUserService_Application.UserCreatedCourse.Commands.DeleteUserCreatedCourse;
+using CourseAppUserService_Application.UserCreatedCourse.Commands.SetUserCourseApprovementStatus;
 using CourseAppUserService_Application.UserCreatedCourse.Queries.GetUserCreatedCourses;
 using CourseAppUserService_Application.UserTakenCourse.Commands.CreateUserTakenCourse;
 using CourseAppUserService_Application.UserTakenCourse.Commands.DeleteUserTakenCourse;
 using CourseAppUserService_Application.UserTakenCourse.Queries.GetUsersTakenCourses;
+using CourseAppUserService_Domain.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -64,6 +66,15 @@ public class UserCourseController(IMediator mediator, ILoggerService logger) : B
         await Mediator.Send(new DeleteUserCreatedCourseCommand() { Id = id }, cancellationToken);
 
         Logger.Information($"{id} course was deleted");
+        return NoContent();
+    }
+
+    [Authorize(Roles = "Admin")]
+    [HttpPut("courses/created/{id}")]
+    public async Task<ActionResult> SetApprovementStatus(string id, ApprovementStatus status, CancellationToken cancellationToken)
+    {
+        await Mediator.Send(new SetUserCourseApprovementStatusCommand{ CourseId = id, Status = status }, cancellationToken);
+        
         return NoContent();
     }
 }

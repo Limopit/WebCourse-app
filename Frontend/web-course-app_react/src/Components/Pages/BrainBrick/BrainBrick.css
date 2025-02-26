@@ -178,3 +178,29 @@
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+.mode-toggle-button {
+    height: 40px;
+    padding: 10px 20px;
+    border: none;
+    background-color: #f0f0f0;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s, transform 0.2s;
+    font-size: 16px;
+    color: #555;
+    margin-left: 10px;
+}
+
+.mode-toggle-button.approved {
+    background-color: var(--secondary-color);
+    color: #fff;
+}
+
+.mode-toggle-button.unapproved {
+    background-color: var(--hover-color);
+    color: white;
+}
+
+.mode-toggle-button:hover {
+    transform: scale(1.05);
+}

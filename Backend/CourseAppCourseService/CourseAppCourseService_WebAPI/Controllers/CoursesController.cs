@@ -84,4 +84,17 @@ public class CoursesController(IMediator mediator, ILoggerService logger, GrpcUs
         return Ok(result);
 
     }
+    
+    [HttpGet("pending")]
+    public async Task<ActionResult<Guid>> GetPendingCourseList(CancellationToken cancellationToken)
+    {
+        Logger.Information("Getting Pending Course List");
+        var pendingCourseList = userServiceClient.GetPendingCourseList();
+        
+        Logger.Information("Getting Pending Courses info");
+        var result = await Mediator.Send(new GetCourseListInfoQuery() { CourseIds = pendingCourseList }, cancellationToken);
+
+        return Ok(result);
+
+    }
 }

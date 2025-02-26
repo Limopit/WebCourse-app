@@ -26,4 +26,10 @@ public class GrpcUserServiceClient(UserServiceRpc.UserService.UserServiceClient 
         var response = grpcClient.GetApprovedCourseList(new EmptyMessage());
         return response.CourseList.ToList();
     }
+    
+    public List<string> GetPendingCourseList()
+    {
+        var response = grpcClient.GetPendingCourseList(new EmptyMessage());
+        return response.CourseList.ToList();
+    }
 }

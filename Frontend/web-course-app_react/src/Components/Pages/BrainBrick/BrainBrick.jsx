@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { fetchCourses, fetchTakenCourses } from "../../../Api/fetchCourses";
+import {fetchCourses, fetchPendingCourses, fetchTakenCourses} from "../../../Api/fetchCourses";
 import "./BrainBrick.css";
 import Header from "../../Elements/Header/Header";
 import { useLocation } from 'react-router-dom';
@@ -14,6 +14,7 @@ import { fetchCourseDetails } from "../../../Api/fetchCourses";
 const BrainBrick = () => {
     const [courses, setCourses] = useState([]);
     const [takenCourses, setTakenCourses] = useState([]);
+    const [unapprovedCourses, setUnapprovedCourses] = useState([]);
     const [filteredCourses, setFilteredCourses] = useState([]);
     const [initialCourseOrder, setInitialCourseOrder] = useState([]);
     const [selectedCourse, setSelectedCourse] = useState(null);
@@ -27,8 +28,11 @@ const BrainBrick = () => {
     const [isSortDropdownOpen, setIsSortDropdownOpen] = useState(false);
     const [isFilterDropdownOpen, setIsFilterDropdownOpen] = useState(false);
 
+    const [showUnapproved, setShowUnapproved] = useState(false);
+
     const location = useLocation();
     const { isAuthenticated } = useContext(AuthContext);
+    const userRole = sessionStorage.getItem("role");
 
     useEffect(() => {
         const loadItems = async () => {
@@ -41,12 +45,18 @@ const BrainBrick = () => {
                 if (isAuthenticated) {
                     const takenCoursesData = await fetchTakenCourses();
                     setTakenCourses(takenCoursesData);
+
+                    if (userRole === "Admin") {
+                        const unapprovedData = await fetchPendingCourses();
+                        setUnapprovedCourses(unapprovedData);
+                    }
                 }
             } catch (error) {
                 console.error("Data loading error: ", error);
                 setCourses([]);
                 setFilteredCourses([]);
                 setInitialCourseOrder([]);
+                setUnapprovedCourses([]);
             } finally {
                 setTimeout(() => {
                     setLoading(false);
@@ -55,10 +65,10 @@ const BrainBrick = () => {
         };
 
         loadItems();
-    }, [isAuthenticated]);
+    }, [isAuthenticated, userRole]);
 
     useEffect(() => {
-        const filtered = courses.filter(course => {
+        const filtered = (showUnapproved ? unapprovedCourses : courses).filter(course => {
             const matchesSearch = course.title.toLowerCase().includes(search.toLowerCase());
 
             const isTaken = takenCourses.some(takenCourse => takenCourse.id === course.id);
@@ -71,7 +81,7 @@ const BrainBrick = () => {
         });
 
         setFilteredCourses(filtered);
-    }, [search, courses, statusFilter, takenCourses]);
+    }, [search, courses, unapprovedCourses, statusFilter, takenCourses, showUnapproved]);
 
     const resetSort = () => {
         setFilteredCourses([...initialCourseOrder]);
@@ -166,6 +176,14 @@ const BrainBrick = () => {
                             </button>
                         </Dropdown>
                     )}
+                    {isAuthenticated && userRole === "Admin" && (
+                        <button
+                            className={`mode-toggle-button ${showUnapproved ? "unapproved" : "approved"}`}
+                            onClick={() => setShowUnapproved(!showUnapproved)}
+                        >
+                            {showUnapproved ? "Show Approved" : "Show Unapproved"}
+                        </button>
+                    )}
                 </div>
 
                 <div className={`course-list-container ${loading ? "loading" : ""}`}>
@@ -196,6 +214,7 @@ const BrainBrick = () => {
                     course={selectedCourse}
                     onClose={handleCloseDetails}
                     takenCourses={takenCourses}
+                    showUnapproved={showUnapproved}
                 />
             )}
         </div>

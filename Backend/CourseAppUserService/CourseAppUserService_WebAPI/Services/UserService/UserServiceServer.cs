@@ -4,6 +4,7 @@ using CourseAppUserService_Application.Interfaces.Services;
 using CourseAppUserService_Application.UserCreatedCourse.Commands.CreateUserCreatedCourse;
 using CourseAppUserService_Application.UserCreatedCourse.Commands.DeleteUserCreatedCourse;
 using CourseAppUserService_Application.UserCreatedCourse.Queries.GetApprovedCourseList;
+using CourseAppUserService_Application.UserCreatedCourse.Queries.GetPendingCourseList;
 using CourseAppUserService_Application.UserTakenCourse.Commands.DeleteEachUserTakenCourse;
 using CourseAppUserService_Domain.Enums;
 using Grpc.Core;
@@ -12,7 +13,7 @@ using UserServiceRpc;
 
 namespace CourseAppUserService.Services.UserService
 {
-    public class UserService(IMediator mediator, IHttpContextService contextService) : UserServiceRpc.UserService.UserServiceBase
+    public class UserService(IMediator mediator) : UserServiceRpc.UserService.UserServiceBase
     {
         public override async Task<CreateRecordResponse> CreateUserCreatedCourseRecord(CreateCourseRequest request,
             ServerCallContext context)
@@ -59,6 +60,18 @@ namespace CourseAppUserService.Services.UserService
             var result = await mediator.Send(query);
 
             return new GetApprovedCourseListResponse()
+            {
+                CourseList = { result }
+            };
+        }
+        
+        public override async Task<GetPendingCourseListResponse> GetPendingCourseList(EmptyMessage request, ServerCallContext context)
+        {
+            var query = new GetPendingCourseListQuery();
+            
+            var result = await mediator.Send(query);
+
+            return new GetPendingCourseListResponse()
             {
                 CourseList = { result }
             };

@@ -2,7 +2,7 @@ namespace CourseAppUserService_Domain.Enums;
 
 public enum ApprovementStatus
 {
-    Pending,
-    Accepted,
-    Rejected
+    Pending = 0,
+    Accepted = 1,
+    Rejected = 2
 }

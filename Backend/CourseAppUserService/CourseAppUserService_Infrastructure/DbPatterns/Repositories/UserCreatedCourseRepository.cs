@@ -15,10 +15,10 @@ public class UserCreatedCourseRepository(UserServiceDbContext context)
             .ToListAsync(token);
     }
 
-    public async Task<List<string>> GetUserApprovedCoursesAsync(CancellationToken token)
+    public async Task<List<string>> GetUserCoursesAsync(ApprovementStatus status, CancellationToken token)
     {
         return await context.UserCreatedCourses
-            .Where(course => course.ApprovementStatus == ApprovementStatus.Accepted.ToString())
+            .Where(course => course.ApprovementStatus == status.ToString())
             .Select(course => course.CourseId)
             .ToListAsync(token);
     }

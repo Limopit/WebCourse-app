@@ -1,12 +1,15 @@
 import api from "../Interceptors/InterceptorSetup";
+import {jwtDecode} from "jwt-decode";
 
 const API_BASE_URL = '/auth';
 
 export const login = async (email, password) => {
     const response = await api.post(`${API_BASE_URL}/login`, { email, password });
     const { jwt } = response.data;
-
     sessionStorage.setItem("accessToken", jwt);
+    
+    const payload = jwtDecode(jwt)
+    sessionStorage.setItem("role", payload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"]);
     return true;
 };
 

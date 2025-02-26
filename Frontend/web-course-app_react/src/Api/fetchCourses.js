@@ -29,3 +29,13 @@ export const fetchCourseDetails = async (id) => {
         return null;
     }
 };
+
+export const fetchPendingCourses = async () => {
+    try {
+        const response = await api.get("/courses/pending");
+        return response.data.courses;
+    } catch (error) {
+        console.error("Loading error: ", error);
+        return [];
+    }
+};

@@ -59,7 +59,7 @@ public class DbInitializer
                 CourseId = "thirdCourse",
                 UserId = AdminId.ToString(),
                 ApprovementDate = null,
-                ApprovementStatus = ApprovementStatus.Pending.ToString()
+                ApprovementStatus = ApprovementStatus.Rejected.ToString()
             },
             new UserCreatedCourses()
             {
