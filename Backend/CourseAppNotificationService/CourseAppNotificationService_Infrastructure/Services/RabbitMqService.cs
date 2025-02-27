@@ -4,12 +4,14 @@ using CourseAppNotificationService_Domain;
 using CourseAppNotificationService_Domain.Interfaces.Services;
 using Microsoft.Extensions.Configuration;
 using RabbitMQ.Client;
+using RabbitMQ.Client.Events;
 
 public class RabbitMqService : IRabbitMqService, IAsyncDisposable
 {
     private readonly IConnection _connection;
     private readonly IChannel _channel;
     private readonly string _queueName;
+    private readonly string _externalQueueName;
 
     public RabbitMqService(IConfiguration configuration)
     {
@@ -18,6 +20,7 @@ public class RabbitMqService : IRabbitMqService, IAsyncDisposable
         var userName = configuration["RabbitMQ:UserName"];
         var password = configuration["RabbitMQ:Password"];
         _queueName = configuration["RabbitMQ:QueueName"];
+        _externalQueueName = configuration["RabbitMQ:ExternalQueueName"];
 
         Console.WriteLine($"Queue name: {_queueName}");
 
@@ -33,7 +36,7 @@ public class RabbitMqService : IRabbitMqService, IAsyncDisposable
         _channel = _connection.CreateChannelAsync().Result;
 
         _channel.QueueDeclareAsync(_queueName, durable: true, exclusive: false, autoDelete: false);
-        Console.WriteLine($"Queue declared: {_queueName}");
+        _channel.QueueDeclareAsync(_externalQueueName, durable: true, exclusive: false, autoDelete: false);
     }
 
     public async Task PublishAsync(Notification notification)
@@ -93,7 +96,27 @@ public class RabbitMqService : IRabbitMqService, IAsyncDisposable
 
         return notifications;
     }
+    
+    public async Task ConsumeAsync(Func<Notification, Task> handler)
+    {
+        var consumer = new AsyncEventingBasicConsumer(_channel);
+        consumer.ReceivedAsync += async (model, ea) =>
+        {
+            var body = ea.Body.ToArray();
+            var message = Encoding.UTF8.GetString(body);
+            var notification = JsonSerializer.Deserialize<Notification>(message);
 
+            if (notification != null)
+            {
+                Console.WriteLine($"Received message from RabbitMQ: {notification.Message}");
+                await handler(notification);
+            }
+
+            await _channel.BasicAckAsync(ea.DeliveryTag, false);
+        };
+
+        await _channel.BasicConsumeAsync(_externalQueueName, false, consumer);
+    }
 
     public async ValueTask DisposeAsync()
     {

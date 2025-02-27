@@ -16,8 +16,7 @@ public static class RecurringJobs
             service => service.SendNotificationToUserAsync(new Notification 
             { 
                 Email = "admin@gmail.com", 
-                Message = "Scheduled notification for admin", 
-                IsRead = false 
+                Message = "Scheduled notification for admin",
             }),
             Cron.Minutely
         );
@@ -28,7 +27,6 @@ public static class RecurringJobs
             { 
                 Email = "user@gmail.com", 
                 Message = "Scheduled notification for user", 
-                IsRead = false 
             }),
             Cron.Minutely
         );

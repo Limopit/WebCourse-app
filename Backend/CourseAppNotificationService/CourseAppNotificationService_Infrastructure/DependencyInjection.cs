@@ -35,6 +35,7 @@ public static class DependencyInjection
         services.AddScoped<INotificationRepository, NotificationRepository>();
         services.AddScoped<INotificationService, NotificationService>();
         services.AddSingleton<IRabbitMqService, RabbitMqService>();
+        services.AddHostedService<NotificationCollectionService>();
 
         return services;
     }

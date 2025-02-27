@@ -34,8 +34,6 @@ public static class DbInitializer
                 NotificationId = Guid.NewGuid(),
                 Message = "Спасибо за регистрацию в нашем сервисе.",
                 Timestamp = DateTime.UtcNow,
-                IsRead = false,
-                ActualTill = DateTime.UtcNow.AddDays(7)
             },
             new Notification
             {
@@ -43,8 +41,6 @@ public static class DbInitializer
                 NotificationId = Guid.NewGuid(),
                 Message = "Мы выпустили новую версию приложения.",
                 Timestamp = DateTime.UtcNow,
-                IsRead = false,
-                ActualTill = DateTime.UtcNow.AddDays(5)
             }
         };
 

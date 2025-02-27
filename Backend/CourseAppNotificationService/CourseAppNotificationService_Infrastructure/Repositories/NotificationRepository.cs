@@ -39,19 +39,6 @@ public class NotificationRepository(IDatabase database) : INotificationRepositor
         return notifications;
     }
 
-    public async Task MarkAsReadAsync(string email, Guid notificationId)
-    {
-        var key = $"notifications:{email}:{notificationId}";
-        var value = await database.StringGetAsync(key);
-
-        if (value.HasValue)
-        {
-            var notification = JsonSerializer.Deserialize<Notification>(value);
-            notification.IsRead = true;
-            await database.StringSetAsync(key, JsonSerializer.Serialize(notification));
-        }
-    }
-
     public async Task DeleteNotificationAsync(string email, Guid notificationId)
     {
         var key = $"notifications:{email}:{notificationId}";

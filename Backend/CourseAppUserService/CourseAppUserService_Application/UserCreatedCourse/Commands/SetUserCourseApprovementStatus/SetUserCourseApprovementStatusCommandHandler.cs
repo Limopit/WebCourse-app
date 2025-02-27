@@ -1,9 +1,9 @@
 using CourseAppUserService_Application.Common.Exceptions;
 using CourseAppUserService_Application.Interfaces;
-using CourseAppUserService_Application.UserCreatedCourse.Commands.SetUserCourseApprovementStatus;
+using CourseAppUserService_Domain.Enums;
 using MediatR;
 
-namespace CourseAppUserService_Application.UserCreatedCourse.Commands.ApproveUserCourse;
+namespace CourseAppUserService_Application.UserCreatedCourse.Commands.SetUserCourseApprovementStatus;
 
 public class SetUserCourseApprovementStatusCommandHandler(IUnitOfWork unitOfWork): IRequestHandler<SetUserCourseApprovementStatusCommand>
 {
@@ -16,6 +16,11 @@ public class SetUserCourseApprovementStatusCommandHandler(IUnitOfWork unitOfWork
         }
         
         course.ApprovementStatus = request.Status.ToString();
+        if (request.Status == ApprovementStatus.Accepted)
+        {
+            course.ApprovementDate = DateTime.UtcNow;
+        }
+        
         await unitOfWork.UserCreatedCourses.UpdateAsync(course);
         await unitOfWork.SaveChangesAsync(cancellationToken);
     }

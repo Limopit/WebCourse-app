@@ -42,6 +42,7 @@ public static class DependencyInjection
         LoggingConfig.ConfigureLogging(configuration);
         services.AddSingleton(Log.Logger);
         services.AddSingleton<ILoggerService, LoggerService>();
+        services.AddSingleton<IRabbitMqService, RabbitMqService>();
         
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IUserTakenCourseRepository, UserTakenCourseRepository>();
@@ -50,6 +51,7 @@ public static class DependencyInjection
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IHttpContextService, HttpContextService>();
+        services.AddScoped<INotificationService, NotificationService>();
         services.AddTransient<IMapperService, MapperService>();
     
         return services;

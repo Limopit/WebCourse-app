@@ -2,6 +2,7 @@ using System.Security.Claims;
 using CourseAppUserService_Application.Interfaces.Services;
 using CourseAppUserService_Application.UserCreatedCourse.Commands.DeleteUserCreatedCourse;
 using CourseAppUserService_Application.UserCreatedCourse.Commands.SetUserCourseApprovementStatus;
+using CourseAppUserService_Application.UserCreatedCourse.Queries.GetUserCourseCreator;
 using CourseAppUserService_Application.UserCreatedCourse.Queries.GetUserCreatedCourses;
 using CourseAppUserService_Application.UserTakenCourse.Commands.CreateUserTakenCourse;
 using CourseAppUserService_Application.UserTakenCourse.Commands.DeleteUserTakenCourse;
@@ -14,7 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CourseAppUserService.Controllers;
 
 [Route("api/Users")]
-public class UserCourseController(IMediator mediator, ILoggerService logger) : BaseController(mediator, logger)
+public class UserCourseController(IMediator mediator, ILoggerService logger, INotificationService notificationService) : BaseController(mediator, logger)
 {
     [Authorize]
     [HttpPost("courses/taken")]
@@ -74,6 +75,9 @@ public class UserCourseController(IMediator mediator, ILoggerService logger) : B
     public async Task<ActionResult> SetApprovementStatus(string id, ApprovementStatus status, CancellationToken cancellationToken)
     {
         await Mediator.Send(new SetUserCourseApprovementStatusCommand{ CourseId = id, Status = status }, cancellationToken);
+
+        var email = await Mediator.Send(new GetUserCourseCreatorQuery() { CourseId = id });
+        await notificationService.PerformAction(email, $"One of your courses` status has been changed. Current: {status.ToString()}");
         
         return NoContent();
     }
