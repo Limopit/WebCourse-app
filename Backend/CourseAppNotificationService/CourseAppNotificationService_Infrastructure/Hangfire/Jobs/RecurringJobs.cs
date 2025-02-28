@@ -15,8 +15,10 @@ public static class RecurringJobs
             "scheduled-notification-admin-job",
             service => service.SendNotificationToUserAsync(new Notification 
             { 
+                NotificationId = Guid.NewGuid(),
                 Email = "admin@gmail.com", 
                 Message = "Scheduled notification for admin",
+                Timestamp = DateTime.UtcNow
             }),
             Cron.Minutely
         );
@@ -25,8 +27,10 @@ public static class RecurringJobs
             "scheduled-notification-user-job",
             service => service.SendNotificationToUserAsync(new Notification 
             { 
+                NotificationId = Guid.NewGuid(),
                 Email = "user@gmail.com", 
-                Message = "Scheduled notification for user", 
+                Message = "Scheduled notification for user",
+                Timestamp = DateTime.UtcNow
             }),
             Cron.Minutely
         );

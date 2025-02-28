@@ -10,6 +10,7 @@ using CourseAppCourseService_Infrastructure.Services.UserService;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using CourseVm = CourseAppCourseService_Application.Courses.Queries.GetCourseListInfo.CourseVm;
 
 namespace CourseAppCourseService.Controllers;
 
@@ -73,27 +74,42 @@ public class CoursesController(IMediator mediator, ILoggerService logger, GrpcUs
     }
     
     [HttpGet("approved")]
-    public async Task<ActionResult<Guid>> GetApprovedCourseList(CancellationToken cancellationToken)
+    public async Task<ActionResult<CourseVm>> GetApprovedCourseList(
+        [FromQuery] int pageNumber = 1, 
+        [FromQuery] int pageSize = 10, 
+        CancellationToken cancellationToken = default)
     {
         Logger.Information("Getting Approved Course List");
         var approvedCourseList = userServiceClient.GetApprovedCourseList();
-        
+    
         Logger.Information("Getting Approved Courses info");
-        var result = await Mediator.Send(new GetCourseListInfoQuery() { CourseIds = approvedCourseList }, cancellationToken);
+        var result = await Mediator.Send(new GetCourseListInfoQuery 
+        { 
+            CourseIds = approvedCourseList,
+            PageNumber = pageNumber,
+            PageSize = pageSize
+        }, cancellationToken);
 
         return Ok(result);
-
     }
     
     [HttpGet("pending")]
-    public async Task<ActionResult<Guid>> GetPendingCourseList(CancellationToken cancellationToken)
+    public async Task<ActionResult<Guid>> GetPendingCourseList(
+        [FromQuery] int pageNumber = 1, 
+        [FromQuery] int pageSize = 10, 
+        CancellationToken cancellationToken = default)
     {
         Logger.Information("Getting Pending Course List");
         var pendingCourseList = userServiceClient.GetPendingCourseList();
         
         Logger.Information("Getting Pending Courses info");
-        var result = await Mediator.Send(new GetCourseListInfoQuery() { CourseIds = pendingCourseList }, cancellationToken);
-
+        var result = await Mediator.Send(new GetCourseListInfoQuery 
+        { 
+            CourseIds = pendingCourseList,
+            PageNumber = pageNumber,
+            PageSize = pageSize
+        }, cancellationToken);
+        
         return Ok(result);
 
     }

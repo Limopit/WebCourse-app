@@ -49,7 +49,7 @@ public class NotificationHub(IRabbitMqService rabbitMqService) : Hub
         Console.WriteLine(notifications.Count());
         foreach (var notification in notifications)
         {
-            await Clients.User(email).SendAsync("ReceiveNotification", notification.Message);
+            await Clients.User(email).SendAsync("ReceiveNotification", notification);
             Console.WriteLine($"Pending notification sent to {email}: {notification.Message}");
         }
     }

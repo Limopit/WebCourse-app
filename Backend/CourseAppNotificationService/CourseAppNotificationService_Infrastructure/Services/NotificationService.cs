@@ -15,7 +15,7 @@ public class NotificationService(IHubContext<NotificationHub> context, INotifica
         if (NotificationHub.IsUserConnected(notification.Email))
         {
             Console.WriteLine($"{notification.Email} Notification sent");
-            await context.Clients.User(notification.Email).SendAsync("ReceiveNotification", notification.Message);
+            await context.Clients.User(notification.Email).SendAsync("ReceiveNotification", notification);
         }
         else
         {
@@ -27,6 +27,6 @@ public class NotificationService(IHubContext<NotificationHub> context, INotifica
     public async Task SendNotificationAsync(Notification notification)
     {
         await repository.AddNotificationAsync(notification);
-        await context.Clients.All.SendAsync("ReceiveNotification", notification.Message);
+        await context.Clients.All.SendAsync("ReceiveNotification", notification);
     }
 }

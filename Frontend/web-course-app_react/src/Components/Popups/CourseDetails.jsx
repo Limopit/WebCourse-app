@@ -28,7 +28,6 @@ const CourseDetails = ({ course, onClose, takenCourses, showUnapproved }) => {
         try {
             await approveUserCourse(id);
             onClose();
-            window.location.reload();
         } catch (error) {
             console.error("Error approving course:", error);
             alert("Failed to approve course.");

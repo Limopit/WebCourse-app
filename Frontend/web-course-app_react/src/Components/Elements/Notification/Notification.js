@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { signalRService } from '../../../Services/SignalRService';
-import "./Notification.css"
+import "./Notification.css";
 
 const Notification = ({ userEmail }) => {
     const [notifications, setNotifications] = useState([]);
@@ -9,12 +9,17 @@ const Notification = ({ userEmail }) => {
         if (!userEmail) return;
 
         const handleNotificationsUpdate = (newNotifications) => {
-            setNotifications(newNotifications);
+            setNotifications((prevNotifications) => [...newNotifications, ...prevNotifications]);
         };
 
         signalRService.addListener(handleNotificationsUpdate);
 
-        setNotifications(signalRService.getNotifications());
+        const loadNotifications = async () => {
+            const notificationsFromServer = await signalRService.getNotifications(userEmail);
+            setNotifications(notificationsFromServer);
+        };
+
+        loadNotifications();
 
         signalRService.startConnection(userEmail);
 
@@ -23,12 +28,22 @@ const Notification = ({ userEmail }) => {
         };
     }, [userEmail]);
 
+    const formatTimestamp = (timestamp) => {
+        const date = new Date(timestamp);
+        return date.toLocaleString();
+    };
+
     return (
         <div className="notification-dropdown">
             <h3>Notifications</h3>
             <ul>
-                {notifications.map((msg, index) => (
-                    <li key={index}>{msg}</li>
+                {notifications.map((notification) => (
+                    <li key={notification.notificationId}>
+                        <div className="notification-message">{notification.message}</div>
+                        <div className="notification-timestamp">
+                            {formatTimestamp(notification.timestamp)}
+                        </div>
+                    </li>
                 ))}
             </ul>
         </div>
