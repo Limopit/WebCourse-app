@@ -69,6 +69,7 @@ services:
     environment:
       - DOTNET_ENVIRONMENT=Development
       - Authority=https://localhost:5001
+      - ASPNETCORE_URLS=http://0.0.0.0:5001
       - ASPNETCORE_Kestrel__Certificates__Default__Path=${KESTREL_CERT_PATH}
       - ASPNETCORE_Kestrel__Certificates__Default__Password=${KESTREL_CERT_PASS}
     volumes:

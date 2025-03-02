@@ -73,7 +73,7 @@ builder.Services.AddGrpcClient<UserServiceRpc.UserService.UserServiceClient>(opt
 builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer(options =>
     {
-        options.Authority = "https://localhost:5001";
+        options.Authority = "http://localhost:5001";
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
@@ -82,7 +82,8 @@ builder.Services.AddAuthentication("Bearer")
             ValidateIssuerSigningKey = true,
             ValidIssuer = "UserService",
             ValidAudience = "OtherServices",
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("ThisKeyWillMakeMyJWTTokenTheBest"))
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("ThisKeyWillMakeMyJWTTokenTheBest")),
+            ClockSkew = TimeSpan.Zero
         };
     });
 

@@ -39,3 +39,21 @@ export const logout = async () => {
 
     window.location.reload();
 };
+
+export const refreshToken = async () => {
+    try {
+        console.log("Refreshing token");
+        const response = await api.post(`${API_BASE_URL}/refresh`, {}, {
+            withCredentials: true,
+        });
+
+        const accessToken = response.data;
+
+        localStorage.setItem('accessToken', accessToken);
+
+        return accessToken;
+    } catch (error) {
+        console.error('Failed to refresh token:', error);
+        throw new Error('Failed to refresh token');
+    }
+};

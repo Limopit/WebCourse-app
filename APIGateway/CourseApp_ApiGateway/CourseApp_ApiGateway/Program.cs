@@ -15,7 +15,7 @@ builder.Configuration.AddOcelotWithSwaggerSupport((o) =>
 builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer("Bearer", options =>
     {
-        options.Authority = "https://localhost:5001";
+        options.Authority = "http://localhost:5001";
         options.RequireHttpsMetadata = false;
         options.Audience = "api_scope";
     });

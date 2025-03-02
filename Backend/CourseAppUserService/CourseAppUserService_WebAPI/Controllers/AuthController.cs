@@ -72,12 +72,15 @@ public class AuthController(IMediator mediator, ILoggerService logger) : BaseCon
         return Ok(result);
     }
     
-    [Authorize]
     [HttpPost("refresh")]
-    public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenCommand command, CancellationToken token)
+    public async Task<IActionResult> RefreshToken(CancellationToken token)
     {
+        if (!Request.Cookies.TryGetValue("RefreshToken", out var refreshToken))
+        {
+            return Unauthorized("Refresh token not found");
+        }
         Logger.Information("Refreshing jwt token");
-        var jwt = await Mediator.Send(command, token);
+        var jwt = await Mediator.Send(new RefreshTokenCommand() { RefreshToken = refreshToken}, token);
         
         Logger.Information("Jwt refreshed successfully");
         return Ok(jwt);
