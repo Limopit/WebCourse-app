@@ -3,7 +3,6 @@ WORKDIR /src
 
 COPY Backend/CourseAppNotificationService/*.sln ./
 
-COPY Backend/CourseAppNotificationService/CourseAppNotificationService_Application/*.csproj CourseAppNotificationService_Application/
 COPY Backend/CourseAppNotificationService/CourseAppNotificationService_Domain/*.csproj CourseAppNotificationService_Domain/
 COPY Backend/CourseAppNotificationService/CourseAppNotificationService_Infrastructure/*.csproj CourseAppNotificationService_Infrastructure/
 COPY Backend/CourseAppNotificationService/CourseAppNotificationService_WebAPI/*.csproj CourseAppNotificationService_WebAPI/

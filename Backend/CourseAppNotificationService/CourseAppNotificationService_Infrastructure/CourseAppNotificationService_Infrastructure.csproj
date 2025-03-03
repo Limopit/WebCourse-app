@@ -19,7 +19,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\CourseAppNotificationService_Application\CourseAppNotificationService_Application.csproj" />
       <ProjectReference Include="..\CourseAppNotificationService_Domain\CourseAppNotificationService_Domain.csproj" />
     </ItemGroup>
 

@@ -4,5 +4,4 @@ public interface INotificationService
 {
     Task SendNotificationToUserAsync(Notification notification);
     Task SendNotificationAsync(Notification notification);
-    
 }

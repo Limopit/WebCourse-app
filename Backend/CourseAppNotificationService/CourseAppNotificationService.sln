@@ -6,8 +6,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CourseAppNotificationServic
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CourseAppNotificationService_Infrastructure", "CourseAppNotificationService_Infrastructure\CourseAppNotificationService_Infrastructure.csproj", "{C6A34281-F74D-4970-8B88-F5639EDC55B8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CourseAppNotificationService_Application", "CourseAppNotificationService_Application\CourseAppNotificationService_Application.csproj", "{B00368F3-4E97-4FDD-A6E4-867878103B36}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,9 +24,5 @@ Global
 		{C6A34281-F74D-4970-8B88-F5639EDC55B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C6A34281-F74D-4970-8B88-F5639EDC55B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C6A34281-F74D-4970-8B88-F5639EDC55B8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B00368F3-4E97-4FDD-A6E4-867878103B36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B00368F3-4E97-4FDD-A6E4-867878103B36}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B00368F3-4E97-4FDD-A6E4-867878103B36}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B00368F3-4E97-4FDD-A6E4-867878103B36}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
