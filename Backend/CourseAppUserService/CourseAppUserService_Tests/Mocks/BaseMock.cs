@@ -1,11 +1,11 @@
 using CourseAppUserService_Application.Interfaces;
 using Moq;
 
-namespace CourseAppUserService_Tests;
+namespace CourseAppUserService_Tests.Mocks;
 
-public class UserServiceDbContextFactory
+public abstract class BaseMock
 {
-    public readonly Mock<IUnitOfWork> UnitOfWorkMock = new();
+    public Mock<IUnitOfWork> UnitOfWorkMock { get; private set; } = new();
 
     public void SetupSaveChangesAsync(int result = 1, CancellationToken cancellationToken = default)
     {
