@@ -3,10 +3,11 @@ using CourseAppUserService_Application.UserTakenCourse.Commands.CreateUserTakenC
 using CourseAppUserService_Domain.Entities;
 using CourseAppUserService_Tests.Fakers;
 using CourseAppUserService_Tests.Mocks.UserTakenCourse;
+using Usr = CourseAppUserService_Domain.Entities.User;
 using FluentAssertions;
 using Moq;
 
-namespace CourseAppUserService_Tests.Tests.Users.CommandsTests;
+namespace CourseAppUserService_Tests.Tests.Users.CommandsTests.UserTakenCourse;
 
 public class CreateUserTakenCourseTest(CreateUserTakenCourseMock mock) : IClassFixture<CreateUserTakenCourseMock>
 {
@@ -79,7 +80,7 @@ public class CreateUserTakenCourseTest(CreateUserTakenCourseMock mock) : IClassF
 
         mock.UnitOfWorkMock
             .Setup(uow => uow.Users.FindUserByEmailAsync(email))
-            .ReturnsAsync((User)null);
+            .ReturnsAsync((Usr)null);
 
         // Act
         Func<Task> act = async () => await mock.Handler.Handle(command, CancellationToken.None);

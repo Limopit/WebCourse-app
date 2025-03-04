@@ -6,7 +6,7 @@ using CourseAppUserService_Tests.Mocks.UserTakenCourse;
 using FluentAssertions;
 using Moq;
 
-namespace CourseAppUserService_Tests.Tests.Users.QueryTests;
+namespace CourseAppUserService_Tests.Tests.Users.QueryTests.UserTakenCourse;
 
 public class GetUsersTakenCoursesTests(GetUsersTakenCoursesMock mock) : IClassFixture<GetUsersTakenCoursesMock>
 {

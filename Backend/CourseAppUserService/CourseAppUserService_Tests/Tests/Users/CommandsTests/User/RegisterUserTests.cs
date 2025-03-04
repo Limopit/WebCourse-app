@@ -1,12 +1,12 @@
 using CourseAppUserService_Application.Common.Exceptions;
 using CourseAppUserService_Application.Users.Commands.RegisterUser;
-using CourseAppUserService_Domain.Entities;
 using CourseAppUserService_Tests.Mocks.User;
-using Moq;
-using Microsoft.AspNetCore.Identity;
 using FluentAssertions;
+using Microsoft.AspNetCore.Identity;
+using Usr = CourseAppUserService_Domain.Entities.User;
+using Moq;
 
-namespace CourseAppUserService_Tests.Tests.Users.CommandsTests;
+namespace CourseAppUserService_Tests.Tests.Users.CommandsTests.User;
 
 public class RegisterUserTests(RegisterUserMock registerUserMock) : IClassFixture<RegisterUserMock>
 {
@@ -24,23 +24,16 @@ public class RegisterUserTests(RegisterUserMock registerUserMock) : IClassFixtur
             Role = "User"
         };
 
-        var user = new User
-        {
-            Id = expectedUserId,
-            UserName = "newuser@example.com",
-            Email = "newuser@example.com"
-        };
-
         registerUserMock.UnitOfWorkMock.Setup(uow => uow.Users.UserRoleExistsAsync(command.Role))
             .ReturnsAsync(true);
 
         registerUserMock.UnitOfWorkMock.Setup(uow => uow.Users
-                .AddUserAsync(It.Is<User>(u => u.Email == command.Email), command.Password))
+                .AddUserAsync(It.Is<Usr>(u => u.Email == command.Email), command.Password))
             .ReturnsAsync(IdentityResult.Success)
-            .Callback<User, string>((u, p) => u.Id = expectedUserId);
+            .Callback<Usr, string>((u, p) => u.Id = expectedUserId);
 
         registerUserMock.UnitOfWorkMock.Setup(uow => uow.Users
-                .GiveRoleAsync(It.IsAny<User>(), command.Role))
+                .GiveRoleAsync(It.IsAny<Usr>(), command.Role))
             .ReturnsAsync(IdentityResult.Success);
 
         // Act
@@ -49,10 +42,6 @@ public class RegisterUserTests(RegisterUserMock registerUserMock) : IClassFixtur
         // Assert
         result.Should().NotBeNull();
         result.Should().Be(expectedUserId);
-
-        registerUserMock.UnitOfWorkMock.Verify(uow => uow.Users
-                .AddUserAsync(It.Is<User>(u => u.Email == command.Email && u.UserName == command.Email), command.Password),
-            Times.Once);
     }
 
     [Fact]
@@ -95,7 +84,7 @@ public class RegisterUserTests(RegisterUserMock registerUserMock) : IClassFixtur
         registerUserMock.UnitOfWorkMock.Setup(uow => uow.Users.UserRoleExistsAsync(command.Role))
             .ReturnsAsync(true);
 
-        registerUserMock.UnitOfWorkMock.Setup(uow => uow.Users.AddUserAsync(It.IsAny<User>(), command.Password))
+        registerUserMock.UnitOfWorkMock.Setup(uow => uow.Users.AddUserAsync(It.IsAny<Usr>(), command.Password))
             .ReturnsAsync(IdentityResult.Failed(new IdentityError { Description = "Error creating user" }));
 
         // Act

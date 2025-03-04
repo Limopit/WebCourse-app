@@ -6,7 +6,7 @@ using CourseAppUserService_Tests.Mocks.UserCreatedCourse;
 using FluentAssertions;
 using Moq;
 
-namespace CourseAppUserService_Tests.Tests.Users.QueryTests;
+namespace CourseAppUserService_Tests.Tests.Users.QueryTests.UserCreatedCourse;
 
 public class GetUserCourseCreatorTests(GetUserCourseCreatorMock mock) : IClassFixture<GetUserCourseCreatorMock>
 {
