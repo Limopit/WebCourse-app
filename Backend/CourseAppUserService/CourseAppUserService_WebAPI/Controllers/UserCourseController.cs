@@ -76,7 +76,7 @@ public class UserCourseController(IMediator mediator, ILoggerService logger, INo
     {
         await Mediator.Send(new SetUserCourseApprovementStatusCommand{ CourseId = id, Status = status }, cancellationToken);
 
-        var email = await Mediator.Send(new GetUserCourseCreatorQuery() { CourseId = id });
+        var email = await Mediator.Send(new GetUserCourseCreatorQuery() { CourseId = id }, cancellationToken);
         await notificationService.PerformAction(email, $"One of your courses` status has been changed. Current: {status.ToString()}");
         
         return NoContent();
