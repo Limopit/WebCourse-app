@@ -18,6 +18,7 @@ public class UsersController(IMediator mediator, ILoggerService logger) : BaseCo
         await Mediator.Send(command, cancellationToken);
         
         Logger.Information("User info was updated successfully");
+        
         return Ok();
     }
     
@@ -28,6 +29,7 @@ public class UsersController(IMediator mediator, ILoggerService logger) : BaseCo
         await Mediator.Send(command, cancellationToken);
         
         Logger.Information("User password was updated successfully");
+        
         return Ok();
     }
 
@@ -38,6 +40,7 @@ public class UsersController(IMediator mediator, ILoggerService logger) : BaseCo
         var result = await Mediator.Send(new GetUserCommand{Email = email}, cancellationToken);
         
         Logger.Information("User info was retrieved successfully");
+        
         return Ok(result);
     }
     
@@ -48,6 +51,7 @@ public class UsersController(IMediator mediator, ILoggerService logger) : BaseCo
         await Mediator.Send(new DeleteUserCommand{Email = email}, cancellationToken);
         
         Logger.Information("User was deleted successfully");
+        
         return Ok();
     }
 }

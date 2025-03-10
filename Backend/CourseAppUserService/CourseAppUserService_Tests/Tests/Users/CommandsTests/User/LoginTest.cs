@@ -1,11 +1,11 @@
 using CourseAppUserService_Application.Common.Exceptions;
 using CourseAppUserService_Application.Users.Commands.LoginUser;
-using CourseAppUserService_Domain.Entities;
-using CourseAppUserService_Tests.Mocks;
-using Moq;
+using CourseAppUserService_Tests.Mocks.User;
 using FluentAssertions;
+using Usr = CourseAppUserService_Domain.Entities.User;
+using Moq;
 
-namespace CourseAppUserService_Tests.Tests.Users.CommandsTests;
+namespace CourseAppUserService_Tests.Tests.Users.CommandsTests.User;
 
 public class LoginTests(LoginUserMock loginUserMock) : IClassFixture<LoginUserMock>
 {
@@ -13,7 +13,7 @@ public class LoginTests(LoginUserMock loginUserMock) : IClassFixture<LoginUserMo
     public async Task Handle_ShouldReturnTokens_WhenUserIsValid()
     {
         // Arrange
-        var user = new User
+        var user = new Usr
         {
             Id = Guid.NewGuid().ToString(),
             UserName = "testuser",
@@ -49,8 +49,8 @@ public class LoginTests(LoginUserMock loginUserMock) : IClassFixture<LoginUserMo
         };
         var cancellationToken = new CancellationToken();
 
-        loginUserMock.UnitOfWorkMock.Setup(uow => uow.Users.FindUserByEmailAsync(command.Email)).ReturnsAsync((User)null);
-        loginUserMock.UserManagerMock.Setup(um => um.FindByEmailAsync(command.Email)).ReturnsAsync((User)null);
+        loginUserMock.UnitOfWorkMock.Setup(uow => uow.Users.FindUserByEmailAsync(command.Email)).ReturnsAsync((Usr)null);
+        loginUserMock.UserManagerMock.Setup(um => um.FindByEmailAsync(command.Email)).ReturnsAsync((Usr)null);
 
         // Act
         Func<Task> act = async () => await loginUserMock.Handler.Handle(command, cancellationToken);
@@ -63,7 +63,7 @@ public class LoginTests(LoginUserMock loginUserMock) : IClassFixture<LoginUserMo
     public async Task Handle_ShouldThrowException_WhenPasswordIsInvalid()
     {
         // Arrange
-        var user = new User
+        var user = new Usr
         {
             Id = Guid.NewGuid().ToString(),
             UserName = "testuser",
