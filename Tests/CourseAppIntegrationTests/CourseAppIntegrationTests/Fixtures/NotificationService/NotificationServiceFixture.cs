@@ -32,7 +32,6 @@ public class NotificationServiceFixture: IAsyncLifetime
     public async Task InitializeAsync()
     {
         await _network.CreateAsync();
-
         await WebApiNotificationContainer.StartAsync();
     }
 

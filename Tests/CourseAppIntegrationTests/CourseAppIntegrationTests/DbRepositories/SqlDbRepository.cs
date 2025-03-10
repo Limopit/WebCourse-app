@@ -16,6 +16,7 @@ public static class SqlDbRepository
         command.Parameters.AddWithValue("@Id", courseId);
 
         var count = (int)await command.ExecuteScalarAsync();
+        
         return count > 0;
     }
 }

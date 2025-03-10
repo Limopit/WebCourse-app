@@ -19,6 +19,7 @@ namespace CourseAppIntegrationTests.DbRepositories
             var filter = Builders<BsonDocument>.Filter.Eq("_id", ObjectId.Parse(courseId));
 
             var result = await collection.Find(filter).FirstOrDefaultAsync();
+            
             return result != null;
         }
 

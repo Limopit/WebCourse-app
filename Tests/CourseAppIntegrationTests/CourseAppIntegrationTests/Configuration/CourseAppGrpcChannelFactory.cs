@@ -1,6 +1,6 @@
 using Grpc.Net.Client;
 
-namespace CourseAppIntegrationTests;
+namespace CourseAppIntegrationTests.Configuration;
 
 public class CourseAppGrpcChannelFactory: IDisposable
 {

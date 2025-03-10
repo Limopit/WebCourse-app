@@ -33,6 +33,7 @@ public class UserServiceContainerTests(UserServiceWithDbFixture fixture, ITestOu
         testOutputHelper.WriteLine($"Status Code: {response.StatusCode}");
         var responseBody = await response.Content.ReadAsStringAsync();
         testOutputHelper.WriteLine($"Response Body: {responseBody}");
+        
         response.EnsureSuccessStatusCode();
     }
     
@@ -64,14 +65,16 @@ public class UserServiceContainerTests(UserServiceWithDbFixture fixture, ITestOu
         testOutputHelper.WriteLine($"Status Code: {response.StatusCode}");
         var responseBody = await response.Content.ReadAsStringAsync();
         testOutputHelper.WriteLine($"Response Body: {responseBody}");
+        
         response.EnsureSuccessStatusCode();
+        
         var isRegistered = await UserExistsByEmailAsync("admin123@gmail.com");
+        
         isRegistered.Should().BeTrue();
     }
-    
-    public async Task<bool> UserExistsByEmailAsync(string email)
-    {
 
+    private async Task<bool> UserExistsByEmailAsync(string email)
+    {
         var user = await fixture.SqlDbFixture.UserManager.FindByEmailAsync(email);
 
         return user != null;

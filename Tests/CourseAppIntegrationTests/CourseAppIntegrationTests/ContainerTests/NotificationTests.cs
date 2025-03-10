@@ -1,5 +1,4 @@
 using System.Text;
-using CourseAppIntegrationTests.Fixtures;
 using CourseAppIntegrationTests.Fixtures.NotificationService;
 using FluentAssertions;
 using RabbitMQ.Client;
@@ -33,7 +32,8 @@ public class NotificationTests(NotificationServiceWithDbFixture fixture, ITestOu
         var queueDeclareOk = await channel.QueueDeclarePassiveAsync(QueueName);
         queueDeclareOk.Should().NotBeNull($"Очередь {QueueName} должна существовать.");
 
-        uint messageCount = queueDeclareOk.MessageCount;
+        var messageCount = queueDeclareOk.MessageCount;
+        
         messageCount.Should().BeGreaterThan(0, $"Ожидалось хотя бы одно сообщение в очереди {QueueName}.");
 
         testOutputHelper.WriteLine($"Очередь {QueueName} существует и содержит {messageCount} сообщений.");
@@ -90,6 +90,7 @@ public class NotificationTests(NotificationServiceWithDbFixture fixture, ITestOu
         } while (cursor != 0);
 
         testOutputHelper.WriteLine($"Общее количество найденных ключей: {count}");
+        
         return count;
     }
 
