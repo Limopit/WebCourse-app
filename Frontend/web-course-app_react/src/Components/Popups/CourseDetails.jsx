@@ -3,8 +3,9 @@ import "./CourseDetails.css";
 import ReactQuill from "react-quill";
 import { useNavigate } from "react-router-dom";
 import { createTakenCourseRecord } from "../../Api/createNewEntity";
+import {approveUserCourse} from "../../Api/updateEntity";
 
-const CourseDetails = ({ course, onClose, takenCourses }) => {
+const CourseDetails = ({ course, onClose, takenCourses, showUnapproved }) => {
     const [activeItem, setActiveItem] = useState(null);
     const navigate = useNavigate();
 
@@ -23,6 +24,16 @@ const CourseDetails = ({ course, onClose, takenCourses }) => {
         }
     };
 
+    const handleApproveCourse = async (id) => {
+        try {
+            await approveUserCourse(id);
+            onClose();
+        } catch (error) {
+            console.error("Error approving course:", error);
+            alert("Failed to approve course.");
+        }
+    };
+
     const isLesson = (item) => {
         return item.duration !== undefined && item.quizDetails !== undefined;
     };
@@ -31,7 +42,7 @@ const CourseDetails = ({ course, onClose, takenCourses }) => {
         <div className="course-details-overlay">
             <div className="course-details-container">
                 <button className="close-button" onClick={onClose}>×</button>
-                
+
                 <div className="header-container">
                     <div className="course-logo">
                         {course.logo ? (
@@ -42,7 +53,7 @@ const CourseDetails = ({ course, onClose, takenCourses }) => {
                     </div>
                     <h2>{course.title}</h2>
                 </div>
-                
+
                 <div className="course-content">
                     <div className="course-items">
                         <h3>Course Content</h3>
@@ -56,14 +67,31 @@ const CourseDetails = ({ course, onClose, takenCourses }) => {
                                 </li>
                             ))}
                         </ul>
-                        <button
-                            className="take-course-button"
-                            onClick={() => handleTakeCourse(course.id)}
-                        >
-                            {isCourseTaken ? "Continue a course" : "Take a course"}
-                        </button>
+                        {showUnapproved ? (
+                            <>
+                                <button
+                                    className="check-course-button"
+                                    onClick={() => navigate(`courses/${course.id}`)}
+                                >
+                                    Check a course
+                                </button>
+                                <button
+                                    className="approve-course-button"
+                                    onClick={() => handleApproveCourse(course.id)}
+                                >
+                                    Approve Course
+                                </button>
+                            </>
+                        ) : (
+                            <button
+                                className="take-course-button"
+                                onClick={() => handleTakeCourse(course.id)}
+                            >
+                                {isCourseTaken ? "Continue a course" : "Take a course"}
+                            </button>
+                        )}
                     </div>
-                    
+
                     <div className="item-details">
                         {activeItem ? (
                             <>

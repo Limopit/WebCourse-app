@@ -22,7 +22,6 @@ public class CreateUserCreatedCourseCommandHandler(IUnitOfWork unitOfWork, IMapp
         var userCreatedCourse = await mapper.MapAsync<CreateUserCreatedCourseCommand, UserCreatedCourses>(request);
         
         userCreatedCourse.UserId = user.Id;
-        userCreatedCourse.ApprovementStatus = ApprovementStatus.Accepted.ToString();
         
         await unitOfWork.UserCreatedCourses.AddEntityAsync(userCreatedCourse, cancellationToken);
         await unitOfWork.SaveChangesAsync(cancellationToken);

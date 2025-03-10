@@ -22,7 +22,7 @@ const CourseContent = () => {
     const [answerStatus, setAnswerStatus] = useState({});
     
     const { isAuthenticated } = useContext(AuthContext);
-    
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -46,10 +46,10 @@ const CourseContent = () => {
         setAnswerStatus({});
     };
 
-    const handleAnswerSelect = (questionIndex, selectedOption) => {
+    const handleAnswerSelect = (questionId, selectedOption) => {
         setUserAnswers((prevAnswers) => ({
             ...prevAnswers,
-            [questionIndex]: selectedOption,
+            [questionId]: selectedOption,
         }));
     };
 
@@ -57,8 +57,8 @@ const CourseContent = () => {
         if (!activeItem || !activeItem.quizDetails) return;
 
         const newStatus = {};
-        activeItem.quizDetails.forEach((quiz, index) => {
-            newStatus[index] = userAnswers[index] === quiz.answer;
+        activeItem.quizDetails.forEach((quiz) => {
+            newStatus[quiz.id] = userAnswers[quiz.id] === quiz.answer;
         });
 
         setAnswerStatus(newStatus);
@@ -80,13 +80,13 @@ const CourseContent = () => {
                     <h3>{course.title}</h3>
                     <ul>
                         {course.lessonDetails && course.lessonDetails.length > 0 ? (
-                            course.lessonDetails.map((lesson, index) => (
+                            course.lessonDetails.map((lesson) => (
                                 <li
-                                    key={index}
+                                    key={lesson.id}
                                     onClick={() => handleItemClick(lesson)}
                                     className={activeItem === lesson ? "active" : ""}
                                 >
-                                    <strong>Lesson {index + 1}:</strong> {lesson.title}
+                                    <strong>Lesson {lesson.order}:</strong> {lesson.title}
                                 </li>
                             ))
                         ) : (
@@ -113,14 +113,14 @@ const CourseContent = () => {
                             {activeItem.quizDetails && activeItem.quizDetails.length > 0 && (
                                 <div className="quiz-section">
                                     <h4>Quiz</h4>
-                                    {activeItem.quizDetails.map((quiz, quizIndex) => (
-                                        <div key={quizIndex} className="quiz-question">
+                                    {activeItem.quizDetails.map((quiz) => (
+                                        <div key={quiz.id} className="quiz-question">
                                             <p>
-                                                <strong>Question {quizIndex + 1}:</strong> {quiz.question}
-                                                {answerStatus[quizIndex] !== undefined && (
+                                                <strong>Question {quiz.order}:</strong> {quiz.question}
+                                                {answerStatus[quiz.id] !== undefined && (
                                                     <span className="answer-status">
-                                                    {answerStatus[quizIndex] ? "✔️" : "❌"}
-                                                </span>
+                                                        {answerStatus[quiz.id] ? "✔️" : "❌"}
+                                                    </span>
                                                 )}
                                             </p>
                                             <div className="quiz-options">
@@ -128,10 +128,10 @@ const CourseContent = () => {
                                                     <label key={optionIndex}>
                                                         <input
                                                             type="radio"
-                                                            name={`question-${quizIndex}`}
+                                                            name={`question-${quiz.id}`}
                                                             value={option}
-                                                            onChange={() => handleAnswerSelect(quizIndex, option)}
-                                                            checked={userAnswers[quizIndex] === option}
+                                                            onChange={() => handleAnswerSelect(quiz.id, option)}
+                                                            checked={userAnswers[quiz.id] === option}
                                                         />
                                                         {option}
                                                     </label>

@@ -10,7 +10,7 @@ public class GetCourseListInfoQueryHandler(IUnitOfWork unitOfWork, IMapperServic
     public async Task<CourseVm> Handle(GetCourseListInfoQuery request, CancellationToken cancellationToken)
     {
         List<Guid> guidList = request.CourseIds.Select(Guid.Parse).ToList();
-        var courses = await unitOfWork.Courses.GetEntityListInfoByIdAsync(guidList, cancellationToken);
+        var courses = await unitOfWork.Courses.GetEntityListInfoByIdAsync(guidList, request.PageNumber, request.PageSize, cancellationToken);
         
         return await mapper.MapAsync<List<Course>, CourseVm>(courses);
     }

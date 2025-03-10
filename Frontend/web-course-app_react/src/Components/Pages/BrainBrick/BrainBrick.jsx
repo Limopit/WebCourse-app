@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { fetchCourses, fetchTakenCourses } from "../../../Api/fetchCourses";
+import { fetchCourses, fetchPendingCourses, fetchTakenCourses } from "../../../Api/fetchCourses";
 import "./BrainBrick.css";
 import Header from "../../Elements/Header/Header";
 import { useLocation } from 'react-router-dom';
@@ -14,9 +14,10 @@ import { fetchCourseDetails } from "../../../Api/fetchCourses";
 const BrainBrick = () => {
     const [courses, setCourses] = useState([]);
     const [takenCourses, setTakenCourses] = useState([]);
+    const [unapprovedCourses, setUnapprovedCourses] = useState([]);
     const [filteredCourses, setFilteredCourses] = useState([]);
-    const [initialCourseOrder, setInitialCourseOrder] = useState([]);
     const [selectedCourse, setSelectedCourse] = useState(null);
+    const [currentItems, setCurrentItems] = useState([]);
 
     const [loading, setLoading] = useState(true);
 
@@ -27,54 +28,80 @@ const BrainBrick = () => {
     const [isSortDropdownOpen, setIsSortDropdownOpen] = useState(false);
     const [isFilterDropdownOpen, setIsFilterDropdownOpen] = useState(false);
 
+    const [showUnapproved, setShowUnapproved] = useState(false);
+
+    const [currentPageApproved, setCurrentPageApproved] = useState(1);
+    const [isLastPageApproved, setIsLastPageApproved] = useState(false);
+
+    const [currentPageUnapproved, setCurrentPageUnapproved] = useState(1);
+    const [isLastPageUnapproved, setIsLastPageUnapproved] = useState(false);
+
+    const itemsPerPage = 10;
+
     const location = useLocation();
     const { isAuthenticated } = useContext(AuthContext);
+    const userRole = sessionStorage.getItem("role");
 
     useEffect(() => {
-        const loadItems = async () => {
+        const loadData = async () => {
+            setLoading(true);
             try {
-                const data = await fetchCourses();
-                setCourses(data);
-                setFilteredCourses(data);
-                setInitialCourseOrder(data);
+                if (showUnapproved) {
+                    if (isAuthenticated && userRole === "Admin") {
+                        const unapprovedData = await fetchPendingCourses(currentPageUnapproved, itemsPerPage);
+                        console.log("Unapproved Data:", unapprovedData);
+                        const coursesArray = unapprovedData.courses || unapprovedData;
+                        setUnapprovedCourses(coursesArray);
+                        setIsLastPageUnapproved(coursesArray.length < itemsPerPage);
+                    }
+                } else {
+                    const approvedData = await fetchCourses(currentPageApproved, itemsPerPage);
+                    console.log("Approved Data:", approvedData);
+                    const coursesArray = approvedData.courses || approvedData;
+                    setCourses(coursesArray);
+                    setIsLastPageApproved(coursesArray.length < itemsPerPage);
+                }
 
                 if (isAuthenticated) {
                     const takenCoursesData = await fetchTakenCourses();
-                    setTakenCourses(takenCoursesData);
+                    console.log("Taken Courses Data:", takenCoursesData);
+                    const takenCoursesArray = takenCoursesData.courses || takenCoursesData;
+                    setTakenCourses(takenCoursesArray);
                 }
             } catch (error) {
                 console.error("Data loading error: ", error);
                 setCourses([]);
-                setFilteredCourses([]);
-                setInitialCourseOrder([]);
+                setUnapprovedCourses([]);
+                setTakenCourses([]);
+                setIsLastPageApproved(true);
+                setIsLastPageUnapproved(true);
             } finally {
-                setTimeout(() => {
-                    setLoading(false);
-                }, 2000);
+                setLoading(false);
             }
         };
 
-        loadItems();
-    }, [isAuthenticated]);
+        loadData();
+    }, [currentPageApproved, currentPageUnapproved, showUnapproved, isAuthenticated, userRole]);
 
     useEffect(() => {
-        const filtered = courses.filter(course => {
+        const filtered = (showUnapproved ? unapprovedCourses : courses).filter(course => {
             const matchesSearch = course.title.toLowerCase().includes(search.toLowerCase());
-
             const isTaken = takenCourses.some(takenCourse => takenCourse.id === course.id);
             const matchesStatus =
                 statusFilter === "All" ||
                 (statusFilter === "Taken" && isTaken) ||
                 (statusFilter === "Not Taken" && !isTaken);
-
             return matchesSearch && matchesStatus;
         });
 
         setFilteredCourses(filtered);
-    }, [search, courses, statusFilter, takenCourses]);
+    }, [search, courses, unapprovedCourses, statusFilter, takenCourses, showUnapproved]);
+
+    useEffect(() => {
+        setCurrentItems(filteredCourses);
+    }, [filteredCourses]);
 
     const resetSort = () => {
-        setFilteredCourses([...initialCourseOrder]);
         setSearch("");
         setSortText("Sort");
         setStatusFilter("All");
@@ -92,6 +119,25 @@ const BrainBrick = () => {
     const handleCloseDetails = () => {
         setSelectedCourse(null);
     };
+
+    const handleNextPage = async () => {
+        if (showUnapproved && !isLastPageUnapproved) {
+            setCurrentPageUnapproved(prev => prev + 1);
+        } else if (!showUnapproved && !isLastPageApproved) {
+            setCurrentPageApproved(prev => prev + 1);
+        }
+    };
+
+    const handlePreviousPage = () => {
+        if (showUnapproved && currentPageUnapproved > 1) {
+            setCurrentPageUnapproved(prev => prev - 1);
+        } else if (!showUnapproved && currentPageApproved > 1) {
+            setCurrentPageApproved(prev => prev - 1);
+        }
+    };
+
+    // Определяем текущую страницу в зависимости от режима
+    const currentPage = showUnapproved ? currentPageUnapproved : currentPageApproved;
 
     return (
         <div>
@@ -166,13 +212,21 @@ const BrainBrick = () => {
                             </button>
                         </Dropdown>
                     )}
+                    {isAuthenticated && userRole === "Admin" && (
+                        <button
+                            className={`mode-toggle-button ${showUnapproved ? "unapproved" : "approved"}`}
+                            onClick={() => setShowUnapproved(!showUnapproved)}
+                        >
+                            {showUnapproved ? "Show Approved" : "Show Unapproved"}
+                        </button>
+                    )}
                 </div>
 
                 <div className={`course-list-container ${loading ? "loading" : ""}`}>
                     {loading ? (
                         <p>Please, wait...</p>
-                    ) : filteredCourses.length > 0 ? (
-                        filteredCourses.map(item => (
+                    ) : currentItems.length > 0 ? (
+                        currentItems.map(item => (
                             <div key={item.id} className="course-item" onClick={() => handleCourseClick(item)}>
                                 <img src={item.logo} alt="Image is missing"/>
                                 <div className="course-text">
@@ -189,6 +243,22 @@ const BrainBrick = () => {
                         <p>No data</p>
                     )}
                 </div>
+
+                <div className="pagination">
+                    <button
+                        onClick={handlePreviousPage}
+                        disabled={currentPageApproved === 1 && currentPageUnapproved === 1}
+                    >
+                        Previous
+                    </button>
+                    <span className="page-number">Page {currentPage}</span>
+                    <button
+                        onClick={handleNextPage}
+                        disabled={showUnapproved ? isLastPageUnapproved : isLastPageApproved}
+                    >
+                        Next
+                    </button>
+                </div>
             </div>
 
             {selectedCourse && (
@@ -196,6 +266,7 @@ const BrainBrick = () => {
                     course={selectedCourse}
                     onClose={handleCloseDetails}
                     takenCourses={takenCourses}
+                    showUnapproved={showUnapproved}
                 />
             )}
         </div>

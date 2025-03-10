@@ -59,7 +59,7 @@ public class DbInitializer
                 CourseId = "thirdCourse",
                 UserId = AdminId.ToString(),
                 ApprovementDate = null,
-                ApprovementStatus = ApprovementStatus.Pending.ToString()
+                ApprovementStatus = ApprovementStatus.Rejected.ToString()
             },
             new UserCreatedCourses()
             {
@@ -108,7 +108,7 @@ public class DbInitializer
             }
         }
 
-        if (await userManager.FindByEmailAsync("user@email.com") == null)
+        if (await userManager.FindByEmailAsync("user@gmail.com") == null)
         {
             var user = new User
             {

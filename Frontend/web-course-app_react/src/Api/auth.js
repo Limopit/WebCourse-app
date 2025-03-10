@@ -1,51 +1,59 @@
 import api from "../Interceptors/InterceptorSetup";
+import {jwtDecode} from "jwt-decode";
 
 const API_BASE_URL = '/auth';
 
 export const login = async (email, password) => {
-    try {
-        const response = await api.post(`${API_BASE_URL}/login`, { email, password });
-        const { jwt } = response.data;
-        
-        sessionStorage.setItem("accessToken", jwt);
-        return true;
-    } catch (error) {
-        throw error;
-    }
+    const response = await api.post(`${API_BASE_URL}/login`, { email, password });
+    const { jwt } = response.data;
+    sessionStorage.setItem("accessToken", jwt);
+    
+    const payload = jwtDecode(jwt)
+    sessionStorage.setItem("role", payload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"]);
+    return true;
 };
 
 export const signup = async (firstname, lastname, email, password) => {
-    try {
-        const response = await api.post(`${API_BASE_URL}/register`, {
-            firstname,
-            lastname,
-            email,
-            password,
-            role: 'user',
-        });
-        
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
+    const response = await api.post(`${API_BASE_URL}/register`, {
+        firstname,
+        lastname,
+        email,
+        password,
+        role: 'user',
+    });
+
+    return response.data;
 };
 
 export const logout = async () => {
+    const token = sessionStorage.getItem("accessToken");
+    if (!token) {
+        console.error("No access token found");
+        throw new Error("No token found");
+    }
+
+    await api.post(`${API_BASE_URL}/logout`, {}, {});
+
+    sessionStorage.clear();
+    localStorage.setItem("isAuthenticated", "false");
+
+    window.location.reload();
+};
+
+export const refreshToken = async () => {
     try {
-        const token = sessionStorage.getItem("accessToken");
-        if (!token) {
-            console.error("No access token found");
-            throw new Error("No token found");
-        }
-        
-        await api.post(`${API_BASE_URL}/logout`, {}, {
+        console.log("Refreshing token");
+        const response = await api.post(`${API_BASE_URL}/refresh`, {}, {
+            withCredentials: true,
         });
-        
-        sessionStorage.clear();
-        localStorage.setItem("isAuthenticated", "false");
-        
-        window.location.reload();
+
+        const accessToken = response.data;
+
+        localStorage.setItem('accessToken', accessToken);
+
+        return accessToken;
     } catch (error) {
-        throw error;
+        console.error('Failed to refresh token:', error);
+        throw new Error('Failed to refresh token');
     }
 };

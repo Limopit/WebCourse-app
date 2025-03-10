@@ -12,41 +12,41 @@ namespace CourseAppCourseService.Controllers;
 public class LessonsController(IMediator mediator, ILoggerService logger) : BaseController(mediator, logger)
 {
     [HttpGet]
-    public async Task<ActionResult<Guid>> GetLessonList()
+    public async Task<ActionResult<Guid>> GetLessonList(CancellationToken cancellationToken)
     {
         Logger.Information("Executing GetLessonList");
-        var result = await Mediator.Send(new GetLessonListQuery());
+        var result = await Mediator.Send(new GetLessonListQuery(), cancellationToken);
         
         return Ok(result);
     }
     
     [Authorize]
     [HttpPost]
-    public async Task<ActionResult<Guid>> CreateNewLesson([FromBody] CreateLessonCommand command)
+    public async Task<ActionResult<Guid>> CreateNewLesson([FromBody] CreateLessonCommand command, CancellationToken cancellationToken)
     {
         Logger.Information($"Executing CreateNewLesson with params: {command.Title} | {command.Description} | {command.Content}");
-        var result = await Mediator.Send(command);
+        var result = await Mediator.Send(command, cancellationToken);
         
         return Ok(result);
     }
     
     [Authorize]
     [HttpPut("{id}")]
-    public async Task<ActionResult> UpdateLesson(Guid id, [FromBody]UpdateLessonCommand command)
+    public async Task<ActionResult> UpdateLesson(Guid id, [FromBody]UpdateLessonCommand command, CancellationToken cancellationToken)
     {
         Logger.Information($"Executing UpdateLesson with params: {command.Title} | {command.Description} | {command.Content}");
         command.Id = id;
-        await Mediator.Send(command);
+        await Mediator.Send(command, cancellationToken);
         
         return NoContent();
     }
     
     [Authorize]
     [HttpDelete("{id}")]
-    public async Task<ActionResult> DeleteLesson(Guid id)
+    public async Task<ActionResult> DeleteLesson(Guid id, CancellationToken cancellationToken)
     {
         Logger.Information($"Executing DeleteLesson with params: {id}");
-        await Mediator.Send(new DeleteLessonCommand(){ Id = id });
+        await Mediator.Send(new DeleteLessonCommand(){ Id = id }, cancellationToken);
         
         return NoContent();
     }

@@ -8,6 +8,7 @@ service UserService {
   rpc CreateUserCreatedCourseRecord(CreateCourseRequest) returns (CreateRecordResponse);
   rpc DeleteCourseRecords(DeleteCourseRecordRequest) returns (DeleteCourseRecordResponse);
   rpc GetApprovedCourseList(EmptyMessage) returns (GetApprovedCourseListResponse);
+  rpc GetPendingCourseList(EmptyMessage) returns (GetPendingCourseListResponse);
 }
 
 message CreateCourseRequest {
@@ -20,6 +21,10 @@ message CreateRecordResponse {
 }
 
 message GetApprovedCourseListResponse {
+  repeated string course_list = 1;
+}
+
+message GetPendingCourseListResponse {
   repeated string course_list = 1;
 }
 

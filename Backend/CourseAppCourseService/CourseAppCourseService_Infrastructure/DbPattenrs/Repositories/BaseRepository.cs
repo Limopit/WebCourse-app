@@ -15,10 +15,14 @@ public abstract class BaseRepository<T>(ICourseDbContext context, string collect
         return await _collection.Find(filter).FirstOrDefaultAsync(token);
     }
     
-    public async Task<List<T>> GetEntityListInfoByIdAsync(List<Guid> ids, CancellationToken token)
+    public async Task<List<T>> GetEntityListInfoByIdAsync(List<Guid> ids, int pageNumber, int pageSize, CancellationToken token)
     {
         var filter = Builders<T>.Filter.In("_id", ids);
-        return await _collection.Find(filter).ToListAsync(token);
+        var skip = (pageNumber - 1) * pageSize;
+        return await _collection.Find(filter)
+            .Skip(skip)
+            .Limit(pageSize)
+            .ToListAsync(token);
     }
 
     public async Task AddEntityAsync(T entity, CancellationToken token)

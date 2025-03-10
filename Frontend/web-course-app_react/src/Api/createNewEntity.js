@@ -25,7 +25,7 @@ export const createTakenCourseRecord = async (courseId) => {
     const payload = jwtDecode(token);
     
     const response = await api.post("/user/courses/taken", {
-        email: payload.sub,
+        email: payload.nameid,
         courseId: courseId,
         startDate: "2025-02-11T22:10:53.263Z",
     });

@@ -50,7 +50,7 @@ const SignInSignUp = () => {
 
     return (
         <div>
-            <Header></Header>
+            <Header />
             
             <div className="main-container" style={{height: previous === "signIn" ? "75vh" : "55vh"}}>
                 <div className="main-container-header">
