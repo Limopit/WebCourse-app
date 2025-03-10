@@ -18,6 +18,7 @@ public class AuthController(IMediator mediator, ILoggerService logger) : BaseCon
         var userId = await Mediator.Send(command, token);
         
         Logger.Information($"User {userId} registered successfully");
+        
         return Ok(new { UserId = userId });
     }
 
@@ -69,6 +70,7 @@ public class AuthController(IMediator mediator, ILoggerService logger) : BaseCon
         var result = await Mediator.Send(command, token);
         
         Logger.Information("Role assigned successfully");
+        
         return Ok(result);
     }
     
@@ -83,6 +85,7 @@ public class AuthController(IMediator mediator, ILoggerService logger) : BaseCon
         var jwt = await Mediator.Send(new RefreshTokenCommand() { RefreshToken = refreshToken}, token);
         
         Logger.Information("Jwt refreshed successfully");
+        
         return Ok(jwt);
     }
 }

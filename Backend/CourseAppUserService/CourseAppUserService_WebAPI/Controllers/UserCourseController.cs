@@ -37,6 +37,7 @@ public class UserCourseController(IMediator mediator, ILoggerService logger, INo
             .Send(new GetUsersTakenCoursesQuery { Email = email }, cancellationToken);
         
         Logger.Information($"User {email} got the taken course list");
+        
         return Ok(result);
     }
     
@@ -47,6 +48,7 @@ public class UserCourseController(IMediator mediator, ILoggerService logger, INo
             .Send(new GetUserCreatedCoursesQuery { Email = email }, cancellationToken);
         
         Logger.Information($"Executed listing {email} created courses");
+        
         return Ok(result);
     }
 
@@ -57,6 +59,7 @@ public class UserCourseController(IMediator mediator, ILoggerService logger, INo
         await Mediator.Send(new DeleteUserTakenCourseCommand() { Id = id, Email = email }, cancellationToken);
         
         Logger.Information($"User`s ({email}) taken ({id}) course was deleted");
+        
         return NoContent();
     }
     
@@ -67,6 +70,7 @@ public class UserCourseController(IMediator mediator, ILoggerService logger, INo
         await Mediator.Send(new DeleteUserCreatedCourseCommand() { Id = id }, cancellationToken);
 
         Logger.Information($"{id} course was deleted");
+        
         return NoContent();
     }
 

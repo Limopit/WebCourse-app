@@ -136,7 +136,6 @@ const BrainBrick = () => {
         }
     };
 
-    // Определяем текущую страницу в зависимости от режима
     const currentPage = showUnapproved ? currentPageUnapproved : currentPageApproved;
 
     return (
